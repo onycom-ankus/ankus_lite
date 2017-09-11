@@ -1,0 +1,5 @@
+outlook,nominal
+temperature,numeric
+humidity,numeric
+windy,nominal
+play,nominal

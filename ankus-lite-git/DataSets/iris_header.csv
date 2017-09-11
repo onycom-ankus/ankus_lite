@@ -1,0 +1,5 @@
+sepallength,numeric
+sepalwidth,numeric
+petallength,numeric
+petalwidth,numeric
+class,nominal
