@@ -1,0 +1,212 @@
+package C45;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+
+import CorePackage.Attribute;
+import CorePackage.Instance;
+import CorePackage.Instances;
+
+public class C45DecisionTree {
+
+	private Instances		mInstances	= null;		// 학습데이터
+	private Tree 			mDecisionTree = null;	// 학습된 의사결정트리
+	
+	private int				mTestFoldIndex;	// 테스트에 사용할 학습데이터의 폴드 인덱스
+	private int				mNodeID;
+	
+	private float			mMinNumData;	// 최소 데이터 개수
+	private float			mMaxPurity;		// 최대 순도
+	
+	private boolean[]		mUsable;
+	
+	private static DecimalFormat	mDecimalFormat = null;
+	
+	/**
+	 * 생성자
+	 * @param inputData 	입력 데이터 
+	 */
+	public C45DecisionTree(Instances inputData) {
+		mDecimalFormat = new DecimalFormat("######.#");
+		this.mInstances = inputData;
+		this.mMinNumData = 4.0f;
+		this.mMaxPurity = 0.92f;
+	}
+
+	/**
+	 * 학습데이터로 의사결정트리 생성 함수
+	 */
+	public void buildClassifier(){
+		
+		this.mDecisionTree = new Tree();
+		this.mNodeID = 0;
+		
+		//환경변수 (종료조건)
+		System.out.println("최소데이터 개수:\t"+this.mMinNumData);
+		System.out.println("최대순도:\t"+this.mMaxPurity);
+		
+		List<Integer> subData = new ArrayList<Integer> ();
+		for(int i=0 ; i<this.mInstances.getNumData() ; i++){
+			subData.add(this.mInstances.getInstance(i).getID());
+		}
+		
+		this.mUsable = new boolean[this.mInstances.getNumAttributes("all")];
+		for(int i=0 ; i<this.mInstances.getNumAttributes("all") ; i++){		
+			this.mUsable[i] = (this.mInstances.getClassAttributeIndex() == i) ? false : true;
+		}
+		
+		makeNode(this.mInstances,this.mTestFoldIndex,subData);
+	}
+	
+
+	/**
+	 * 노드 객체를 생성하는 재귀함수
+	 * 종료조건은 노드에 포함된 데이터 개수가 죄소데이터개수보다 작을 때, 또는 노드의 순도가 최대순도보다 클 때
+	 * @param instances	전체데이터 객체
+	 * @param testFoldIndex	테스트로 사용할 데이터 폴드 인덱스
+	 * @param subData	노드에 할당될 데이터 인덱스 집합
+	 */
+	private void makeNode(Instances instances, int testFoldIndex, List<Integer> subData) {
+		
+		Node node = new Node(this.mNodeID, instances, testFoldIndex, subData);
+		
+		System.out.println("===> 노드의 ID: " + this.mNodeID + ", 할당된 데이터 개수: " + subData.size());
+		
+		if(node.getNumInstances() < this.mMinNumData){	
+			// 종료조건 1: 노드에 할당된 데이터가 최소데이터개수보다 적을 경우
+			this.mDecisionTree.addNode(this.mNodeID, node);
+			
+			System.out.println("노드에 할당된 데이터가 최소데이터개수보다 작아서 단말노드된 경우, 노드ID: "+this.mNodeID);
+			System.out.println(node.toStringInfo(instances));
+			
+		}else if(this.mMaxPurity < node.getPurity()){
+			// 종료조건 2: 노드에 할당된 데이터의 순도가 최대순도보다 클 경우
+			this.mDecisionTree.addNode(this.mNodeID, node);
+			
+			System.out.println("노드의 순도가 최대순도보다 큰 경우, 노드ID: "+this.mNodeID);
+			System.out.println(node.toStringInfo(instances));
+			
+		}else{
+			
+			Link link;
+			
+			// 자식노드 생성
+			this.mDecisionTree.addNode(this.mNodeID, node);
+			
+			// 자식노드를 생성하기 위해 선택된 속성 인덱스
+			int selectIndex = node.selectAttributeID(instances,this.mUsable,subData);
+			
+			Attribute attribute = this.mInstances.getAttributeObjs().get(selectIndex);
+			
+			node.setNodeName(attribute.getAttributeName());
+			node.constructChildrenNodesObj();
+			
+			System.out.println("노드 이름: "+node.getNodeName()+"("+selectIndex+")");
+
+			if(attribute.getAttributeType().equalsIgnoreCase("nominal")){
+				// 기호속성
+				this.mUsable[selectIndex] = false;
+				List<Integer>[] subSet = new ArrayList[attribute.getNumNominalValues()];
+				
+				for(int i=0 ; i<attribute.getNumNominalValues() ; i++){
+					subSet[i] = new ArrayList<Integer>();
+				}
+				
+				for(int k=0 ; k<node.getNumInstances() ; k++){
+					subSet[(int)instances.getInstance(node.getInstanceID(k)).getValue(selectIndex)].add(node.getInstanceID(k));
+				}
+				
+				for(int i=0 ; i<attribute.getNumNominalValues() ; i++){
+					System.out.println("\t 링크: "+attribute.getNominalValueName(i));
+					this.mNodeID++;
+					link = new Link(i,attribute.getNominalValueName(i),this.mNodeID);				
+					node.setChild(i, link);
+					makeNode(instances,testFoldIndex,subSet[i]);
+				}
+			}else{
+				// 수치속성
+				List<Integer>[] subSet = new ArrayList[2];
+				int dataID;
+				
+				for(int i=0 ; i<2 ; i++){
+					subSet[i] = new ArrayList<Integer> ();
+				}
+				
+				for(int k=0 ; k<node.getNumInstances() ; k++){
+					dataID = node.getInstanceID(k);
+					if(instances.getInstance(dataID).getValue(selectIndex) <= node.getBreakPoint(selectIndex)){
+						subSet[0].add(node.getInstanceID(k));
+					}else{
+						subSet[1].add(node.getInstanceID(k));
+					}
+				}
+					
+				String strTemp;
+				
+				this.mNodeID++;
+				strTemp = "<= "+ String.valueOf(mDecimalFormat.format(node.getBreakPoint(selectIndex)));
+				link = new Link(0,strTemp,this.mNodeID);
+				node.setChild(0, link);
+				
+				System.out.println("\t 링크: "+node.getChildrenName(0));
+				makeNode(instances,testFoldIndex,subSet[0]);
+				
+				this.mNodeID++;
+				strTemp = String.valueOf(mDecimalFormat.format(node.getBreakPoint(selectIndex)))+" <";
+				link = new Link(1,strTemp,this.mNodeID);
+				node.setChild(1, link);
+				
+				System.out.println("\t 링크: "+node.getChildrenName(1));
+				makeNode(instances,testFoldIndex,subSet[1]);
+			}
+			
+		}
+	}
+
+	/**
+	 * 분할된 데이터 집합 중 어느 집합을 테스트 데이터로 사용할 것인가 결정하는 함수
+	 * @param testfoldIndex	테스트데이터로 사용할 fold 인덱스
+	 */
+	public void setTestFold(int testfoldIndex) {
+		this.mTestFoldIndex = testfoldIndex;
+	}
+
+	public void classifer(Instance inst) {
+		
+		Node node;
+		
+		for(int i=0 ; i<this.mDecisionTree.getNumNodes() ; i++){
+			node = this.mDecisionTree.getNode(i);
+			
+			System.out.println(i+"\t"+node.getAttributeName());
+			if(!node.getAttributeName().equalsIgnoreCase("null")){
+				for(int k=0 ; k<node.getNumChildren() ; k++){
+					System.out.println("   link: "+k+"\t"+node.getChildrenName(k)+"\t"+node.getChildNodeID(k));
+				}
+			}else{
+				System.out.println("    단말 노드: "+node.getMajorityClass()+"\t"+node.getPurity());
+			}
+		}
+			
+		System.exit(1);
+//		search(node,inst);
+	}
+
+	private void search(Node node, Instance inst) {
+		
+		String attributeName = node.getAttributeName();
+		
+		if(attributeName.equalsIgnoreCase("NULL")){
+			// 단말노드
+			System.out.println("단말...");
+		}else{
+//			for(int i=0 ; i<node.getNumChildren() ; i++){
+//				search(this.mDecisionTree.getNode(???),inst);
+//			}
+
+		}
+		
+	}
+}
