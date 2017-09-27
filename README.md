@@ -1,12 +1,12 @@
 ########################################################################### <br>
- ankus lite V 1.0 (~ing) 
-  This is readme.rnd file 
-  ldbslovis@onycom.com edited 20170927 
- 
- ankus lite 
- http://openankus.com 
- http://onycom.com 
- ONYCOM INC. 
+ ankus lite V 1.0 (~ing) <br>
+  This is readme.rnd file <br>
+  ldbslovis@onycom.com edited 20170927 <br>
+ <br>
+ ankus lite <br>
+ http://openankus.com <br>
+ http://onycom.com <br>
+ ONYCOM INC. <br>
 ########################################################################### 
 # license
                     GNU GENERAL PUBLIC LICENSE
