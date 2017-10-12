@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+            http://www.springframework.org/schema/task 
+        	http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+
+    <!-- ========================= PROPERTY PLACE HOLDER DEFINITION ========================= -->
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>/WEB-INF/config-${spring.profiles.active:dev}.properties</value>
+            </list>
+        </property>
+        <property name="properties">
+            <props>
+                <prop key="active.profile">${spring.profiles.active:dev}</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- ========================= PROPERTIES DEFINITION ========================= -->
+
+    <util:properties id="config" location="/WEB-INF/config-${spring.profiles.active:dev}.properties"/>
+
+    <!-- ========================= COMPONENT SCAN DEFINITION ========================= -->
+
+    
+    <context:component-scan base-package="com.ankus">
+	     <context:exclude-filter type="assignable" expression="com.ankus.el.ELServiceImpl"/>
+	</context:component-scan>
+
+    <context:annotation-config/>
+    
+    <!-- ========================= MVC DEFINITION ========================= -->
+
+    <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
+        <mvc:message-converters>
+            <ref bean="jsonConverter"/>
+            <ref bean="stringHttpMessageConverter"/>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
+
+    <!-- HTTP Session Applied
+        <mvc:interceptors>
+            <bean class="com.ankus.web.security.SessionValidationInterceptor"/>
+        </mvc:interceptors>
+    -->
+
+    <!-- ========================= VIEW RESOLVER ========================= -->
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!-- ========================= REST DEFINITION ========================= -->
+
+    <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="defaultContentType" value="application/xml"/>
+        <property name="favorPathExtension" value="true"/>
+        <property name="favorParameter" value="false"/>
+        <property name="parameterName" value="type"/>
+        <property name="ignoreAcceptHeader" value="false"/>
+        <property name="useJaf" value="false"/>
+        <property name="mediaTypes">
+            <map>
+                <entry key="json" value="application/json"/>
+                <entry key="xml" value="application/xml"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- ========================= EXCEPTION RESOLVER DEFINITION ========================= -->
+
+    <bean id="exceptionResolverComposite"
+          class="org.springframework.web.servlet.handler.HandlerExceptionResolverComposite">
+        <property name="exceptionResolvers">
+            <list>
+                <bean id="exceptionResolver"
+                      class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
+                    <property name="contentNegotiationManager" ref="contentNegotiationManager"/>
+                </bean>
+            </list>
+        </property>
+        <property name="order" value="0"/>
+    </bean>
+
+    <!-- ========================= MESSAGE CONVERTER DEFINITION ========================= -->
+
+    <bean id="jsonMediaType" class="org.springframework.http.MediaType">
+        <constructor-arg value="application"/>
+        <constructor-arg value="json"/>
+    </bean>
+
+    <bean id="xmlMediaType" class="org.springframework.http.MediaType">
+        <constructor-arg value="application"/>
+        <constructor-arg value="xml"/>
+    </bean>
+
+    <bean id="stringMediaType" class="org.springframework.http.MediaType">
+        <constructor-arg value="text"/>
+        <constructor-arg value="plain"/>
+    </bean>
+
+    <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <util:list>
+                <ref bean="jsonMediaType"/>
+            </util:list>
+        </property>
+        <property name="prettyPrint" value="true"/>
+        <property name="objectMapper" ref="jacksonObjectMapper"/>
+    </bean>
+
+    <bean id="jacksonObjectMapper" class="com.ankus.web.core.ObjectMapeprFactoryBean"/>
+
+    <bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+        <constructor-arg type="java.nio.charset.Charset">
+            <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+                <property name="staticMethod" value="java.nio.charset.Charset.forName"/>
+                <property name="arguments">
+                    <list>
+                        <!-- Set Default Charset -->
+                        <bean class="java.lang.String">
+                            <constructor-arg value="UTF-8"/>
+                        </bean>
+                    </list>
+                </property>
+            </bean>
+        </constructor-arg>
+
+        <property name="supportedMediaTypes">
+            <util:list>
+                <ref bean="jsonMediaType"/>
+                <ref bean="xmlMediaType"/>
+                <ref bean="stringMediaType"/>
+            </util:list>
+        </property>
+    </bean>
+
+    <!-- ========================= REST TEMPLATE DEFINITION ========================= -->
+
+    <bean id="restTemplate" class="com.ankus.web.util.RestTemplateFactoryBean">
+        <property name="messageConverters">
+            <list>
+                <ref bean="jsonConverter"/>
+                <ref bean="stringHttpMessageConverter"/>
+            </list>
+        </property>
+        <!--
+        <property name="readTimeout" value="${network.read.timeout}"/>
+        <property name="connectTimeout" value="${network.connection.timeout}"/>
+        <property name="proxyHost" value="${network.proxy.host}"/>
+        <property name="proxyPort" value="${network.proxy.port}"/>
+        -->
+    </bean>
+
+    <!-- ========================= FILEUPLOAD DEFINITION ========================= -->
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="107374182400"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+    
+    <!-- ========================= LANGEAGE ========================= -->
+    <!-- SessionLocaleResolver -->
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+	 	<!-- 세션에 locale 정보가 없을 경우 기본 언어  -->
+   		<property name="defaultLocale" value="en" />  
+	</bean>
+	
+    <!-- AcceptHeaderLocaleResolver -->
+	<bean id="browserLocaleResolver" class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver"></bean>
+	
+	<!-- MessageSource -->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>resources/language/messages</value> <!-- 마지막 messages는  messages_ko.properties 의 앞에 messages 이다. 안해주면 프로퍼티를 못찾음 -->
+			</list>
+		</property>
+		<property name="defaultEncoding" value="UTF-8" />
+		<!-- true인 경우, locale에 해당하는 file이 없을 경우 system locale을 사용 -->
+   	    <property name="fallbackToSystemLocale" value="true"/> 
+   	    <property name="cacheSeconds" value="60"></property>
+	</bean>
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/"/>
+			<bean class="com.ankus.language.LanguageUtil"></bean>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/main"/>
+			<bean class="com.ankus.language.LanguageUtil"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+<!-- 	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+				<property name="paramName" value="lang"/>
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors> -->
+
+    <!-- Activates @Scheduled and @Async annotations for scheduling -->
+	<task:annotation-driven />
+			
+
+</beans>

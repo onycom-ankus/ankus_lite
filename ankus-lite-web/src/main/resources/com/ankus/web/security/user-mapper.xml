@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.security.UserRepository">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+    <resultMap id="userMap" type="com.ankus.model.rest.User">
+        <result property="username" column="USERNAME" jdbcType="VARCHAR"/>
+        <result property="password" column="PASSWD" jdbcType="VARCHAR"/>
+        <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        <result property="email" column="EMAIL" jdbcType="VARCHAR"/>
+        <result property="enabled" column="ENABLED" jdbcType="BOOLEAN"/>
+        <result property="accountNonExpired" column="AC_NON_EXPIRED" jdbcType="BOOLEAN"/>
+        <result property="accountNonLocked" column="AC_NON_LOCKED" jdbcType="BOOLEAN"/>
+        <result property="credentialsNonExpired" column="CR_NON_EXPRED" jdbcType="BOOLEAN"/>
+        <result property="authority" column="AUTHORITY" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== -->
+
+    <sql id="wherePK">WHERE USERNAME = #{username}</sql>
+
+    <sql id="whereName">WHERE NAME = #{name}</sql>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Select Statement -->
+    <!-- ==================================================================================== -->
+
+    <select id="select" parameterType="string" resultMap="userMap">
+        SELECT * FROM [USER]
+        <include refid="wherePK"/>
+    </select>
+
+    <select id="selectByName" resultMap="userMap">
+        SELECT * FROM [USER]
+        <include refid="whereName"/>
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Exist Statement -->
+    <!-- ==================================================================================== -->
+
+    <select id="exist" parameterType="string" resultType="Integer">
+        SELECT COUNT(*) FROM [USER]
+        <include refid="wherePK"/>
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 4. Insert Statements -->
+    <!-- ==================================================================================== -->
+
+    <insert id="insert" parameterType="user">
+        INSERT INTO [USER]
+        (
+            USERNAME,
+            PASSWD,
+            NAME,
+            EMAIL,
+            ENABLED,
+            AC_NON_EXPIRED,
+            AC_NON_LOCKED,
+            CR_NON_EXPRED,
+            AUTHORITY,
+        )
+        VALUES
+        (
+            #{username},
+            #{password},
+            #{name},
+            #{email},
+            #{enabled},
+            #{accountNonExpired},
+            #{accountNonLocked},
+            #{credentialsNonExpired},
+            #{authority}
+        )
+    </insert>
+
+    <!-- ==================================================================================== -->
+    <!-- 5. Update Statements -->
+    <!-- ==================================================================================== -->
+
+    <update id="update" parameterType="user">
+        UPDATE [USER]
+        SET
+        PASSWD = #{password},
+        NAME = #{name},
+        EMAIL = #{email},
+        ENABLED = #{enabled},
+        AC_NON_EXPIRED = #{accountNonExpired},
+        AC_NON_LOCKED = #{accountNonLocked},
+        CR_NON_EXPRED = #{credentialsNonExpired},
+        AUTHORITY = #{authority}
+        <include refid="wherePK"/>
+    </update>
+
+    <update id="updatePassword" parameterType="user">
+        UPDATE [USER]
+        SET
+        PASSWD = #{password}
+        <include refid="wherePK"/>
+    </update>
+
+    <!-- ==================================================================================== -->
+    <!-- 6. Delete Statements -->
+    <!-- ==================================================================================== -->
+
+    <delete id="delete" parameterType="string">
+        DELETE FROM [USER]
+        <include refid="wherePK"/>
+    </delete>
+</mapper>

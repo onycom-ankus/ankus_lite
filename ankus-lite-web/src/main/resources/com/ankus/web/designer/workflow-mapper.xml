@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.designer.DesignerRepository">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+    <resultMap id="workflowMap" type="com.ankus.model.rest.Workflow">
+        <result property="id" column="ID" jdbcType="BIGINT"/>
+        <result property="workflowId" column="WORKFLOW_ID" jdbcType="VARCHAR"/>
+        <result property="workflowName" column="NAME" jdbcType="VARCHAR"/>
+        <result property="description" column="DESCRIPTION" jdbcType="VARCHAR"/>
+        <result property="variables" column="VARIABLE" jdbcType="CLOB"/>
+        <result property="workflowXml" column="WORKFLOW_XML" jdbcType="CLOB"/>
+        <result property="designerXml" column="DESIGNER_XML" jdbcType="CLOB"/>
+        <result property="create" column="CREATE_DT" jdbcType="TIMESTAMP"/>
+        <result property="status" column="STATUS" jdbcType="VARCHAR"/>
+        <result property="workflowTreeId" column="TREE_ID" jdbcType="BIGINT"/>
+        <result property="username" column="USERNAME" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== -->
+
+    <sql id="wherePK">WHERE ID = #{id}</sql>
+
+    <sql id="whereWFID">WHERE WORKFLOW_ID = #{workflowId}</sql>
+
+    <sql id="whereUsername">WHERE USERNAME = #{username}</sql>
+
+    <sql id="whereTreeId">WHERE TREE_ID = #{workflowTreeId}</sql>
+
+    <sql id="whereStatus">WHERE USERNAME = #{username} AND STATUS = #{STATUS}</sql>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Select Statement -->
+    <!-- ==================================================================================== -->
+
+    <select id="select" resultMap="workflowMap">
+        SELECT * FROM WORKFLOW
+        <include refid="wherePK"/>
+    </select>
+
+    <select id="selectAll" resultMap="workflowMap">
+        SELECT * FROM WORKFLOW
+    </select>
+
+    <select id="selectByStatus" parameterType="workflow" resultMap="workflowMap">
+        SELECT * FROM WORKFLOW
+        <include refid="whereStatus"/>
+    </select>
+
+    <select id="selectByUsername" resultMap="workflowMap">
+        SELECT * FROM WORKFLOW
+        <include refid="whereUsername"/>
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Exist Statement -->
+    <!-- ==================================================================================== -->
+
+    <select id="exist" parameterType="string" resultType="Integer">
+        SELECT COUNT(*) FROM WORKFLOW
+        <include refid="wherePK"/>
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 4. Insert Statements -->
+    <!-- ==================================================================================== -->
+
+    <insert id="insert" parameterType="workflow" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+        INSERT INTO WORKFLOW
+        (
+        WORKFLOW_ID,
+        NAME,
+        DESCRIPTION,
+        [VARIABLE],
+        WORKFLOW_XML,
+        DESIGNER_XML,
+        CREATE_DT,
+        STATUS,
+        TREE_ID,
+        USERNAME
+        )
+        VALUES
+        (
+        #{workflowId},
+        #{workflowName},
+        #{description},
+        #{variables},
+        #{workflowXml},
+        #{designerXml},
+        #{create},
+        #{status},
+        #{workflowTreeId},
+        #{username}
+        )
+
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <!-- ==================================================================================== -->
+    <!-- 5. Update Statements -->
+    <!-- ==================================================================================== -->
+
+    <update id="update" parameterType="workflow">
+        UPDATE WORKFLOW
+        SET
+        WORKFLOW_ID = #{workflowId},
+        NAME = #{workflowName},
+        DESCRIPTION = #{description},
+        [VARIABLE] = #{variables},
+        WORKFLOW_XML = #{workflowXml},
+        DESIGNER_XML = #{designerXml},
+        CREATE_DT = #{create},
+        STATUS = #{status},
+        TREE_ID = #{workflowTreeId},
+        USERNAME = #{username}
+        <include refid="wherePK"/>
+    </update>
+
+    <!-- ==================================================================================== -->
+    <!-- 6. Delete Statements -->
+    <!-- ==================================================================================== -->
+
+    <delete id="delete" parameterType="string">
+        DELETE FROM WORKFLOW
+        <include refid="wherePK"/>
+    </delete>
+</mapper>

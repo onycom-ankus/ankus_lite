@@ -1,0 +1,562 @@
+@CHARSET "UTF-8";
+
+.disabled-plain {
+    opacity: 1;
+}
+
+.code {
+    font-family: "Monaco", "NamumGothicCoding", "Courier New", "Gulimche", "monospace"
+}
+
+.common-refresh {
+    background-image: url(../images/common-refresh.png) !important;
+}
+
+.common-confirm {
+    background-image: url(../images/common-confirm.png) !important;
+}
+
+.common-cancel {
+    background-image: url(../images/common-cancel.png) !important;
+}
+
+.common-add {
+    background-image: url(../images/common-add.png) !important;
+}
+.common-edit {
+    background-image: url(../images/common-edit.png) !important;
+}
+.common-delete {
+    background-image: url(../images/common-delete.png) !important;
+}
+
+.common-window {
+    background-image: url(../images/common-details.gif) !important;
+}
+
+.common-folder {
+    background-image: url(../images/common-folder.png) !important;
+}
+
+.common-folder-collapse {
+    background-image: url(../images/common-folder-collapse.png) !important;
+}
+
+.common-folder-expand {
+    background-image: url(../images/common-folder-expand.png) !important;
+}
+
+.common-folder-create {
+    background-image: url(../images/common-folder-create.png) !important;
+}
+
+.common-folder-delete {
+    background-image: url(../images/common-folder-delete.png) !important;
+}
+
+.common-folder-info {
+    background-image: url(../images/common-folder-info.png) !important;
+}
+
+.common-folder-move {
+    background-image: url(../images/common-folder-move.png) !important;
+}
+
+.common-folder-rename {
+    background-image: url(../images/common-folder-rename.png) !important;
+}
+
+.common-find {
+    background: url(../images/find.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.common-find-clear {
+    background: url(../images/find-clear.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.status-blue {
+    background: url(../images/status-blue.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.status-red {
+    background: url(../images/status-red.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.status-yellow {
+    background: url(../images/status-yellow.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.status-green {
+    background: url(../images/status-green.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.status-orange {
+    background: url(../images/status-orange.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.status-gray {
+    background: url(../images/status-gray.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.collector-show-fs {
+    background: url(../images/collector-show-fs.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.collector-regist {
+    background: url(../images/collector-regist.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.hdfs-directory-create {
+    background-image: url(../images/fs/hdfs/directory-create.png) !important;
+}
+
+.hdfs-directory-delete {
+    background-image: url(../images/fs/hdfs/directory-delete.png) !important;
+}
+
+.hdfs_directory_copy {
+    background-image: url(../images/fs/hdfs/directory_copy.png) !important;
+}
+
+.hdfs-directory-info {
+    background-image: url(../images/fs/hdfs/information.png) !important;
+}
+
+.hdfs-directory-move {
+    background-image: url(../images/fs/hdfs/directory-move.png) !important;
+}
+
+.hdfs-directory-rename {
+    background-image: url(../images/fs/hdfs/directory-rename.png) !important;
+}
+
+.hdfs-file-copy {
+    background-image: url(../images/fs/hdfs/file-copy.png) !important;
+}
+
+.hdfs-file-delete {
+    background-image: url(../images/fs/hdfs/file-delete.png) !important;
+}
+
+.hdfs-file-move {
+    background-image: url(../images/fs/hdfs/file-move.png) !important;
+}
+
+.hdfs-file-rename {
+    background-image: url(../images/fs/hdfs/file-rename.png) !important;
+}
+
+.hdfs-file-select {
+    background-image: url(../images/fs/hdfs/file-select.png) !important;
+}
+
+.hdfs-file-upload {
+    background-image: url(../images/fs/hdfs/file-upload.png) !important;
+}
+
+.hdfs-file-download {
+    background-image: url(../images/fs/hdfs/file-download.png) !important;
+}
+
+.hdfs-used {
+    background-image: url(../images/fs/hdfs/used.png) !important;
+}
+
+.hdfs-database {
+    background-image: url(../images/fs/hdfs/hive-database.png) !important;
+}
+
+.hdfs-table {
+    background-image: url(../images/fs/hdfs/hive-table.png) !important;
+}
+
+/* Desktop shortcut images */
+.desktop-hive {
+    background-image: url(../images/desktop/hive.png) !important;
+}
+
+.desktop-pig {
+    background-image: url(../images/desktop/pig.png) !important;
+}
+
+.desktop-hdfs {
+    background-image: url(../images/desktop/floppy.png) !important;
+}
+
+.desktop-user {
+    background-image: url(../images/desktop/users.png) !important;
+}
+
+.desktop-usermgr {
+    background-image: url(../images/desktop/usermgr.png) !important;
+}
+
+.desktop-workflow {
+    background-image: url(../images/desktop/hadoop_big.png) !important;
+}
+
+.desktop-dashboard {
+    background-image: url(../images/desktop/dashboard_big.png) !important;
+}
+
+.desktop-dashboard-small {
+    background-image: url(../images/desktop/dashboard_small.png) !important;
+}
+
+.desktop-dashboard-big {
+    background-image: url(../images/desktop/dashboard_big.png) !important;
+}
+
+.desktop-hdfs-small {
+    background-image: url(../images/desktop/disk_small.png) !important;
+}
+
+.desktop-user-small {
+    background-image: url(../images/desktop/users_small.png) !important;
+}
+
+.desktop-usermgr-small {
+    background-image: url(../images/desktop/usermgr_small.png) !important;
+}
+
+.desktop-workflow-small {
+    background-image: url(../images/desktop/hadoop_small.png) !important;
+}
+
+.desktop-visualization {
+    background-image: url(../images/desktop/visual_big.png) !important;
+}
+
+.desktop-visualization-small {
+    background-image: url(../images/desktop/visual_small.png) !important;
+}
+
+.desktop-tajo {
+    background-image: url(../images/desktop/tajo_big.png) !important;
+}
+
+.desktop-tajo-small {
+    background-image: url(../images/desktop/tajo_small.png) !important;
+}
+
+.desktop-monitoring {
+    background-image: url(../images/desktop/monitoring_big.png) !important;
+}
+
+.desktop-monitoring-small {
+    background-image: url(../images/desktop/monitoring_small.png) !important;
+}
+
+.designer-create {
+    background-image: url(../images/designer/create.png) !important;
+}
+
+.designer-hdfs {
+    background-image: url(../images/designer/hdfs.png) !important;
+}
+
+.designer-save {
+    background-image: url(../images/designer/save.png) !important;
+}
+
+.designer-loading {
+    background-image: url(../images/designer/loading.png) !important;
+}
+
+.designer-explanation {
+    background-image: url(../images/designer/explanation.png) !important;
+}
+
+.designer-action {
+    background-image: url(../images/designer/action.png) !important;
+}
+
+.designer-workflow-xml {
+    background-image: url(../images/designer/xml.png) !important;
+}
+
+.visualization-bar {
+    background-image: url(../images/visualization/chart/v_bar.png) !important;
+    background-size: 36px;
+}
+
+.visualization-bar-c {
+	border: 2px solid #208fda;
+    background-color: #ebbf3a;
+    background-size: 32px;
+    background-image: url(../images/visualization/chart/v_bar.png) !important;
+}
+
+.visualization-bar:hover {	
+    border: 2px solid #208fda;
+    background-color: #ebbf3a;
+    background-size: 32px;
+    cursor: pointer;
+ }
+ 
+.visualization-box {
+    background-image: url(../images/visualization/chart/v_box.png) !important; 
+    background-size: 36px;
+}
+
+.visualization-box-c {	
+    border: 2px solid #208fda;
+    background-color: #273d4b;
+    background-size: 32px;
+    background-image: url(../images/visualization/chart/v_box.png) !important;
+ }
+
+.visualization-box:hover {	
+    border: 2px solid #208fda;
+    background-color: #273d4b;
+    background-size: 32px;
+    cursor: pointer;
+ }
+ 
+.visualization-graph {
+    background-image: url(../images/visualization/chart/v_graph.png) !important;
+    background-size: 36px;
+}
+
+ .visualization-graph-c {
+    border: 2px solid #208fda;
+    background-color: #ebbf3a;
+    background-image: url(../images/visualization/chart/v_graph.png) !important;
+    background-size: 32px;
+}
+
+ .visualization-graph:hover {	
+    border: 2px solid #208fda;
+    background-color: #ebbf3a;
+    background-size: 32px;
+    cursor: pointer;
+ }
+
+.visualization-pdf {	
+    background-image: url(../images/visualization/chart/v_pdf.png) !important;
+    background-size: 36px;     
+ }
+ 
+ .visualization-pdf-c{	
+    border: 2px solid #208fda;
+    background-color: #4ca289;
+    background-image: url(../images/visualization/chart/v_pdf.png) !important;
+    background-size: 32px;     
+ }
+ 
+ .visualization-pdf:hover {	
+    border: 2px solid #208fda;
+    background-color: #32a589;
+    background-size: 32px;
+    cursor: pointer;
+ }
+
+.visualization-pie {
+    background-image: url(../images/visualization/chart/v_pie.png) !important;
+    background-size: 36px;     
+}
+
+.visualization-pie-c {
+	border: 2px solid #208fda;
+    background-color: #283e4b;
+    background-image: url(../images/visualization/chart/v_pie.png) !important;
+    background-size: 32px;     
+}
+
+.visualization-pie:hover {	
+    border: 2px solid #208fda;
+    background-color: #283e4b;
+    background-size: 32px;
+    cursor: pointer;
+ }
+ 
+.visualization-scatter {
+    background-image: url(../images/visualization/chart/v_scatter.png) !important;
+     background-size: 36px;
+}
+
+.visualization-scatter-c {
+    border: 2px solid #208fda;
+    background-color: #d7443a;
+    background-image: url(../images/visualization/chart/v_scatter.png) !important;
+    background-size: 32px;
+}
+
+.visualization-scatter:hover {	
+    border: 2px solid #208fda;
+    background-color: #d7443a;
+    background-size: 32px;
+    cursor: pointer;
+ }
+ 
+.visualization-tree-dis {
+    background-image: url(../images/visualization/chart/tree_dis.png) !important;
+     background-size: 36px;
+}
+ 
+.visualization-tree {
+    background-image: url(../images/visualization/chart/v_tree.png) !important;
+     background-size: 36px;
+}
+
+.visualization-tree-c {
+    border: 2px solid #208fda;
+    background-color: #283e4b;	
+    background-image: url(../images/visualization/chart/v_tree.png) !important;
+    background-size: 32px;
+}
+
+.visualization-tree:hover {	
+    border: 2px solid #208fda;
+    background-color: #283e4b;
+    background-size: 32px;
+    cursor: pointer;
+ }
+
+.desktop-DBLink {
+    background-image: url(../images/desktop/database_45.png) !important;
+}
+
+.desktop-DBLink-small {
+    background-image: url(../images/desktop/database_16.png) !important;
+}
+
+
+.x-grid-cell {
+    vertical-align: middle;
+}
+
+.x-form-check-group-label {
+    color: black;
+    padding: 2px;
+    margin: 0 30px 5px 0;
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    border-color: #E0E0E0
+}
+
+.msg .x-box-mc {
+    font-size: 14px;
+}
+
+#msg-div {
+    position: absolute;
+    left: 35%;
+    top: 10px;
+    width: 300px;
+    z-index: 20000;
+}
+
+#msg-div .msg {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #F6F6F6;
+    border: 2px solid #ccc;
+    margin-top: 2px;
+    padding: 10px 15px;
+    color: #555;
+}
+
+#msg-div .msg h3 {
+    margin: 0 0 8px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#msg-div .msg p {
+    margin: 0;
+}
+
+.audit-cell-height {
+    height: 30px;
+    padding-top: 10px;
+}
+
+.about-window-field {
+    margin-bottom: 0px
+}
+
+.about-window-logo {
+    background-image: url(../images/about/logo.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.about-window-logo2 {
+    background-image: url(../images/about/logo2.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.need-help-logo-red {
+    background-image: url(../images/about/angry.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.need-help-logo-yel {
+    background-image: url(../images/about/angry_y.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.forgot-passwd {
+    background-image: url(../images/about/forgot_pw.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.forgot-passwd2 {
+    background-image: url(../images/about/forgot_pw2.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.forgot-passwd-yel {
+    background-image: url(../images/about/forgot_pw_y.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.forgot-passwd2-yel {
+    background-image: url(../images/about/forgot_pw2_y.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.ankus-small {
+    background-image: url(../images/favicon.ico);
+    background-size: 16px 16px;
+}
+
+.HDFS-folder {
+    background-image: url(../images/common-folder.png) !important;    
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.state-check  .x-grid-cell{ 
+  background-color:#B2CCFF;  
+}
+
+

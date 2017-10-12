@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+    <bean id="remoteService" class="com.ankus.web.core.RemoteServiceImpl">
+        <property name="serviceMap">
+            <map>
+                <entry key="hive" value="com.ankus.provider.hive.HiveService"/>
+                <entry key="job" value="com.ankus.provider.engine.JobService"/>
+                <entry key="hdfs" value="com.ankus.provider.fs.FileSystemService"/>
+                <entry key="audit" value="com.ankus.provider.fs.FileSystemAuditService"/>
+                <entry key="engine" value="com.ankus.provider.engine.WorkflowEngineService"/>
+                <entry key="cache" value="com.ankus.provider.engine.JobService"/>
+                <entry key="monitoring" value="com.ankus.provider.engine.MonitoringEngineService"/>
+                <entry key="module" value="com.ankus.provider.engine.JobService"/>
+            </map>
+        </property>
+    </bean>
+
+</beans>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.engine.EngineRepository">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+    <resultMap id="engineMap" type="com.ankus.model.rest.Engine">
+        <result property="id" column="ID" jdbcType="BIGINT"/>
+        <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        <result property="ip" column="IP" jdbcType="VARCHAR"/>
+        <result property="port" column="PORT" jdbcType="VARCHAR"/>
+        <result property="hadoopClusterId" column="CLUSTER_ID" jdbcType="BIGINT"/>
+        <result property="hiveServerId" column="HIVE_ID" jdbcType="BIGINT"/>
+        <result property="isPublic" column="ISPUBLIC" jdbcType="BIGINT"/>
+        <result property="permission" column="PERMISSION" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== -->
+
+    <sql id="wherePK">WHERE ID = #{id}</sql>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Select Statement -->
+    <!-- ==================================================================================== -->
+
+<!-- MySQL
+    <select id="select" resultMap="engineMap">
+        SELECT E.ID, E.NAME, E.IP, E.PORT, E.CLUSTER_ID, E.HIVE_ID, E.ISPUBLIC
+			, GROUP_CONCAT(P.USERNAME SEPARATOR ',' ) AS PERMISSION
+        FROM ENGINE AS E, ADMIN_ENGINE_PERMISSION AS P
+        WHERE E.ID = P.ID AND E.ID = #{id}
+    </select>
+
+    <select id="selectAll" parameterType="com.ankus.web.member.Member" resultMap="engineMap">
+	    SELECT E.ID, E.NAME, E.IP, E.PORT, E.CLUSTER_ID, E.HIVE_ID, E.ISPUBLIC, NULL AS [PERMISSION]
+		FROM ENGINE E
+		WHERE E.ISPUBLIC = 1
+		UNION
+		SELECT E.ID, E.NAME, E.IP, E.PORT, E.CLUSTER_ID, E.HIVE_ID, E.ISPUBLIC, P.PERMISSION
+		FROM ENGINE E, 
+		     (SELECT ID, GROUP_CONCAT(USERNAME) AS PERMISSION from ADMIN_ENGINE_PERMISSION 
+  		<if test="authority != null and authority == 'ROLE_USER'">
+		     WHERE USERNAME = #{username} 
+  		</if>
+		     GROUP BY ID) as P
+		WHERE E.ISPUBLIC = 0 AND E.ID = P.ID
+    </select>
+
+ -->
+    <select id="select" resultMap="engineMap">
+        SELECT E.ID, E.NAME, E.IP, E.PORT, E.CLUSTER_ID, E.HIVE_ID, E.ISPUBLIC
+			,(SELECT MAX(USERNAME) FROM ADMIN_ENGINE_PERMISSION WHERE id=E.id) AS PERMISSION
+        FROM ENGINE AS E
+        WHERE E.ID = #{id}
+    </select>
+
+    <select id="selectAll" parameterType="com.ankus.web.member.Member" resultMap="engineMap">
+	    SELECT E.ID, E.NAME, E.IP, E.PORT, E.CLUSTER_ID, E.HIVE_ID, E.ISPUBLIC, NULL AS [PERMISSION]
+		FROM ENGINE E
+		WHERE E.ISPUBLIC = 1
+		UNION
+		SELECT E.ID, E.NAME, E.IP, E.PORT, E.CLUSTER_ID, E.HIVE_ID, E.ISPUBLIC, P.PERMISSION
+		FROM ENGINE E, 
+		     (SELECT ID, USERNAME AS PERMISSION from ADMIN_ENGINE_PERMISSION 
+  		<if test="authority != null and authority == 'ROLE_USER'">
+		     WHERE USERNAME = #{username} 
+  		</if>
+		     GROUP BY ID) as P
+		WHERE E.ISPUBLIC = 0 AND E.ID = P.ID
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Exist Statement -->
+    <!-- ==================================================================================== -->
+
+    <select id="exist" parameterType="string" resultType="Integer">
+        SELECT COUNT(*) FROM ENGINE
+        <include refid="wherePK"/>
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 4. Insert Statements -->
+    <!-- ==================================================================================== -->
+
+    <insert id="insert" parameterType="engine" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+        INSERT INTO ENGINE ( ID, NAME, IP, PORT, CLUSTER_ID, HIVE_ID, ISPUBLIC )
+        VALUES ( #{id}, #{name}, #{ip}, #{port}, #{hadoopClusterId}, #{hiveServerId}, #{isPublic} )
+
+        <selectKey resultType="long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <!-- ==================================================================================== -->
+    <!-- 5. Update Statements -->
+    <!-- ==================================================================================== -->
+
+    <update id="update" parameterType="engine">
+        UPDATE ENGINE
+        SET
+        NAME = #{name},
+        IP = #{ip},
+        PORT = #{port},
+        CLUSTER_ID = #{hadoopClusterId},
+        HIVE_ID = #{hiveServerId},
+        ISPUBLIC = #{isPublic}
+        <include refid="wherePK"/>
+    </update>
+
+    <!-- ==================================================================================== -->
+    <!-- 6. Delete Statements -->
+    <!-- ==================================================================================== -->
+
+    <delete id="delete" parameterType="string">
+        DELETE FROM ENGINE
+        <include refid="wherePK"/>
+    </delete>
+    
+    
+    <insert id="insertPermission" parameterType="java.util.Map">
+        INSERT INTO ADMIN_ENGINE_PERMISSION ( ID, USERNAME )
+        VALUES ( #{id}, #{username} )
+    </insert>
+    
+    <delete id="deletePermission" parameterType="int">
+        DELETE FROM ADMIN_ENGINE_PERMISSION
+        WHERE ID = #{id}
+    </delete>
+</mapper>

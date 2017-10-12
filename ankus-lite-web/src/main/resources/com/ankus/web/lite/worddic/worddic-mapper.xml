@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace=" com.ankus.web.lite.worddic.WorddicRepository">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+    <resultMap id="worddicMap" type=" com.ankus.web.lite.worddic.Worddic">
+        <result property="wid" column="WID" jdbcType="INTEGER"/>
+        <result property="word" column="WORD" jdbcType="VARCHAR"/>
+        <result property="wtype" column="WTYPE" jdbcType="VARCHAR"/>        
+    </resultMap>
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== -->
+
+    <sql id="wherePK">WHERE WID = #{wid}</sql>
+    <sql id="whereItem">WHERE WORD = #{word}</sql>    
+    <sql id="whereWtype">WHERE WTYPE = #{wtype}</sql>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Select Statement -->
+    <!-- ==================================================================================== -->
+   
+    <select id="select" parameterType="Integer" resultMap="worddicMap">
+        SELECT * FROM WORDDIC
+        <include refid="wherePK"/>
+    </select>
+
+    <select id="selectAll" resultMap="worddicMap">
+        SELECT * FROM WORDDIC
+    </select>
+
+    <select id="selectByCondition" parameterType="worddic" resultMap="worddicMap">
+        SELECT wid, word, dtype				
+ 		FROM WORDDIC
+        <where>
+            <if test=" word != null and word !='' ">
+                AND WORD LIKE #{word}
+            </if>            
+            <if test=" wtype != null and wtype !='' ">
+                AND WTYPE = #{wtype}
+            </if>            
+        </where>
+        ORDER BY 
+        <choose>
+        	<when test="sidx != null and sidx != ''"> ${sidx} </when>
+        	<otherwise> ITEM </otherwise>
+        </choose>
+        <choose>
+        	<when test="sord != null and sord != ''"> ${sord} </when>
+        	<otherwise> ASC </otherwise>
+        </choose>
+        <if test="paging == true">
+        FOR ORDERBY_NUM() BETWEEN #{startRow} AND #{endRow};
+        </if>
+    </select>
+
+    <select id="selectByConditionCnt" parameterType="worddic" resultType="int">
+    	SELECT COUNT(1) FROM WORDDIC
+        <where>
+           <if test=" word != null and word !='' ">
+                AND WORD LIKE #{word}
+            </if>            
+            <if test=" wtype != null and wtype !='' ">
+                AND WTYPE = #{wtype}
+            </if>            
+        </where>
+    </select>
+
+    <select id="selectItems" resultMap="worddicMap">
+        SELECT DISTINCT ITEM FROM WORDDIC
+        <if test="excludeN != null and excludeN == true">
+        WHERE [TYPE] <![CDATA[<>]]> 'N'
+        </if>       
+        ORDER BY ITEM
+    </select>
+    <select id="selectTypes" parameterType="worddic" resultMap="worddicMap">
+        SELECT DISTINCT TYPE FROM WORDDIC WHERE DTYPE = #{dtype} AND [TYPE] != ''
+        ORDER BY [TYPE]
+    </select>
+    
+     <select id="selectItemsList" parameterType="worddic" resultMap="worddicMap">
+        SELECT DISTINCT ITEM FROM WORDDIC        
+        <if test=" item != null and item !='' ">
+         WHERE ITEM LIKE #{item}
+        </if>
+        ORDER BY ITEM
+    </select>
+    
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Exist Statement -->
+    <!-- ==================================================================================== -->
+    
+    <select id="exist" parameterType="Integer" resultType="int">
+        SELECT COUNT(*) FROM WORDDIC 
+        <include refid="wherePK"/>
+    </select>
+    
+    <!-- ==================================================================================== -->
+    <!-- 4. Insert Statements -->
+    <!-- ==================================================================================== -->
+    
+    <insert id="insert" parameterType="worddic" useGeneratedKeys="true" keyProperty="wid">
+        INSERT INTO WORDDIC (
+			WORD,
+			WTYPE			
+        )
+        VALUES (
+			#{word},
+			#{dtype}			
+        )
+    </insert>
+    
+    <!-- ==================================================================================== -->
+    <!-- 5. Update Statements -->
+    <!-- ==================================================================================== -->
+    
+    <update id="update">
+    	UPDATE WORDDIC SET
+    		WORD = #{word},
+    		WTYPE = #{wtype}    		
+        <include refid="wherePK"/>
+    </update>
+    
+    <!-- ==================================================================================== -->
+    <!-- 6. Delete Statements -->
+    <!-- ==================================================================================== -->
+    
+	<delete id="delete" parameterType="String">
+        DELETE FROM WORDDIC
+        <include refid="wherePK"/>
+    </delete>
+
+	<delete id="deleteList">
+        DELETE FROM WORDDIC WHERE ID IN 
+        <foreach collection="array" open="(" separator="," close=")" index="index" item="wid">
+        #{wid}
+        </foreach>
+    </delete>
+
+</mapper>

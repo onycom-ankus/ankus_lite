@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dataMgr">
+
+	<select id="getDataNmList" parameterType="DataMap" resultType="DataMap">
+		SELECT
+			DISTINCT(data_id),
+			data_nm
+		FROM
+			inner_data_collection
+		WHERE
+			writer = #{username}
+		ORDER BY 
+			data_id ASC
+	</select>
+	
+	<select id="searchData" parameterType="DataMap" resultType="DataMap">
+		SELECT
+			icid,
+			data_id,
+			record_id,
+			data_nm,
+			file_nm,
+			title,
+			content,
+			content_type,
+			writer,
+			reg_dttm
+		FROM
+			inner_data_collection
+		WHERE 
+			writer = #{username}
+		AND
+			data_id = #{data_id}
+		ORDER BY
+			record_id ASC
+	</select>
+	
+	<select id="getTitle" parameterType="DataMap" resultType="DataMap">
+		SELECT 
+			 title
+		FROM (	
+			SELECT 
+				title
+				,icid
+			FROM
+				inner_data_collection
+			WHERE 
+				writer = #{username}
+			AND
+				data_id = #{data_id}
+			ORDER BY 
+				icid asc
+		)
+		GROUP BY 
+			title
+		ORDER BY 
+			icid ASC
+	</select>
+	
+	<delete id="remove" parameterType="DataMap">
+		DELETE FROM
+			inner_data_collection
+		WHERE
+			data_id = #{data_id}
+	</delete>
+</mapper>

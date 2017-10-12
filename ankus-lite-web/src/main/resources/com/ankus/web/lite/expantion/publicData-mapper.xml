@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="publicData">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+<!--     <resultMap id="engineMap" type="com.ankus.model.rest.Engine"> -->
+<!--         <result property="id" column="ID" jdbcType="BIGINT"/> -->
+<!--         <result property="name" column="NAME" jdbcType="VARCHAR"/> -->
+<!--         <result property="ip" column="IP" jdbcType="VARCHAR"/> -->
+<!--         <result property="port" column="PORT" jdbcType="VARCHAR"/> -->
+<!--         <result property="hadoopClusterId" column="CLUSTER_ID" jdbcType="BIGINT"/> -->
+<!--         <result property="hiveServerId" column="HIVE_ID" jdbcType="BIGINT"/> -->
+<!--         <result property="isPublic" column="ISPUBLIC" jdbcType="BIGINT"/> -->
+<!--         <result property="permission" column="PERMISSION" jdbcType="VARCHAR"/> -->
+<!--     </resultMap> -->
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== -->
+
+<!--     <sql id="wherePK">WHERE ID = #{id}</sql> -->
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Select Statement -->
+    <!-- ==================================================================================== -->
+
+	<select id="getList" resultType="DataMap" parameterType="DataMap">
+		SELECT
+			pd.pid as pid,
+			pd.data_id as data_id,
+			pd.data_nm as data_nm,
+			pd.reload_cycle as reload_cycle,
+			pd.writer as writer,
+			pd.reg_dttm as reg_dttm,
+			pd.updt_dttm as updt_dttm,
+			u.name as name
+		FROM
+			[public_data] pd 
+			LEFT OUTER JOIN [user] u ON (pd.writer = u.username)
+		WHERE 
+			pd.writer = #{username}
+		<if test="data_nm != ''">AND pd.data_nm LIKE '%' || #{data_nm} || '%'</if>
+		<if test="reg_dttm != ''">AND reg_dttm = #{reg_dttm}</if>
+	</select>
+	
+	<select id="getLastDataId" resultType="DataMap">
+		SELECT
+			data_id
+		FROM
+			[public_data_collection]
+		ORDER BY
+			data_id DESC
+		LIMIT 1
+	</select>
+	
+	<insert id="registCollection" parameterType="DataMap">
+		INSERT INTO
+			public_data_collection (
+				data_id,
+				record_id,
+				[key],
+				[value]
+			)
+		VALUES
+		<foreach collection="rows" item="r" separator=",">
+		(
+			#{r.data_id},
+			#{r.record_id},
+			#{r.key},
+			#{r.value}
+		)
+		</foreach>
+	</insert>
+	
+	<insert id="regist" parameterType="DataMap">
+		INSERT INTO
+			public_data (
+				data_id,
+				data_nm,
+				reload_cycle,
+				addr,
+				writer
+			)
+		VALUES
+			(
+				#{data_id},
+				#{data_nm},
+				#{reload_cycle},
+				#{addr},
+				#{writer}
+			)
+	</insert>
+	
+	<select id="pdDetailGrid" parameterType="DataMap" resultType="DataMap">
+		SELECT
+			pdc.pcid as pcid,
+			pd.data_nm as data_nm,
+			pd.reload_cycle as reload_cycle,
+			pd.writer as writer,
+			pdc.data_id as data_id,
+			pdc.record_id as record_id,
+			pdc.[key],
+			pdc.[value],
+			pdc.reg_dttm as reg_dttm,
+			pdc.updt_dttm as updt_dttm
+		FROM
+			public_data_collection pdc
+			LEFT OUTER JOIN public_data pd ON (pdc.data_id = pd.data_id)
+		WHERE 
+			pdc.data_id = #{data_id}
+	</select>
+	
+	<delete id="removePublicData" parameterType="DataMap">
+		DELETE FROM
+			public_data
+		WHERE
+			pid = #{pid}
+	</delete>
+	
+	<delete id="removePublicDataCollection" parameterType="DataMap">
+		DELETE FROM
+			public_data_collection
+		WHERE
+			data_id = #{data_id}		
+	</delete>
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <typeAliases>
+        <typeAlias type="com.ankus.web.menu.Menu" alias="menu"/>
+        <typeAlias type="com.ankus.web.pig.Pig" alias="pig"/>
+        <typeAlias type="com.ankus.model.rest.Workflow" alias="workflow"/>
+
+        <!-- Common -->
+        <typeAlias type="com.ankus.locale.Locale" alias="locale"/>
+        <typeAlias type="com.ankus.model.rest.Tree" alias="tree"/>
+        <typeAlias type="com.ankus.model.rest.User" alias="user"/>
+
+        <!-- Admin -->
+        <typeAlias type="com.ankus.model.rest.Engine" alias="engine"/>
+        <typeAlias type="com.ankus.model.rest.HadoopCluster" alias="hadoopCluster"/>
+        <typeAlias type="com.ankus.model.rest.HiveServer" alias="hiveServer"/>
+        <typeAlias type="com.ankus.model.rest.User" alias="user"/>
+        
+        <!-- main -->
+        <typeAlias type="com.ankus.web.scheduler.Scheduler" alias="scheduler"/>       
+        
+        <!-- DataMap -->
+        <typeAlias type="com.ankus.web.lite.expantion.util.DataMap" alias="DataMap"/> 
+        <typeAlias type="com.ankus.web.lite.worddic.Worddic" alias="worddic"/>
+    </typeAliases>
+
+    <mappers>
+        <mapper resource="com/ankus/web/menu/menu-mapper.xml"/>
+        <mapper resource="com/ankus/web/pig/pig-mapper.xml"/>
+        <mapper resource="com/ankus/web/designer/workflow-mapper.xml"/>
+        
+        <!-- Common -->
+       
+        <mapper resource="com/ankus/web/tree/tree-mapper.xml"/>
+        <mapper resource="com/ankus/web/security/user-mapper.xml"/>
+
+        <!-- Admin -->
+        <mapper resource="com/ankus/web/admin/engine-mapper.xml"/>
+        <mapper resource="com/ankus/web/admin/hadoop-admin-mapper.xml"/>
+        <mapper resource="com/ankus/web/admin/hive-admin-mapper.xml"/>
+        <mapper resource="com/ankus/web/admin/user-admin-mapper.xml"/>
+
+        <!-- Member -->
+        <mapper resource="com/ankus/web/member/member-mapper.xml"/>
+        
+        <!-- main -->      
+        <mapper resource="com/ankus/web/scheduler/scheduler-mapper.xml"/>    
+        <mapper resource="com/ankus/web/lite/worddic/worddic-mapper.xml"/>
+        
+        <!-- Language -->      
+        <mapper resource="com/ankus/web/language/language-mapper.xml"/>
+        
+    </mappers>
+
+</configuration>

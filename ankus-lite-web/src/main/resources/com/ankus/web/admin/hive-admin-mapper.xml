@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.admin.HiveAdminRepository">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+    <resultMap id="hiveServerMap" type="com.ankus.model.rest.HiveServer">
+        <result property="id" column="ID" jdbcType="BIGINT"/>
+        <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        <result property="jdbcDriver" column="JDBC_DRIVER" jdbcType="VARCHAR"/>
+        <result property="jdbcUrl" column="JDBC_URL" jdbcType="VARCHAR"/>
+        <result property="metastoreUris" column="METASTORE_URIS" jdbcType="VARCHAR"/>
+        <result property="metastoreJdbcDriver" column="METASTORE_JDBC_DRIVER" jdbcType="VARCHAR"/>
+        <result property="metastoreJdbcUrl" column="METASTORE_JDBC_URL" jdbcType="VARCHAR"/>
+        <result property="metastoreUser" column="METASTORE_USER" jdbcType="VARCHAR"/>
+        <result property="metastorePassword" column="METASTORE_PASSWORD" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== -->
+
+    <sql id="wherePK">WHERE ID = #{id}</sql>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Select Statement -->
+    <!-- ==================================================================================== -->
+
+    <select id="select" resultMap="hiveServerMap">
+        SELECT * FROM ADMIN_HIVE_SERVER
+        <include refid="wherePK"/>
+    </select>
+
+    <select id="selectAll" resultMap="hiveServerMap">
+        SELECT * FROM ADMIN_HIVE_SERVER
+    </select>
+
+    <select id="selectByName" parameterType="string" resultType="Integer">
+        SELECT COUNT(*) FROM ADMIN_HIVE_SERVER
+        WHERE NAME = #{value}
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Exist Statement -->
+    <!-- ==================================================================================== -->
+
+    <select id="exist" parameterType="string" resultType="Integer">
+        SELECT COUNT(*) FROM ADMIN_HIVE_SERVER
+        <include refid="wherePK"/>
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 4. Insert Statements -->
+    <!-- ==================================================================================== -->
+
+    <insert id="insert" parameterType="hiveServer" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+        INSERT INTO ADMIN_HIVE_SERVER
+        ( ID, NAME, JDBC_DRIVER, JDBC_URL, METASTORE_URIS, METASTORE_JDBC_DRIVER, METASTORE_JDBC_URL )
+        VALUES
+        ( #{id}, #{name}, #{jdbcDriver}, #{jdbcUrl}, #{metastoreUris}, #{metastoreJdbcDriver}, #{metastoreJdbcUrl} )
+
+        <selectKey resultType="long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <!-- ==================================================================================== -->
+    <!-- 5. Update Statements -->
+    <!-- ==================================================================================== -->
+
+    <update id="update" parameterType="hiveServer">
+        UPDATE ADMIN_HIVE_SERVER
+        SET
+        ID = #{id},
+        NAME = #{name},
+        JDBC_DRIVER = #{jdbcDriver},
+        JDBC_URL = #{jdbcUrl},
+        METASTORE_URIS = #{metastoreUris}
+        <include refid="wherePK"/>
+    </update>
+
+    <!-- ==================================================================================== -->
+    <!-- 6. Delete Statements -->
+    <!-- ==================================================================================== -->
+
+    <delete id="delete" parameterType="string">
+        DELETE FROM ADMIN_HIVE_SERVER
+        <include refid="wherePK"/>
+    </delete>
+</mapper>

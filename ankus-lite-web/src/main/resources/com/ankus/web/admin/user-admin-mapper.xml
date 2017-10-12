@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.admin.UserAdminRepository">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+    <resultMap id="userMap" type="com.ankus.model.rest.User">
+        <result property="username" column="USERNAME" jdbcType="VARCHAR"/>
+        <result property="email" column="EMAIL" jdbcType="VARCHAR"/>
+        <result property="enabled" column="ENABLED" jdbcType="INTEGER"/>
+        <result property="authority" column="AUTHORITY" jdbcType="VARCHAR"/>
+        <result property="createDate" column="CREATE_DT" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp"/>
+        <result property="lastlogin" column="LAST_LOGIN" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp"/>
+    </resultMap>
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== --> 
+
+    <sql id="wherePK">WHERE USERNAME = #{username}</sql>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Select Statement -->
+    <!-- ==================================================================================== -->
+
+    <select id="select" resultMap="userMap">
+        SELECT * FROM [USER]
+        <include refid="wherePK"/>
+    </select>
+
+    <select id="selectAll" resultMap="userMap">
+        SELECT * FROM [USER]
+    </select>
+
+    
+    <select id="selectByCondition" parameterType="map" resultMap="userMap">
+        SELECT * FROM [USER]
+        WHERE 1=1
+        <if test="username != null and username != ''">
+            AND USERNAME = '%${username}%'
+        </if>
+        <if test="email != null and email != ''">
+            AND EMAIL LIKE '%${email}%'
+        </if>
+        <if test="enabled != null and enabled != '' and enabled != 'ALL'">
+            AND ENABLED = #{enabled}
+        </if>
+        <if test="authority != null and authority != '' and authority != 'ALL'">
+            AND AUTHORITY = #{authority}
+        </if>
+        <if test="createDate != null and createDate != ''">
+            AND DATE(CREATE_DT) LIKE '%${createDate}'
+        </if>
+        ORDER BY ${orderBy} ${desc}
+        LIMIT ${start}, ${limit}
+    </select>
+
+    <select id="selectByName" parameterType="string" resultType="Integer">
+        SELECT COUNT(*) FROM [USER]
+        WHERE USERNAME = #{value}
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 4. Exist Statement -->
+    <!-- ==================================================================================== -->
+
+    <select id="exist" parameterType="string" resultType="Integer">
+        SELECT COUNT(*) FROM [USER]
+        <include refid="wherePK"/>
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 5. Update Statements -->
+    <!-- ==================================================================================== -->
+
+    <update id="updateUser" parameterType="user">
+        UPDATE [USER]
+        SET
+        ENABLED = #{enabled},
+        AUTHORITY = #{authority}
+        <include refid="wherePK"/>
+    </update>
+
+    <!-- ==================================================================================== -->
+    <!-- 6. Delete Statements -->
+    <!-- ==================================================================================== -->
+
+    <delete id="deleteUser" parameterType="user">
+        DELETE FROM [USER]
+        WHERE USERNAME = #{username}
+        AND EMAIL = #{email}
+    </delete>
+    
+    <delete id="deleteByUsernames" parameterType="java.util.Map">
+        DELETE FROM [USER]
+        WHERE USERNAME IN
+ 		<foreach collection="usernames" item="obj" open="(" close=")" separator=",">
+	     	 '${obj}'
+	 	</foreach>
+    </delete>
+    
+    <select id="count" resultType="Integer">
+        SELECT COUNT(*) FROM [USER]
+    </select>
+
+</mapper>
