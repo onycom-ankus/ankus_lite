@@ -4,7 +4,7 @@
 		var postData = $('#_wd_grid').jqGrid('getGridParam', 'postData');
 		var data = {};
 		data.word		= $('#_wd_searchWord').val();	
-		data.dtype		= $('#_wd_searchDtype').val();
+		data.wtype		= $('#_wd_searchWtype').val();
 		data.paging		= true;
 		if (postData) {
 			data.page		= page ? 1 : postData.page;
@@ -44,7 +44,7 @@
 	        multiselect		: true,
 	        idPrefix		: '_wdGrid_',
 	        ondblClickRow	: function(id){
-	        	_editAction($('#_wd_grid').getRowData(wid));
+	        	_editAction($('#_wd_grid').getRowData(id));
 	        },
 	        refreshfunc		: function(){
 	        },
@@ -53,55 +53,38 @@
 	        colModel		: [
 	        	{ name : 'wid', hidden : true},
 	        	{ name : 'word', label : '대표어',  width : 590, align : 'center'},	        	
-	        	{ name : 'dtype', label : '종류',  width : 590, align : 'center'}	        	
+	        	{ name : 'wtype', label : '종류',  width : 590, align : 'center'}	        	
 	        ]
 	    });
 	};
 	
 	function _getItems(){
-		var item = $('#_wd_popSearchItem').val();
+		
+		var item = $('#_wd_popSearchWord').val();
 		if (!item) {
 			ANKUS_API.util.alert('대표어를 입력해 주세요.');
 			return;
 		}
+		
+		var data = {};
+		data.word = item;
+		
 		ANKUS_API.ajax({
-			url			: '/mfds/worddic/itemsList',
-			data		: {
-				item : item
-			},
-			type		: 'GET',
+			url			: '/worddic/exist',
+			data		: JSON.stringify(data),
+			type		: 'POST',
 			success		: function(res){
 				if(res.total > 0){
 					ANKUS_API.util.alert('대표어가 중복됩니다.');
 					return;
 				}else{
-					var str_item = $('#_wd_popSearchItem').val();
-					$('#_wd_item').val(str_item);
+					var str_item = $('#_wd_popSearchWord').val();
+					$('#_wd_word').val(str_item);
 				}
 			},
 			error : function(xhr, status, error) {
 //	        	alert("에러발생");
 	        }
-		});
-	};
-
-	function _getTypes(callback, dtype){
-		ANKUS_API.ajax({
-			url			: '/mfds/worddic/types',
-			data		: {dtype:dtype},
-			type		: 'GET',
-			success		: function(res){
-				$('#_wd_types').empty();
-				$('<option>').val('').text('=== 직접입력 ===').appendTo($('#_wd_types'));
-				$.each(res.list, function(i, v) {
-					$('<option>').val(v.type).text(v.type).appendTo($('#_wd_types'));
-				});
-				$('#_wd_types').trigger('change');
-				callback(res);
-			},
-			error : function(xhr, status, error) {
-//	        	alert("에러발생");
-			}
 		});
 	};
 	
@@ -121,7 +104,7 @@
 		$('#_wd_wid').val(row.wid);			
 		$('#_wd_popSearchWord').val('');			
 		$('#_wd_word').val(row.word);				
-		$('#_wd_wtype').val(row.wtype).trigger('change');			
+		$('#_wd_wtype').val(row.wtype);			
 		$('#_wd_btnSave').text('수정');
 		$('#_wd_createModal .modal-title').text('단어 수정');
 		
@@ -132,28 +115,17 @@
 		var text;
 		
 		if ($('#_wd_wid').val()) {
-			url = '/mfds/worddic/update';
+			url = '/worddic/update';
 			text = '수정';
 		} else {
-			url = '/mfds/worddic/insert';
+			url = '/worddic/insert';
 			text = '추가';
 		}
-		
-		var item = $('#_wd_createInput').val();
+			
 		var data = _getFormParam();
-		console.log(data);
 		
-		if (!data.item){
+		if (!data.word){
 			ANKUS_API.util.alert('대표어를 입력하고 중복체크를 클릭하여 주세요.');
-			return;
-		}
-		
-		var str_dtype = $('#_wd_dtype').val();
-		var str_category = $('#_wd_category').val();
-		var str_types = $('#_wd_item').val();
-		
-		if(str_dtype == '식품' && !data.type){
-			ANKUS_API.util.alert('분류를 입력해 주세요.');
 			return;
 		}
 		
@@ -192,7 +164,7 @@
 		
 		var rows = [];
 		$.each(selArr, function(i, v) {
-			rows.push($('#_wd_grid').getRowData(v).id);
+			rows.push($('#_wd_grid').getRowData(v).wid);
 		});
 		
 		if(0 === length){
@@ -204,7 +176,7 @@
 			callback : function(sel){
 				if(sel){
 					ANKUS_API.ajax({
-						url			: '/mfds/worddic/deleteItems',
+						url			: '/worddic/deleteItems',
 						type		: 'POST',
 						data		: JSON.stringify(rows),
 						success		: function(res){
@@ -224,19 +196,9 @@
 	
 	var _getFormParam = function() {
 		var param = {};
-		param.id = $('#_wd_id').val();
-		param.item = $('#_wd_item').val();
-		param.dtype = $('#_wd_dtype').val();
-		param.cnt = 0;
-		param.synonym = $('#_wd_synonym').val();
-		param.code = $('#_wd_code').val();
-		param.item_eng = $('#_wd_item_eng').val();
-		
-		if($('#_wd_dtype').val() == '식품관련용어'){
-			param.category = $('#_wd_category').val();
-		}else if($('#_wd_dtype').val() == '식품'){
-			param.type = $('#_wd_type').val();
-		}
+		param.wid = $('#_wd_wid').val();
+		param.word = $('#_wd_word').val();
+		param.wtype = $('#_wd_wtype').val();				
 		
 		return param;
 	};
@@ -250,7 +212,7 @@
 	});
 	
 	$('#_wd_popSearchBtn').on('click', _getItems);
-	$('#_wd_popSearchItem').keypress(function(e){
+	$('#_wd_popSearchWord').keypress(function(e){
 		if(13 === e.which){
 			$('#_wd_popSearchBtn').trigger('click');
 		}
@@ -260,17 +222,7 @@
 	$('#_wd_btnSave').on('click', _saveAction);
 	$('#_wd_btnCancel').on('click', _cancelAction);
 	
-	
-	
 	$('#_wd_btnDelete').on('click', _btnDeleteAction);
-
-	$('#_wd_btnRefresh').on('click', func_worddic_refresh);
-	$('#_wd_btnRefresh2').on('click', func_worddic_refresh2);
-	
-	$('#_wd_btnrecalc').on('click', func_worddic_refresh_exec);
-	$('#_wd_btnClose').on('click', function() {
-		$('#_wd_recalcModal').ankusModal('hide');
-	});
 	
 	$('#_tabWorddic').on('click', function() {
 		_getGrid();

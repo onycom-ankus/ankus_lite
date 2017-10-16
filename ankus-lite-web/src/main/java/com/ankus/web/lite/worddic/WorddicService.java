@@ -11,26 +11,16 @@ import java.util.Map;
  */
 public interface WorddicService {
     Worddic select(Integer wid);
-
-    List<Worddic> selectAll();
     
     List<Worddic> selectByCondition(Worddic worddic);
     
     int selectByConditionCnt(Worddic worddic);
-
-    List<Worddic> selectItems(Map map);
     
-    List<Worddic> selectTypes(Worddic worddic);
-    
-    List<Worddic> selectItemsList(Worddic worddic);
-    
-    int exist(Integer wid);
+    int exist(Worddic worddic);
 
     int insert(Worddic worddic);
     
     int update(Worddic worddic);
-
-    int delete(Integer wid);
 
     int deleteList(Integer[] wids);
     

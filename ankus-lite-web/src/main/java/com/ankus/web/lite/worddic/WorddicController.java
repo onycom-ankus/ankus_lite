@@ -67,20 +67,16 @@ public class WorddicController extends LocaleSupport {
         return response;
     }
     
-    
-    @RequestMapping(value = "items")
+    @RequestMapping(value = "exist", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Response items(boolean excludeN) {
+    public Response exist(@RequestBody Worddic worddic) throws Exception {
     	Response response = new Response();
     	try {
-    		HashMap<String, Object> map = new HashMap<>();
-    		map.put("excludeN", excludeN);
-    		List<Worddic> list = worddicService.selectItems(map);
-    		
-    		response.getList().addAll(list);
-    		response.setTotal(list.size());
-    		response.setSuccess(true);
+			
+    		int cnt = worddicService.exist(worddic);			
+			response.setTotal(cnt);
+			response.setSuccess(true);
     		
     	} catch (Exception ex) {
     		response.setSuccess(false);
@@ -90,50 +86,6 @@ public class WorddicController extends LocaleSupport {
     	}
     	return response;
     }
-    
-    @RequestMapping(value = "types")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public Response types(Worddic worddic) {
-    	Response response = new Response();
-    	try {
-    		List<Worddic> list = worddicService.selectTypes(worddic);
-    		
-    		response.getList().addAll(list);
-    		response.setTotal(list.size());
-    		response.setSuccess(true);
-    		
-    	} catch (Exception ex) {
-    		response.setSuccess(false);
-    		response.getError().setMessage(ex.getMessage());
-    		if (ex.getCause() != null) response.getError().setCause(ex.getCause().getMessage());
-    		response.getError().setException(ExceptionUtils.getFullStackTrace(ex));
-    	}
-    	return response;
-    }
-    
-    @RequestMapping(value = "itemsList")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public Response itemsList(Worddic worddic) {
-    	Response response = new Response();
-    	try {
-    		
-    		List<Worddic> list = worddicService.selectItemsList(worddic);
-    		
-    		response.getList().addAll(list);
-    		response.setTotal(list.size());
-    		response.setSuccess(true);
-    		
-    	} catch (Exception ex) {
-    		response.setSuccess(false);
-    		response.getError().setMessage(ex.getMessage());
-    		if (ex.getCause() != null) response.getError().setCause(ex.getCause().getMessage());
-    		response.getError().setException(ExceptionUtils.getFullStackTrace(ex));
-    	}
-    	return response;
-    }
-    
     
     @RequestMapping(value = "insert", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)

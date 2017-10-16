@@ -22,11 +22,6 @@ public class WorddicServiceImpl implements WorddicService {
     public Worddic select(Integer wid) {
         return worddicRepository.select(wid);
     }
-
-    @Override
-    public List<Worddic> selectAll() {
-        return worddicRepository.selectAll();
-    }
     
     @Override
     public List<Worddic> selectByCondition(Worddic worddic) {
@@ -37,25 +32,10 @@ public class WorddicServiceImpl implements WorddicService {
     public int selectByConditionCnt(Worddic worddic) {
     	return worddicRepository.selectByConditionCnt(worddic);
     }
-    
-    @Override
-    public List<Worddic> selectItems(Map map) {
-    	return worddicRepository.selectItems(map);
-    }
-    
-    @Override
-    public List<Worddic> selectTypes(Worddic worddic) {
-    	return worddicRepository.selectTypes(worddic);
-    }
-    
-    @Override
-    public List<Worddic> selectItemsList(Worddic worddic) {
-    	return worddicRepository.selectItemsList(worddic);
-    }
 
     @Override
-    public int exist(Integer wid) {
-    	return worddicRepository.exist(wid);
+    public int exist(Worddic worddic) {
+    	return worddicRepository.exist(worddic);
     }
     
     @Override
@@ -67,12 +47,7 @@ public class WorddicServiceImpl implements WorddicService {
     public int update(Worddic worddic) {
     	return worddicRepository.update(worddic);
     }
-
-    @Override
-    public int delete(Integer wid) {
-        return worddicRepository.delete(wid);
-    }
-
+ 
     @Override
     public int deleteList(Integer[] wids) {
     	return worddicRepository.deleteList(wids);

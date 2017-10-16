@@ -150,6 +150,7 @@ if(isLogin == false){
 		<div class="_body" id="_conDemandForecast" style="display:none"></div>	
 		<div class="_body" id="_conCauseBad" style="display:none"></div>
 		<div class="_body" id="_conPredictionBad" style="display:none"></div>			
+		<div class="_body" id="_conWorddic" style="display:none"><jsp:include page="../main/worddic.jsp"/></div>
 	</div>
 	<style>
 	.wrap-loading{
@@ -213,6 +214,7 @@ if(isLogin == false){
 	<script src="/resources/js/expantion/innerData.js"></script>
 	<script src="/resources/js/expantion/publicData.js"></script>
 	<script src="/resources/js/expantion/dataMgr.js"></script>
+	<script src="/resources/js/main/worddic.js"></script>
 	<!--  
 	<script src="/resources/js/main/monitoring.js"></script>
 	<script src="/resources/js/main/hadoopmgr.js"></script>

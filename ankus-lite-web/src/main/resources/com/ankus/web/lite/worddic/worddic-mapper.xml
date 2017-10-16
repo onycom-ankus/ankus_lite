@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace=" com.ankus.web.lite.worddic.WorddicRepository">
+<mapper namespace="com.ankus.web.lite.worddic.WorddicRepository">
 
     <!-- ==================================================================================== -->
     <!-- 1. Result and Parameter Maps -->
     <!-- ==================================================================================== -->
 
-    <resultMap id="worddicMap" type=" com.ankus.web.lite.worddic.Worddic">
+    <resultMap id="worddicMap" type="com.ankus.web.lite.worddic.Worddic">
         <result property="wid" column="WID" jdbcType="INTEGER"/>
         <result property="word" column="WORD" jdbcType="VARCHAR"/>
         <result property="wtype" column="WTYPE" jdbcType="VARCHAR"/>        
@@ -30,12 +30,8 @@
         <include refid="wherePK"/>
     </select>
 
-    <select id="selectAll" resultMap="worddicMap">
-        SELECT * FROM WORDDIC
-    </select>
-
     <select id="selectByCondition" parameterType="worddic" resultMap="worddicMap">
-        SELECT wid, word, dtype				
+        SELECT wid, word, wtype				
  		FROM WORDDIC
         <where>
             <if test=" word != null and word !='' ">
@@ -71,34 +67,13 @@
         </where>
     </select>
 
-    <select id="selectItems" resultMap="worddicMap">
-        SELECT DISTINCT ITEM FROM WORDDIC
-        <if test="excludeN != null and excludeN == true">
-        WHERE [TYPE] <![CDATA[<>]]> 'N'
-        </if>       
-        ORDER BY ITEM
-    </select>
-    <select id="selectTypes" parameterType="worddic" resultMap="worddicMap">
-        SELECT DISTINCT TYPE FROM WORDDIC WHERE DTYPE = #{dtype} AND [TYPE] != ''
-        ORDER BY [TYPE]
-    </select>
-    
-     <select id="selectItemsList" parameterType="worddic" resultMap="worddicMap">
-        SELECT DISTINCT ITEM FROM WORDDIC        
-        <if test=" item != null and item !='' ">
-         WHERE ITEM LIKE #{item}
-        </if>
-        ORDER BY ITEM
-    </select>
-    
-
     <!-- ==================================================================================== -->
     <!-- 3. Exist Statement -->
     <!-- ==================================================================================== -->
     
-    <select id="exist" parameterType="Integer" resultType="int">
+    <select id="exist" parameterType="worddic" resultType="int">
         SELECT COUNT(*) FROM WORDDIC 
-        <include refid="wherePK"/>
+        <include refid="whereItem"/>
     </select>
     
     <!-- ==================================================================================== -->
@@ -112,7 +87,7 @@
         )
         VALUES (
 			#{word},
-			#{dtype}			
+			#{wtype}			
         )
     </insert>
     
@@ -137,7 +112,7 @@
     </delete>
 
 	<delete id="deleteList">
-        DELETE FROM WORDDIC WHERE ID IN 
+        DELETE FROM WORDDIC WHERE WID IN 
         <foreach collection="array" open="(" separator="," close=")" index="index" item="wid">
         #{wid}
         </foreach>

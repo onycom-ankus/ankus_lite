@@ -5,7 +5,7 @@
 			<label class="form_label">대표어 : </label>
 			<input type="text" id="_wd_searchWord" class="form-control" style="width:150px;"/>			
 			<label class="form_label" style="padding-left:10px;">단어구분 : </label>
-			<select id="_wd_searchDtype" class="form-control" >
+			<select id="_wd_searchWtype" class="form-control" >
 				<option value="">전체</option>
 				<option value="관심">관심</option>
 				<option value="수요(긍정)">수요(긍정)</option>
