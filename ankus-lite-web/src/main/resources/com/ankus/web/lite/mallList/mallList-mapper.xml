@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.lite.mallList.MallListRepository">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+    <resultMap id="mallListMap" type="com.ankus.web.lite.mallList.MallList">
+        <result property="mng_no" column="MNG_NO" jdbcType="VARCHAR"/>
+        <result property="kwrd" column="KWRD" jdbcType="VARCHAR"/>
+        <result property="goods_no" column="GOODS_NO" jdbcType="VARCHAR"/>
+        <result property="goods_url" column="GOODS_URL" jdbcType="VARCHAR"/>
+        <result property="goods_nm" column="GOODS_NM" jdbcType="VARCHAR"/>
+        <result property="shopng_knd" column="SHOPNG_KND" jdbcType="VARCHAR"/>
+        <result property="seler_nm" column="SELER_NM" jdbcType="VARCHAR"/>  
+        <result property="tel_no" column="TEL_NO" jdbcType="VARCHAR"/> 
+        <result property="review_no" column="REVIEW_NO" jdbcType="INTEGER"/> 
+        <result property="purch_de" column="PURCH_DE" jdbcType="VARCHAR"/> 
+        <result property="goods_review" column="GOODS_REVIEW" jdbcType="VARCHAR"/>
+        <result property="score" column="SCORE" jdbcType="VARCHAR"/>      
+    </resultMap>
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== -->
+   
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Select Statement -->
+    <!-- ==================================================================================== -->
+   
+    <select id="selectByCondition" parameterType="mallList" resultMap="mallListMap">
+        SELECT A.MNG_NO        
+        	  ,B.GOODS_NO 	
+              ,B.SHOPNG_KND
+              ,B.GOODS_NM
+              ,B.GOODS_URL
+              ,B.SELER_NM              
+              ,C.REVIEW_NO
+        	  ,C.PURCH_DE              
+              ,C.GOODS_REVIEW 
+          FROM SHOPNG_GOODS_MSTR A
+      		  ,SHOPNG_GOODS_DTLS B
+      		  ,SHOPNG_GOODS_REVIEW C
+      	 WHERE A.MNG_NO = B.MNG_NO
+      	   AND B.MNG_NO = C.MNG_NO
+      	   AND B.GOODS_NO = C.GOODS_NO
+      	   
+      	 <if test=" from != null and from !='' ">
+	       AND C.PURCH_DE <![CDATA[>=]]> #{from}
+	     </if>
+	     <if test=" to != null and to !='' ">
+	       AND C.PURCH_DE <![CDATA[<=]]> #{to}
+	     </if>
+	     <if test=" shopng_knd != null and shopng_knd !='' ">
+	       AND B.SHOPNG_KND LIKE CONCAT('%', #{shopng_knd}, '%')
+	     </if>
+	     <if test=" kwrd != null and kwrd !='' ">
+	       AND A.KWRD LIKE CONCAT('%', #{kwrd}, '%')
+	     </if>
+	     <if test=" goods_review != null and goods_review !='' ">
+	       AND C.GOODS_REVIEW LIKE CONCAT('%', #{goods_review}, '%')
+	     </if>
+        ORDER BY 
+        <choose>
+        	<when test="sidx != null and sidx != ''"> ${sidx} </when>
+        	<otherwise> C.PURCH_DE, B.GOODS_NM, C.GOODS_REVIEW </otherwise>
+        </choose>
+        <choose>
+        	<when test="sord != null and sord != ''"> ${sord} </when>
+        	<otherwise> ASC </otherwise>
+        </choose>
+        <if test="paging == true">
+        FOR ORDERBY_NUM() BETWEEN #{startRow} AND #{endRow};
+        </if>
+    </select>
+
+    <select id="selectByConditionCnt" parameterType="mallList" resultType="int">
+        SELECT COUNT(1) 
+          FROM SHOPNG_GOODS_MSTR A
+      		  ,SHOPNG_GOODS_DTLS B
+      		  ,SHOPNG_GOODS_REVIEW C
+      	 WHERE A.MNG_NO = B.MNG_NO
+      	   AND B.MNG_NO = C.MNG_NO
+      	   AND B.GOODS_NO = C.GOODS_NO
+        
+         <if test=" from != null and from !='' ">
+	       AND C.PURCH_DE <![CDATA[>=]]> #{from}
+	     </if>
+	     <if test=" to != null and to !='' ">
+	       AND C.PURCH_DE <![CDATA[<=]]> #{to}
+	     </if>
+	     <if test=" shopng_knd != null and shopng_knd !='' ">
+	       AND B.SHOPNG_KND LIKE CONCAT('%', #{shopng_knd}, '%')
+	     </if>
+	     <if test=" kwrd != null and kwrd !='' ">
+	       AND A.KWRD LIKE CONCAT('%', #{kwrd}, '%')
+	     </if>
+	     <if test=" goods_review != null and goods_review !='' ">
+	       AND C.GOODS_REVIEW LIKE CONCAT('%', #{goods_review}, '%')
+	     </if>
+    </select>
+   
+</mapper>

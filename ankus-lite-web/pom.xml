@@ -12,7 +12,7 @@
     <artifactId>ankus-lite</artifactId>
     <packaging>war</packaging>
     <version>1.0.0</version>
-    <name>ankus-lite</name>
+    <name>ankus-lite-web</name>
 
     <build>
         <plugins>

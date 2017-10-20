@@ -128,6 +128,8 @@ if(isLogin == false){
 						<ul class="dropdown-menu">
 							<li id="_tabScheduler" data-body="_conSchduler"><a href="#"><spring:message code="MENU_SCHEDULER"/></a></li>
 							<li id="_tabUserMgr" data-body="_conUserMgr"><a href="#"><spring:message code="MENU_USER_MANAGE"/></a></li>	
+							<li id="_tabHadoopMgr" data-body="_conHadoopMgr"><a href="#"><spring:message code="MENU_HADOOP_MANAGE"/></a></li>
+							<li id="_tabSrvMgr" data-body="_conSrvMgr"><a href="#"><spring:message code="MENU_SERVER_MANAGE"/></a></li>
 			            	<li id="_tabAlgMgr" data-body="_conAlgMgr"><a href="#"><spring:message code="MENU_ALGORITHM_MANAGE"/></a></li>	
 			            	<li id="_tabLanguage" data-body="_conLanguage"><a href="#"><spring:message code="MENU_LANGUAGE_SETTING"/></a></li>	
 						</ul>
@@ -147,6 +149,8 @@ if(isLogin == false){
 		<div class="_body" id="_conUserMgr" style="display:none"><jsp:include page="../main/usermgr.jsp"/></div>		
 		<div class="_body" id="_conMyInfo" style="display:none"><jsp:include page="../main/myinfo.jsp"/></div>
 		<div class="_body" id="_conLanguage" style="display:none"><jsp:include page="../main/language.jsp"/></div>	
+		<div class="_body" id="_conSrvMgr" style="display:none"><jsp:include page="../main/srvmgr.jsp"/></div>
+		<div class="_body" id="_conHadoopMgr" style="display:none"><jsp:include page="../main/hadoopmgr.jsp"/></div>
 			
 		<div class="_body" id="_conPublicData" style="display:none"><jsp:include page="../expantion/publicData.jsp"/></div>		
 		<div class="_body" id="_conInnerData" style="display:none"><jsp:include page="../expantion/innerData.jsp"/></div>		
@@ -159,6 +163,7 @@ if(isLogin == false){
 		<div class="_body" id="_conNewsOid" style="display:none"><jsp:include page="../main/newsoid.jsp"/></div>
 		<div class="_body" id="_conNewsList" style="display:none"><jsp:include page="../main/newsList.jsp"/></div>
 		<div class="_body" id="_conBlogList" style="display:none"><jsp:include page="../main/blogList.jsp"/></div>
+		<div class="_body" id="_conMallList" style="display:none"><jsp:include page="../main/mallList.jsp"/></div>
 	</div>
 	<style>
 	.wrap-loading{
@@ -218,6 +223,8 @@ if(isLogin == false){
 	<script src="/resources/js/main/myinfo.js"></script>
 	<script src="/resources/js/main/usermgr.js"></script>
 	<script src="/resources/js/main/algmgr.js"></script>
+	<script src="/resources/js/main/hadoopmgr.js"></script>
+	<script src="/resources/js/main/srvmgr.js"></script>
 	
 	<script src="/resources/js/expantion/innerData.js"></script>
 	<script src="/resources/js/expantion/publicData.js"></script>
@@ -226,10 +233,10 @@ if(isLogin == false){
 	<script src="/resources/js/main/newsoid.js"></script>
 	<script src="/resources/js/main/newsList.js"></script>
 	<script src="/resources/js/main/blogList.js"></script>
+	<script src="/resources/js/main/mallList.js"></script>
+	
 	<!--  
-	<script src="/resources/js/main/monitoring.js"></script>
-	<script src="/resources/js/main/hadoopmgr.js"></script>
-	<script src="/resources/js/main/srvmgr.js"></script>
+	<script src="/resources/js/main/monitoring.js"></script>	
 	<script src="/resources/js/main/hmetamgr.js"></script>
 	<script src="/resources/js/main/hqrymgr.js"></script>
 	-->

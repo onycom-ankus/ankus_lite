@@ -77,13 +77,14 @@
 			type		: 'GET',			
 			data		: data,
 			success		: function(res){				
-				//console.log(res);
-				var obj = res.map;
-				obj.rows = res.list;
-				$('#_ei_triggersGrid').jqGrid('resetSelection');
-				$('#_ei_triggersGrid').jqGrid('clearGridData');
-				$('#_ei_triggersGrid')[0].addJSONData(obj);
-				
+				console.log(res);
+				if(res.success){
+					var obj = res.map;
+					obj.rows = res.list;
+					$('#_ei_triggersGrid').jqGrid('resetSelection');
+					$('#_ei_triggersGrid').jqGrid('clearGridData');
+					$('#_ei_triggersGrid')[0].addJSONData(obj);
+				}
 			}
 		});		
 	}
@@ -304,7 +305,7 @@
 	};
 	
 	var _editAction = function(row){	
-		console.log(row);
+		
 		$('#_ei_engineId').val(row.id);
 		$('#_ei_engineName').val(row.instanceName);
 		$('#_ei_engineIp').val(row.hostAddress);
@@ -324,11 +325,16 @@
 			url			: '/admin/hadoop/clusters',	
 			type		: 'GET',
 			success		: function(res){
-				//console.log(res);
-				$('#_ei_hadoop').empty();
-				$.each(res.list, function(i, v) {
-					$('<option>').val(v.id).text(v.name).appendTo($('#_ei_hadoop'));
-				});				
+				if(res.success){
+					$('#_ei_hadoop').empty();
+					$.each(res.list, function(i, v) {
+						$('<option>').val(v.id).text(v.name).appendTo($('#_ei_hadoop'));
+					});
+					$('<option>').val('localhost').text('Local').appendTo($('#_ei_hadoop'));
+				}else{
+					$('<option>').val('localhost').text('Local').appendTo($('#_ei_hadoop'));
+				}
+								
 				//callback(res);
 			},
 			error : function(xhr, status, error) {
@@ -351,7 +357,7 @@
 				//callback(res);
 			},
 			error : function(xhr, status, error) {
-//	        	alert("에러발생");
+				//alert("에러발생");
 			}
 		});
 	};
