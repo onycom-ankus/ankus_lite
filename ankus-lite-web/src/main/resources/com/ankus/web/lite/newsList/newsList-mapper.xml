@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.lite.newsList.NewsListRepository">
+
+	<resultMap id="newsListMap" type="com.ankus.web.lite.newsList.NewsList">
+        <result property="nid" column="NID" jdbcType="BIGINT"/>
+        <result property="rdate" column="RDATE" jdbcType="TIMESTAMP"/>
+        <result property="title" column="TITLE" jdbcType="VARCHAR"/>
+        <result property="content" column="CONTENT" jdbcType="VARCHAR"/>
+        <result property="nsite" column="NSITE" jdbcType="VARCHAR"/>
+        <result property="url" column="URL" jdbcType="VARCHAR"/>
+        <result property="path" column="PATH" jdbcType="VARCHAR"/>       
+    </resultMap>
+	
+	<sql id="wherePK">WHERE NID = #{nid}</sql>
+       
+    <select id="selectByCondition" parameterType="newsList" resultMap="newsListMap">
+    	SELECT 
+	    	NID,
+			RDATE,
+			TITLE,			
+			CONTENT,			
+			NSITE,			
+			URL
+	        FROM NEWS	        
+	        <where>   				
+	            <if test=" from != null and from !='' ">
+	                AND RDATE <![CDATA[>=]]> #{from}
+	            </if>
+	            <if test=" to != null and to !='' ">
+	                AND RDATE <![CDATA[<=]]> #{to}
+	            </if>
+	            <if test=" title != null and title !='' ">
+	      			AND TITLE LIKE CONCAT('%', #{title}, '%')
+	     		</if> 
+	     		<if test=" nsite != null and nsite !='' ">
+	      			AND NSITE LIKE CONCAT('%', #{nsite}, '%')
+	     		</if>	 
+	     	</where>   	    		
+	        ORDER BY 
+	        <choose>
+	        	<when test="sidx != null and sidx != ''"> ${sidx} </when>
+	        	<otherwise> NID </otherwise>
+	        </choose>
+	        <choose>
+	        	<when test="sord != null and sord != ''"> ${sord} </when>
+	        	<otherwise> DESC </otherwise>
+	        </choose>
+	        <if test="paging == true">
+	        FOR ORDERBY_NUM() BETWEEN #{startRow} AND #{endRow}
+	        </if>       
+    </select>
+
+    <select id="selectByConditionCnt" parameterType="newsList" resultType="int">
+        SELECT COUNT(1) 
+        FROM NEWS        
+        <where>        	
+            <if test=" from != null and from !='' ">
+	            AND RDATE <![CDATA[>=]]> #{from}
+            </if>
+            <if test=" to != null and to !='' ">
+                AND RDATE <![CDATA[<=]]> #{to}
+            </if>
+            <if test=" title != null and title !='' ">
+      			AND TITLE LIKE CONCAT('%', #{title}, '%')
+     		</if> 
+     		<if test=" nsite != null and nsite !='' ">
+      			AND NSITE LIKE CONCAT('%', #{nsite}, '%')
+     		</if>
+     	</where>		
+    </select>
+
+</mapper>

@@ -25,6 +25,10 @@
         <!-- DataMap -->
         <typeAlias type="com.ankus.web.lite.expantion.util.DataMap" alias="DataMap"/> 
         <typeAlias type="com.ankus.web.lite.worddic.Worddic" alias="worddic"/>
+        <typeAlias type="com.ankus.web.lite.newsoid.NewsOid" alias="newsoid"/>
+        <typeAlias type="com.ankus.web.lite.newsList.NewsList" alias="newsList"/>
+        <typeAlias type="com.ankus.web.lite.blogList.BlogList" alias="blogList"/>
+        
     </typeAliases>
 
     <mappers>
@@ -49,6 +53,9 @@
         <!-- main -->      
         <mapper resource="com/ankus/web/scheduler/scheduler-mapper.xml"/>    
         <mapper resource="com/ankus/web/lite/worddic/worddic-mapper.xml"/>
+        <mapper resource="com/ankus/web/lite/newsoid/newsoid-mapper.xml"/>
+        <mapper resource="com/ankus/web/lite/newsList/newsList-mapper.xml"/>
+        <mapper resource="com/ankus/web/lite/blogList/blogList-mapper.xml"/>
         
         <!-- Language -->      
         <mapper resource="com/ankus/web/language/language-mapper.xml"/>

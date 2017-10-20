@@ -94,20 +94,25 @@ if(isLogin == false){
 						<ul class="dropdown-menu">
 							<li id="_tabWorddic" data-body="_conWorddic"><a href="#">단어사전관리</a></li>
 							<li id="_tabNewsOid" data-body="_conNewsOid"><a href="#">뉴스관리</a></li>	
-							<li id="_tabBlogList" data-body="_conBlogList"><a href="#">블로그관리</a></li>
-							<li id="_tabDataMgr" data-body="_conDataMgr"><a href="#">데이터 관리</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
 						<a href = "#" class = "dropdown-toggle" data-toggle = "dropdown">외부데이터조회<span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li id="_tabFoodRisk" data-body="_conFoodRisk"><a href="#">뉴스조회</a></li>
-							<li id="_tabBlogInfoList" data-body="_conBlogInfoList"><a href="#">블로그자료조회</a></li>
+							<li id="_tabNewsList" data-body="_conNewsList"><a href="#">뉴스조회</a></li>
+							<li id="_tabBlogList" data-body="_conBlogList"><a href="#">블로그자료조회</a></li>
 							<li id="_tabMallList" data-body="_conMallList"><a href="#">쇼핑몰자료조회</a></li>	
 							<li id="_tabPublicData" data-body="_conPublicData"><a href="#">공공데이터조회</a></li>
 						</ul>
 					</li>
-					<li id="_tabInnerData" data-body="_conInnerData"><a href="#">내부데이터등록</a></li>
+					<li class="dropdown">
+						<a href = "#" class = "dropdown-toggle" data-toggle = "dropdown">내부데이터<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li id="_tabInnerData" data-body="_conInnerData"><a href="#">내부데이터등록</a></li>	
+							<li id="_tabDataMgr" data-body="_conDataMgr"><a href="#">내부데이터관리</a></li>													
+						</ul>
+					</li>
+					
 					<li class="dropdown">
 						<a href = "#" class = "dropdown-toggle" data-toggle = "dropdown">분석도구<span class="caret"></span></a>
 						<ul class="dropdown-menu">
@@ -151,6 +156,9 @@ if(isLogin == false){
 		<div class="_body" id="_conCauseBad" style="display:none"></div>
 		<div class="_body" id="_conPredictionBad" style="display:none"></div>			
 		<div class="_body" id="_conWorddic" style="display:none"><jsp:include page="../main/worddic.jsp"/></div>
+		<div class="_body" id="_conNewsOid" style="display:none"><jsp:include page="../main/newsoid.jsp"/></div>
+		<div class="_body" id="_conNewsList" style="display:none"><jsp:include page="../main/newsList.jsp"/></div>
+		<div class="_body" id="_conBlogList" style="display:none"><jsp:include page="../main/blogList.jsp"/></div>
 	</div>
 	<style>
 	.wrap-loading{
@@ -215,6 +223,9 @@ if(isLogin == false){
 	<script src="/resources/js/expantion/publicData.js"></script>
 	<script src="/resources/js/expantion/dataMgr.js"></script>
 	<script src="/resources/js/main/worddic.js"></script>
+	<script src="/resources/js/main/newsoid.js"></script>
+	<script src="/resources/js/main/newsList.js"></script>
+	<script src="/resources/js/main/blogList.js"></script>
 	<!--  
 	<script src="/resources/js/main/monitoring.js"></script>
 	<script src="/resources/js/main/hadoopmgr.js"></script>
