@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.lite.blogList.BlogListRepository">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+    <resultMap id="blogListMap" type="com.ankus.web.lite.blogList.BlogList">
+        <result property="sn" column="SN" jdbcType="INTEGER"/>
+        <result property="blog_wrter" column="BLOG_WRTER" jdbcType="VARCHAR"/>
+        <result property="doc_cret_dt" column="DOC_CRET_DT" jdbcType="VARCHAR"/>
+        <result property="doc_sj" column="DOC_SJ" jdbcType="VARCHAR"/>
+        <result property="doc_cn" column="DOC_CN" jdbcType="VARCHAR"/>
+        <result property="kwrd" column="KWRD" jdbcType="VARCHAR"/>
+        <result property="kwrd_sj" column="KWRD_SJ" jdbcType="VARCHAR"/>
+        <result property="http_addr" column="HTTP_ADDR" jdbcType="VARCHAR"/>  
+        <result property="file_stre_addr" column="FILE_STRE_ADDR" jdbcType="VARCHAR"/> 
+        <result property="srch_kwrd" column="SRCH_KWRD" jdbcType="VARCHAR"/> 
+        <result property="caution" column="CAUTION" jdbcType="VARCHAR"/> 
+        <result property="rtype" column="RTYPE" jdbcType="VARCHAR"/>
+        <result property="riskpo" column="RISKPO" jdbcType="VARCHAR"/>      
+    </resultMap>
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== -->
+
+    <sql id="wherePk">WHERE SN = #{sn}</sql>    
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Select Statement -->
+    <!-- ==================================================================================== -->
+   
+    <select id="selectByCondition" parameterType="blogList" resultMap="blogListMap">
+        SELECT SN
+              ,TO_CHAR(DOC_CRET_DT,'YYYY-MM-DD') AS DOC_CRET_DT
+        	  ,SRCH_KWRD
+              ,CAUTION
+              ,DOC_SJ
+              ,DOC_CN  
+              ,KWRD  
+              ,KWRD_SJ        
+              ,BLOG_WRTER
+              ,HTTP_ADDR                          
+          FROM BLOG_INFO      		  
+      	 <where> 
+      	 	<if test=" from != null and from !='' ">
+	       		AND DOC_CRET_DT <![CDATA[>=]]> #{from}
+	     	</if>
+	     	<if test=" to != null and to !='' ">
+	      		AND DOC_CRET_DT <![CDATA[<=]]> #{to}
+	     	</if>
+	     	<if test=" doc_sj != null and doc_sj !='' ">
+	      		AND DOC_SJ LIKE CONCAT('%', #{doc_sj}, '%')
+	     	</if> 
+	     	<if test=" srch_kwrd != null and srch_kwrd !='' ">
+	      		AND SRCH_KWRD LIKE CONCAT('%', #{srch_kwrd}, '%')
+	     	</if> 
+	     	<if test=" caution != null and caution !='' ">
+	      		AND CAUTION = #{caution}
+	     	</if>  
+      	 </where>
+        ORDER BY 
+        <choose>
+        	<when test="sidx != null and sidx != ''"> ${sidx} </when>
+        	<otherwise> DOC_CRET_DT, SRCH_KWRD </otherwise>
+        </choose>
+        <choose>
+        	<when test="sord != null and sord != ''"> ${sord} </when>
+        	<otherwise> ASC </otherwise>
+        </choose>
+        <if test="paging == true">
+        FOR ORDERBY_NUM() BETWEEN #{startRow} AND #{endRow};
+        </if>
+    </select>
+
+    <select id="selectByConditionCnt" parameterType="blogList" resultType="int">
+        SELECT COUNT(1) 
+          FROM BLOG_INFO      		  
+      	 <where> 
+      	 	<if test=" from != null and from !='' ">
+	       		AND DOC_CRET_DT <![CDATA[>=]]> #{from}
+	     	</if>
+	     	<if test=" to != null and to !='' ">
+	      		AND DOC_CRET_DT <![CDATA[<=]]> #{to}
+	     	</if>
+	     	<if test=" doc_sj != null and doc_sj !='' ">
+	      		AND DOC_SJ LIKE CONCAT('%', #{doc_sj}, '%')
+	     	</if> 
+	     	<if test=" srch_kwrd != null and srch_kwrd !='' ">
+	      		AND SRCH_KWRD LIKE CONCAT('%', #{srch_kwrd}, '%')
+	     	</if>  
+	     	<if test=" caution != null and caution !='' ">
+	      		AND CAUTION = #{caution}
+	     	</if> 
+      	 </where>
+      
+    </select>
+   
+</mapper>

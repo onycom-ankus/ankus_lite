@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.pig.PigRepository">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+    <resultMap id="pigMap" type="com.ankus.web.pig.Pig">
+        <result property="scriptId" column="ID" jdbcType="BIGINT"/>
+        <result property="username" column="USERNAME" jdbcType="VARCHAR"/>
+        <result property="scriptName" column="SCRIPT_NAME" jdbcType="VARCHAR"/>
+        <result property="script" column="SCRIPT" jdbcType="BLOB"/>
+        <result property="createDate" column="CREATE_DATE" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== -->
+
+    <sql id="wherePK">WHERE ID = #{scriptId}</sql>
+
+    <sql id="whereUsername">WHERE USERNAME = #{username}</sql>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Select Statement -->
+    <!-- ==================================================================================== -->
+
+    <select id="selectTotalCountByCondition" parameterType="string" resultType="Integer">
+        SELECT COUNT(*) FROM PIG
+        WHERE 1=1
+        <if test="username != null and username != ''">
+            AND USERNAME = #{username}
+        </if>
+        <if test="scriptName != null and scriptName != ''">
+            AND SCRIPT_NAME LIKE '%${scriptName}%'
+        </if>
+        <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+            AND DATE(CREATE_DATE) BETWEEN #{startDate} AND #{endDate}
+        </if>
+    </select>
+
+    <select id="selectByCondition" parameterType="map" resultMap="pigMap">
+        SELECT * FROM PIG
+        WHERE 1=1
+        <if test="username != null and username != ''">
+            AND USERNAME = #{username}
+        </if>
+        <if test="scriptName != null and scriptName != ''">
+            AND SCRIPT_NAME LIKE '%${scriptName}%'
+        </if>
+        <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+            AND DATE(CREATE_DATE) BETWEEN #{startDate} AND #{endDate}
+        </if>
+        ORDER BY ${orderBy} ${desc}
+        LIMIT ${start}, ${limit}
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Exist Statement -->
+    <!-- ==================================================================================== -->
+
+    <select id="exist" parameterType="string" resultType="Integer">
+        SELECT COUNT(*) FROM PIG
+        <include refid="wherePK"/>
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 4. Insert Statements -->
+    <!-- ==================================================================================== -->
+
+    <insert id="insert" parameterType="pig" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+        INSERT INTO PIG ( ID, USERNAME, SCRIPT_NAME, SCRIPT, CREATE_DATE )
+        VALUES (
+        #{scriptId},
+        #{username},
+        #{scriptName},
+        #{script},
+        NOW()
+        )
+
+        <selectKey resultType="long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <!-- ==================================================================================== -->
+    <!-- 5. Update Statements -->
+    <!-- ==================================================================================== -->
+
+    <update id="update" parameterType="pig">
+        UPDATE PIG
+        SET
+        ID = #{scriptId},
+        USERNAME = #{username},
+        SCRIPT_NAME = #{scriptName},
+        SCRIPT = #{script},
+        CREATE_DATE = CURRENT_TIMESTAMP
+        <include refid="wherePK"/>
+    </update>
+
+    <!-- ==================================================================================== -->
+    <!-- 6. Delete Statements -->
+    <!-- ==================================================================================== -->
+
+    <delete id="delete" parameterType="pig">
+        DELETE FROM PIG
+        <include refid="wherePK"/>
+    </delete>
+</mapper>

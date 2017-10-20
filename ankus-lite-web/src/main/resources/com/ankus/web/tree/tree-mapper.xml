@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.tree.TreeRepository">
+
+    <resultMap id="treeMap" type="com.ankus.model.rest.Tree">
+        <result property="id" column="ID" jdbcType="INTEGER"/>
+        <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        <result property="treeType" column="TREE" jdbcType="VARCHAR"/>
+        <result property="nodeType" column="NODE" jdbcType="VARCHAR"/>
+        <result property="root" column="ROOT" jdbcType="BOOLEAN"/>
+        <result property="username" column="USERNAME" jdbcType="VARCHAR"/>
+        <result property="referenceId" column="REF_ID" jdbcType="VARCHAR"/>
+
+        <association property="parent" column="PARENT_ID" javaType="tree" select="select">
+            <id property="id" column="ID"/>
+            <result property="name" column="NAME" jdbcType="VARCHAR"/>
+            <result property="treeType" column="TREE" jdbcType="VARCHAR"/>
+            <result property="nodeType" column="NODE" jdbcType="VARCHAR"/>
+            <result property="root" column="ROOT" jdbcType="BOOLEAN"/>
+            <result property="username" column="USERNAME" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+    <sql id="select">
+        SELECT ID, NAME, TREE, NODE, ROOT, USERNAME, PARENT_ID
+        FROM TREE
+    </sql>
+
+    <sql id="sort">
+        ORDER BY ID
+    </sql>
+
+    <select id="select" parameterType="tree" resultMap="treeMap">
+        <include refid="select"/>
+        WHERE ID = #{id}
+    </select>
+
+    <select id="selectRoot" parameterType="tree" resultMap="treeMap">
+        <include refid="select"/>
+        WHERE 1=1
+        AND NAME = '/'
+        AND TREE = #{treeType}
+        AND NODE = 'FOLDER'
+        AND USERNAME = #{username}
+    </select>
+
+<!-- 
+    <select id="selectWorkflowChilds" parameterType="int" resultMap="treeMap">
+        SELECT T.ID AS ID, T.NAME AS NAME, T.TREE AS TREE, T.NODE AS NODE, T.ROOT AS ROOT, T.USERNAME AS USERNAME,
+        W.ID AS REF_ID
+        FROM TREE T, WORKFLOW W
+        WHERE 1=1
+          AND PARENT_ID = #{id}
+          AND T.ID = W.TREE_ID
+    </select>
+ -->
+   <!--  modifiy 2015 03 18 whitepoo@onycom.com -->
+    <select id="selectWorkflowChilds" parameterType="com.ankus.web.member.Member" resultMap="treeMap">
+        SELECT T.ID AS ID, T.NAME AS NAME, T.TREE AS TREE, T.NODE AS NODE, T.ROOT AS ROOT, T.USERNAME AS USERNAME,
+        W.ID AS REF_ID
+        FROM TREE T, WORKFLOW W
+        WHERE T.ID = W.TREE_ID
+        <if test="authority != null and authority == 'ROLE_USER'">
+		     AND T.USERNAME = #{username} 
+  		</if>
+    </select>
+    
+    <select id="selectChilds" parameterType="int" resultMap="treeMap">
+        <include refid="select"/>
+        WHERE 1=1
+        AND PARENT_ID = #{id}
+    </select>
+
+    <select id="selectAll" resultMap="treeMap">
+        <include refid="select"/>
+    </select>
+
+    <insert id="insert" parameterType="tree" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+        INSERT INTO TREE
+        (
+        NAME,
+        TREE,
+        NODE,
+        ROOT,
+        USERNAME,
+        PARENT_ID
+        )
+        VALUES
+        (
+        #{name},
+        #{treeType},
+        #{nodeType},
+        #{root},
+        #{username},
+        #{parent.id}
+        )
+
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="update" parameterType="tree">
+        UPDATE TREE
+        SET
+            NAME = #{name},
+            TREE = #{treeType},
+            NODE = #{nodeType},
+            ROOT = #{root},
+            PARENT_ID = #{parent.id},
+            USERNAME = #{username}
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="delete" parameterType="tree">
+        DELETE FROM TREE WHERE ID = #{id}
+    </delete>
+</mapper>

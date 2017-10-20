@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <param name="Target" value="System.out"/>
+        <param name="Threshold" value="WARN"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%c:%L] %m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="/home/logs/ankus-web.log"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%c:%L] %m%n"/>
+        </layout>
+    </appender>
+
+    <category name="com.ankus">
+        <priority value="WARN"/>
+    </category>
+
+    <category name="org.apache">
+        <priority value="WARN"/>
+    </category>
+
+    <!-- C3P0 Connection Pool -->
+    <category name="com.mchange">
+        <priority value="WARN"/>
+    </category>
+
+    <!-- Quartz Job Scheduler -->
+    <category name="org.quartz">
+        <priority value="WARN"/>
+    </category>
+
+    <!-- Spring Framework -->
+ 
+ 
+    <category name="org.springframework">
+        <priority value="WARN"/>
+    </category>
+
+    <category name="org.springframework.web.client">
+        <priority value="WARN"/>
+    </category>
+
+    <category name="org.hibernate">
+        <priority value="WARN"/>
+    </category>
+
+    <category name="org.jgroups">
+        <priority value="WARN"/>
+    </category>
+
+    <category name="org.jboss">
+        <priority value="WARN"/>
+    </category>
+
+    <category name="org.mybatis">
+        <priority value="WARN"/>
+    </category>
+
+    <logger name="jdbc.sqlonly" additivity="false">
+        <level value="WARN"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <logger name="jdbc.sqltiming" additivity="false">
+        <level value="WARN"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <logger name="jdbc.connection" additivity="false">
+        <level value="WARN"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <logger name="jdbc.audit" additivity="false">
+        <level value="WARN"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <logger name="jdbc.resultset" additivity="false">
+        <level value="WARN"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <logger name="com.zaxxer.hikari">
+	    <level value="error"/>
+	</logger>
+	
+    <root>
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+	
+</log4j:configuration>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.scheduler.SchedulerRepository">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+    <resultMap id="schedulerMap" type="com.ankus.web.scheduler.Scheduler">
+        <result property="id" column="ID" jdbcType="INTEGER"/>
+        <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        <result property="month" column="MONTH" jdbcType="VARCHAR"/>
+        <result property="week" column="WEEK" jdbcType="VARCHAR"/>
+        <result property="day" column="DAY" jdbcType="VARCHAR"/>
+        <result property="hour" column="HOUR" jdbcType="VARCHAR"/>
+        <result property="min" column="MIN" jdbcType="VARCHAR"/>
+        <result property="stype" column="STYPE" jdbcType="VARCHAR"/>
+        <result property="workflowId" column="WORKFLOW_ID" jdbcType="INTEGER"/>
+        <result property="sshIp" column="SSH_IP" jdbcType="VARCHAR"/>
+        <result property="sshPort" column="SSH_PORT" jdbcType="INTEGER"/>
+        <result property="sshId" column="SSH_ID" jdbcType="VARCHAR"/>
+        <result property="sshPwd" column="SSH_PWD" jdbcType="VARCHAR"/>
+        <result property="sshCmd" column="SSH_CMD" jdbcType="VARCHAR"/>
+        <result property="state" column="STATE" jdbcType="VARCHAR"/>
+        <result property="runtime" column="RUNTIME" jdbcType="TIMESTAMP"/>
+        <result property="endtime" column="ENDTIME" jdbcType="TIMESTAMP"/>
+        <result property="duration" column="DURATION" jdbcType="INTEGER"/>
+        <result property="workflowName" column="WORKFLOW_NAME" jdbcType="VARCHAR"/>
+        <result property="enable" column="ENABLE" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== -->
+
+    <sql id="wherePK">WHERE ID = #{id}</sql>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Select Statement -->
+    <!-- ==================================================================================== -->
+   
+    <select id="select" parameterType="Integer" resultMap="schedulerMap">
+        SELECT *,CAST(NVL(endtime,NOW()) AS TIMESTAMP)-CAST(runtime AS TIMESTAMP) DURATION FROM SCHEDULER
+        <include refid="wherePK"/>
+    </select>
+
+    <select id="selectAll" resultMap="schedulerMap">
+        SELECT 
+        	S.*,CAST(NVL(S.endtime,NOW()) AS TIMESTAMP)-CAST(S.runtime AS TIMESTAMP) DURATION, W.[NAME] AS WORKFLOW_NAME 
+        FROM SCHEDULER S
+        LEFT JOIN WORKFLOW W ON S.WORKFLOW_ID = W.ID
+    </select>
+
+    <select id="selectByCondition" parameterType="scheduler" resultMap="schedulerMap">
+        SELECT 
+        	S.*,CAST(NVL(S.endtime,NOW()) AS TIMESTAMP)-CAST(S.runtime AS TIMESTAMP) DURATION, W.[NAME] AS WORKFLOW_NAME,
+        	CASE
+        		WHEN S.STYPE = 'W' THEN W.[NAME]
+        		WHEN S.STYPE = 'R' THEN S.SSH_IP || '/' || S.SSH_PORT || '/' || S.SSH_ID || '/' || S.SSH_PWD || '/' || S.SSH_CMD
+        		WHEN S.STYPE = 'L' THEN S.SSH_CMD
+        		ELSE ''
+        	END AS SCHEDULE,
+        	REPLACE(NVL(ENABLE, 'N'), '1', 'Y') AS ENABLE
+        FROM SCHEDULER S
+        LEFT JOIN WORKFLOW W ON S.WORKFLOW_ID = W.ID
+        <where>
+            <if test=" name != null and name !='' ">
+                AND S.[NAME] LIKE CONCAT(#{name}, '%')
+            </if>
+            <if test=" workflowName != null and workflowName !='' ">
+                AND W.[NAME] LIKE CONCAT(#{workflowName}, '%')
+            </if>
+            <if test=" stype != null and stype !='' ">
+                AND S.STYPE = #{stype}
+            </if>
+            <if test=" enable != null and enable !='' ">
+                AND S.ENABLE = #{enable}
+            </if>
+        </where>
+        ORDER BY 
+        <choose>
+        	<when test="sidx != null and sidx != ''"> ${sidx} </when>
+        	<otherwise> S.ID </otherwise>
+        </choose>
+        <choose>
+        	<when test="sord != null and sord != ''"> ${sord} </when>
+        	<otherwise> ASC </otherwise>
+        </choose>
+        <if test="paging == true">
+        FOR ORDERBY_NUM() BETWEEN #{startRow} AND #{endRow};
+        </if>
+    </select>
+    
+    <select id="selectByConditionCnt" parameterType="scheduler" resultType="int">
+        SELECT COUNT(1) 
+        FROM SCHEDULER S
+        LEFT JOIN WORKFLOW W ON S.WORKFLOW_ID = W.ID
+        <where>
+            <if test=" name != null and name !='' ">
+                AND S.[NAME] LIKE CONCAT(#{name}, '%')
+            </if>
+            <if test=" workflowName != null and workflowName !='' ">
+                AND W.[NAME] LIKE CONCAT(#{workflowName}, '%')
+            </if>
+            <if test=" stype != null and stype !='' ">
+                AND S.STYPE = #{stype}
+            </if>
+            <if test=" enable != null and enable !='' ">
+                AND S.ENABLE = #{enable}
+            </if>
+        </where>
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Exist Statement -->
+    <!-- ==================================================================================== -->
+    
+    
+    <!-- ==================================================================================== -->
+    <!-- 4. Insert Statements -->
+    <!-- ==================================================================================== -->
+    
+    <insert id="insert" parameterType="scheduler" useGeneratedKeys="true" keyProperty="id" >
+        INSERT INTO SCHEDULER (
+			[NAME],
+			[MONTH],
+			[WEEK],
+			[DAY],
+			[HOUR],
+			[MIN],
+			STYPE,
+			WORKFLOW_ID,
+			SSH_IP,
+			SSH_PORT,
+			SSH_ID,
+			SSH_PWD,
+			SSH_CMD,
+			STATE,
+			RUNTIME,
+			ENABLE
+        )
+        VALUES (
+			#{name},
+			#{month},
+			#{week},
+			#{day},
+			#{hour},
+			#{min},
+			#{stype},
+			#{workflowId},
+			#{sshIp},
+			#{sshPort},
+			#{sshId},
+			#{sshPwd},
+			#{sshCmd},
+			#{state},
+			#{runtime},
+			#{enable}
+        )
+    </insert>
+    
+    <!-- ==================================================================================== -->
+    <!-- 5. Update Statements -->
+    <!-- ==================================================================================== -->
+    
+    <update id="update" parameterType="Integer">
+    	UPDATE SCHEDULER SET
+    		[NAME] = #{name},
+    		[MONTH] = #{month},
+			[WEEK] = #{week},
+			[DAY] = #{day},
+			[HOUR] = #{hour},
+			[MIN] = #{min},
+			STYPE = #{stype},
+			WORKFLOW_ID = #{workflowId},
+			SSH_IP = #{sshIp},
+			SSH_PORT = #{sshPort},
+			SSH_ID = #{sshId},
+			SSH_PWD = #{sshPwd},
+			SSH_CMD = #{sshCmd},
+			ENABLE = #{enable}
+        <include refid="wherePK"/>
+    </update>
+    
+    <!-- ==================================================================================== -->
+    <!-- 6. Delete Statements -->
+    <!-- ==================================================================================== -->
+    
+	<delete id="delete" parameterType="Integer">
+        DELETE FROM SCHEDULER
+        <include refid="wherePK"/>
+    </delete>
+
+	<delete id="deleteList">
+        DELETE FROM SCHEDULER WHERE ID IN 
+        <foreach collection="array" open="(" separator="," close=")" index="index" item="item">
+        #{item}
+        </foreach>
+    </delete>
+
+</mapper>

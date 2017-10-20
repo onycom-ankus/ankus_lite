@@ -1,0 +1,107 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans  
+       http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+            http://www.springframework.org/schema/util                  
+            http://www.springframework.org/schema/util/spring-util-3.2.xsd
+            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+            http://www.springframework.org/schema/task 
+        	http://www.springframework.org/schema/task/spring-task-3.2.xsd"
+        	>
+
+    <!-- ========================= PROPERTY PLACE HOLDER DEFINITION ========================= -->
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>/WEB-INF/config-${spring.profiles.active:dev}.properties</value>
+            </list>
+        </property>
+        <property name="properties">
+            <props>
+                <prop key="active.profile">${spring.profiles.active:dev}</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- ========================= PROPERTIES DEFINITION ========================= -->
+
+    <util:properties id="config" location="/WEB-INF/config-${spring.profiles.active:dev}.properties"/>
+    <util:properties id="version" location="/WEB-INF/version.properties"/>
+
+    <!-- ========================= DATASOURCE DEFINITION ========================= -->
+
+    <bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+        <constructor-arg ref="pooledDataSource"/>
+        <property name="logFormatter">
+            <bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+                <property name="sqlPrefix" value="[SQL]  "/>
+            </bean>
+        </property>
+    </bean>
+    
+    <bean id="pooledDataSource" class="com.zaxxer.hikari.HikariDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="connectionTestQuery" value="SELECT 1"/>
+        <property name="dataSourceProperties">
+            <props>
+                <prop key="cachePrepStmts">true</prop>
+                <prop key="prepStmtCacheSize">250</prop>
+                <prop key="prepStmtCacheSqlLimit">2048</prop>
+            </props>
+        </property>
+    </bean>
+    
+    <!-- ========================= EL SERVICE DEFINITION ========================= -->
+
+    <bean id="configuration" class="com.ankus.web.configuration.ConfigurationFactoryBean">
+        <property name="configurationFile" value="/WEB-INF/ankus-site.xml"/>
+    </bean>
+
+    <bean id="elService" class="com.ankus.el.ELServiceImpl" destroy-method="destroy">
+        <property name="definitions">
+            <bean class="org.springframework.beans.factory.config.MapFactoryBean">
+                <property name="sourceMap">
+                    <map>
+                        <entry key="EL.constants">
+                            <value>
+                                KB=com.ankus.el.ELConstantsFunctions#KB,
+                                MB=com.ankus.el.ELConstantsFunctions#MB,
+                                GB=com.ankus.el.ELConstantsFunctions#GB,
+                                TB=com.ankus.el.ELConstantsFunctions#TB,
+                                PB=com.ankus.el.ELConstantsFunctions#PB,
+                                MINUTES=com.ankus.el.ELConstantsFunctions#MINUTES,
+                                HOURS=com.ankus.el.ELConstantsFunctions#HOURS,
+                                DAYS=com.ankus.el.ELConstantsFunctions#DAYS
+                            </value>
+                        </entry>
+                        <entry key="EL.functions">
+                            <value>
+                                firstNotNull=com.ankus.el.ELConstantsFunctions#firstNotNull,
+                                concat=com.ankus.el.ELConstantsFunctions#concat,
+                                trim=com.ankus.el.ELConstantsFunctions#trim,
+                                dateFormat=com.ankus.el.ELConstantsFunctions#dateFormat,
+                                hostname=com.ankus.el.ELConstantsFunctions#hostname,
+                                escapeString=com.ankus.el.ELConstantsFunctions#escapeString,
+                                yesterday=com.ankus.el.ELConstantsFunctions#yesterday,
+                                tommorow=com.ankus.el.ELConstantsFunctions#tommorow,
+                                month=com.ankus.el.ELConstantsFunctions#month,
+                                day=com.ankus.el.ELConstantsFunctions#day,
+                                hour=com.ankus.el.ELConstantsFunctions#hour,
+                                minute=com.ankus.el.ELConstantsFunctions#minute,
+                                second=com.ankus.el.ELConstantsFunctions#second,
+                                urlEncode=com.ankus.el.ELConstantsFunctions#urlEncode
+                            </value>
+                        </entry>
+                    </map>
+                </property>
+            </bean>
+        </property>
+    </bean>
+</beans>

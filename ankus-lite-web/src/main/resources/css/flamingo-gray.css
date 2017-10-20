@@ -1,0 +1,437 @@
+@CHARSET "UTF-8";
+
+.disabled-plain {
+    opacity: 1;
+}
+
+.code {
+    font-family: "Monaco", "NamumGothicCoding", "Courier New", "Gulimche", "monospace"
+}
+
+.common-refresh {
+    background-image: url(../images/common-refresh.png) !important;
+}
+
+.common-confirm {
+    background-image: url(../images/common-confirm.png) !important;
+}
+
+.common-cancel {
+    background-image: url(../images/common-cancel.png) !important;
+}
+
+.common-add {
+    background-image: url(../images/common-add.png) !important;
+}
+.common-edit {
+    background-image: url(../images/common-edit.png) !important;
+}
+.common-delete {
+    background-image: url(../images/common-delete.png) !important;
+}
+
+.common-window {
+    background-image: url(../images/common-details.gif) !important;
+}
+
+.common-folder {
+    background-image: url(../images/common-folder.png) !important;
+}
+
+.common-folder-collapse {
+    background-image: url(../images/common-folder-collapse.png) !important;
+}
+
+.common-folder-expand {
+    background-image: url(../images/common-folder-expand.png) !important;
+}
+
+.common-folder-create {
+    background-image: url(../images/common-folder-create.png) !important;
+}
+
+.common-folder-delete {
+    background-image: url(../images/common-folder-delete.png) !important;
+}
+
+.common-folder-info {
+    background-image: url(../images/common-folder-info.png) !important;
+}
+
+.common-folder-move {
+    background-image: url(../images/common-folder-move.png) !important;
+}
+
+.common-folder-rename {
+    background-image: url(../images/common-folder-rename.png) !important;
+}
+
+.common-find {
+    background: url(../images/find.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.common-find-clear {
+    background: url(../images/find-clear.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.status-blue {
+    background: url(../images/status-blue.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.status-red {
+    background: url(../images/status-red.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.status-yellow {
+    background: url(../images/status-yellow.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.status-green {
+    background: url(../images/status-green.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.status-orange {
+    background: url(../images/status-orange.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.status-gray {
+    background: url(../images/status-gray.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.collector-show-fs {
+    background: url(../images/collector-show-fs.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.collector-regist {
+    background: url(../images/collector-regist.png) no-repeat 2px 1px;
+    padding-left: 16px;
+    background-position: left;
+}
+
+.hdfs-directory-create {
+    background-image: url(../images/fs/hdfs/directory-create.png) !important;
+}
+
+.hdfs-directory-delete {
+    background-image: url(../images/fs/hdfs/directory-delete.png) !important;
+}
+
+.hdfs_directory_copy {
+    background-image: url(../images/fs/hdfs/directory_copy.png) !important;
+}
+
+.hdfs-directory-info {
+    background-image: url(../images/fs/hdfs/information.png) !important;
+}
+
+.hdfs-directory-move {
+    background-image: url(../images/fs/hdfs/directory-move.png) !important;
+}
+
+.hdfs-directory-rename {
+    background-image: url(../images/fs/hdfs/directory-rename.png) !important;
+}
+
+.hdfs-file-copy {
+    background-image: url(../images/fs/hdfs/file-copy.png) !important;
+}
+
+.hdfs-file-delete {
+    background-image: url(../images/fs/hdfs/file-delete.png) !important;
+}
+
+.hdfs-file-move {
+    background-image: url(../images/fs/hdfs/file-move.png) !important;
+}
+
+.hdfs-file-rename {
+    background-image: url(../images/fs/hdfs/file-rename.png) !important;
+}
+
+.hdfs-file-select {
+    background-image: url(../images/fs/hdfs/file-select.png) !important;
+}
+
+.hdfs-file-upload {
+    background-image: url(../images/fs/hdfs/file-upload.png) !important;
+}
+
+.hdfs-file-download {
+    background-image: url(../images/fs/hdfs/file-download.png) !important;
+}
+
+.hdfs-used {
+    background-image: url(../images/fs/hdfs/used.png) !important;
+}
+
+.hdfs-database {
+    background-image: url(../images/fs/hdfs/hive-database.png) !important;
+}
+
+.hdfs-table {
+    background-image: url(../images/fs/hdfs/hive-table.png) !important;
+}
+
+/* Desktop shortcut images */
+.desktop-hive {
+    background-image: url(../images/desktop/hive.png) !important;
+}
+
+.desktop-pig {
+    background-image: url(../images/desktop/pig.png) !important;
+}
+
+.desktop-hdfs {
+    background-image: url(../images/desktop/floppy.png) !important;
+}
+
+.desktop-user {
+    background-image: url(../images/desktop/users.png) !important;
+}
+
+.desktop-workflow {
+    background-image: url(../images/desktop/hadoop_big.png) !important;
+}
+
+.desktop-dashboard {
+    background-image: url(../images/desktop/dashboard_big.png) !important;
+}
+
+.desktop-dashboard-small {
+    background-image: url(../images/desktop/dashboard_small.png) !important;
+}
+
+.desktop-dashboard-big {
+    background-image: url(../images/desktop/dashboard_big.png) !important;
+}
+
+.desktop-hdfs-small {
+    background-image: url(../images/desktop/disk_small.png) !important;
+}
+
+.desktop-user-small {
+    background-image: url(../images/desktop/user.png) !important;
+}
+
+.desktop-workflow-small {
+    background-image: url(../images/desktop/hadoop_small.png) !important;
+}
+
+.designer-create {
+    background-image: url(../images/designer/create.png) !important;
+}
+
+.designer-hdfs {
+    background-image: url(../images/designer/hdfs.png) !important;
+}
+
+.designer-save {
+    background-image: url(../images/designer/save.png) !important;
+}
+
+.designer-loading {
+    background-image: url(../images/designer/loading.png) !important;
+}
+
+.designer-explanation {
+    background-image: url(../images/designer/explanation.png) !important;
+}
+
+.designer-action {
+    background-image: url(../images/designer/action.png) !important;
+}
+
+.designer-workflow-xml {
+    background-image: url(../images/designer/xml.png) !important;
+}
+
+.visual-icon {
+    background-image: url(../images/visual/visual_icon.png) !important;
+}
+
+.x-grid-cell {
+    vertical-align: middle;
+}
+
+.x-form-check-group-label {
+    color: black;
+    padding: 2px;
+    margin: 0 30px 5px 0;
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    border-color: #E0E0E0
+}
+
+.msg .x-box-mc {
+    font-size: 14px;
+}
+
+#msg-div {
+    position: absolute;
+    left: 35%;
+    top: 10px;
+    width: 300px;
+    z-index: 20000;
+}
+
+#msg-div .msg {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #F6F6F6;
+    border: 2px solid #ccc;
+    margin-top: 2px;
+    padding: 10px 15px;
+    color: #555;
+}
+
+#msg-div .msg h3 {
+    margin: 0 0 8px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#msg-div .msg p {
+    margin: 0;
+}
+
+.audit-cell-height {
+    height: 30px;
+    padding-top: 10px;
+}
+
+.about-window-field {
+    margin-bottom: 0px
+}
+
+.about-window-logo {
+    background-image: url(../images/about/logo.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.about-window-logo2 {
+    background-image: url(../images/about/logo2.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.need-help-logo-red {
+    background-image: url(../images/about/angry.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.need-help-logo-yel {
+    background-image: url(../images/about/angry_y.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.forgot-passwd {
+    background-image: url(../images/about/forgot_pw.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.forgot-passwd2 {
+    background-image: url(../images/about/forgot_pw2.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.forgot-passwd-yel {
+    background-image: url(../images/about/forgot_pw_y.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.forgot-passwd2-yel {
+    background-image: url(../images/about/forgot_pw2_y.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.ankus-small {
+    background-image: url(../images/ankus-small.png) !important;
+}
+
+.HDFS-folder {
+    background-image: url(../images/common-folder.png) !important;    
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.state-check  .x-grid-cell{ 
+  background-color:#B2CCFF;  
+}
+
+/* = Progress Column
+----------------------------------------------- */
+.x-grid-row .x-progress .x-grid-cell-inner {
+    padding: 0; 
+}
+.x-progress-default .x-progress-bar-red {
+    background-color: #FF0000;
+    background-image: -moz-linear-gradient(center top , #FF0000, #FF6600 50%, #FF6600 51%, #FF0000);
+    border-right-color: #CC3366;
+    border-top-color: #CC00CC;
+}
+.x-progress-bar-red {
+    border-radius: 0 0 0 0;
+    border-right: 1px solid;
+    border-top: 1px solid;
+    height: 18px;
+    overflow: hidden;
+    position: absolute;
+    width: 0;
+}
+
+.x-progress-default .x-progress-bar-orange {
+    background-color: #FFCC00;
+    background-image: -moz-linear-gradient(center top , #FFCC00, #FF6600 50%, #FF6600 51%, #FFCC00);
+    border-right-color: #FFCC00;
+    border-top-color: #FFCC00;
+}
+.x-progress-bar-orange {
+    border-radius: 0 0 0 0;
+    border-right: 1px solid;
+    border-top: 1px solid;
+    height: 18px;
+    overflow: hidden;
+    position: absolute;
+    width: 0;
+}
+
+.x-progress-default .x-progress-bar-green {
+    background-color: #00FF00;
+    background-image: -moz-linear-gradient(center top , #FFFF00, #00FF00 50%, #33FF99 51%, #00FF00);
+    border-right-color: #00CC00;
+    border-top-color: #00CC00;
+}
+.x-progress-bar-green {
+    border-radius: 0 0 0 0;
+    border-right: 1px solid;
+    border-top: 1px solid;
+    height: 18px;
+    overflow: hidden;
+    position: absolute;
+    width: 0;
+}  
