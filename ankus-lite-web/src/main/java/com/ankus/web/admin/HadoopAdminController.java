@@ -149,8 +149,10 @@ public class HadoopAdminController extends LocaleSupport {
             List<HadoopCluster> servers = adminService.getHadoopClusters();
             if (servers != null) {
                 response.getList().addAll(servers);
+                response.setSuccess(true);
                 response.setTotal(response.getList().size());
             } else {
+            	response.setSuccess(false);
                 response.setTotal(0);
             }
         } catch (Exception ex) {

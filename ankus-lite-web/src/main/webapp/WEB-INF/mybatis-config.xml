@@ -28,6 +28,7 @@
         <typeAlias type="com.ankus.web.lite.newsoid.NewsOid" alias="newsoid"/>
         <typeAlias type="com.ankus.web.lite.newsList.NewsList" alias="newsList"/>
         <typeAlias type="com.ankus.web.lite.blogList.BlogList" alias="blogList"/>
+        <typeAlias type="com.ankus.web.lite.mallList.MallList" alias="mallList"/>
         
     </typeAliases>
 
@@ -56,6 +57,7 @@
         <mapper resource="com/ankus/web/lite/newsoid/newsoid-mapper.xml"/>
         <mapper resource="com/ankus/web/lite/newsList/newsList-mapper.xml"/>
         <mapper resource="com/ankus/web/lite/blogList/blogList-mapper.xml"/>
+        <mapper resource="com/ankus/web/lite/mallList/mallList-mapper.xml"/>
         
         <!-- Language -->      
         <mapper resource="com/ankus/web/language/language-mapper.xml"/>

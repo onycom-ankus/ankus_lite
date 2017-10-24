@@ -21,12 +21,12 @@
 			data.sidx		= postData.sidx;
 			data.sord		= postData.sord;
 		}
-		console.log(data);
+		
 		ANKUS_API.ajax({
 			url			: '/blogList/list',
 			data		: data,
 			success		: function(res){
-				console.log(res);
+				
 				var obj = res.map;
 				obj.rows = res.list;
 				

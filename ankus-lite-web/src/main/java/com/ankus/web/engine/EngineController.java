@@ -174,6 +174,8 @@ public class EngineController {
                     param.put("ip", engine.getIp());
                     param.put("port", engine.getPort());
                     param.put("permission", engine.getPermission());
+                    
+                    System.out.println("------->" + type);
 
                     if (("ALL".equals(type) || "HADOOP".equals(type))) {
                         param.put("hadoopClusterId", engine.getHadoopClusterId());
@@ -202,9 +204,9 @@ public class EngineController {
                         logger.info("Engine({})의 상태 조회실패: {}", ex);
                         param.put("status", "FAIL");
                     }
-                    //if("list".equals(from) || "RUNNING".equals(param.get("status"))) {
+                    if("list".equals(from) || "RUNNING".equals(param.get("status"))) {
                     	response.getList().add(param);
-                    //}
+                    }
                 }
                 response.setTotal(response.getList().size());
             } else {
