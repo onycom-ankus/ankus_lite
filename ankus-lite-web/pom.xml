@@ -1,0 +1,634 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.ankus</groupId>
+        <artifactId>ankus</artifactId>
+        <version>0.4.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>ankus-lite</artifactId>
+    <packaging>war</packaging>
+    <version>1.0.0</version>
+    <name>ankus-lite-web</name>
+
+    <build>
+        <plugins>
+
+            <!--
+                YUI Compressor
+                 http://alchim.sourceforge.net/yuicompressor-maven-plugin/
+            -->
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>yuicompressor-maven-plugin</artifactId>
+                <version>1.3.2</version>
+                <executions>
+                    <execution>
+                        <id>compress_js_css</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>compress</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!--
+                        <preProcessAggregates>true</preProcessAggregates>
+                        <aggregations>
+                            <aggregation>
+                                <insertNewLine>true</insertNewLine>
+                                <includes>
+                                    <include>**/*.js</include>
+                                </includes>
+                                <excludes>
+                                    <exclude>**/*abc.js</exclude>
+                                    <exclude>**/compressed.css</exclude>
+                                </excludes>
+                            </aggregation>
+                        </aggregations>
+                    -->
+                    <excludes>
+                        <exclude>**/*_rTerm.js</exclude>
+                        <exclude>**/lib/**/*</exclude>
+                        <exclude>**/*.min.js</exclude>
+                        <exclude>**/*-min.css</exclude>
+                        <exclude>**/*.min.css</exclude>
+                        <exclude>**/WEB-INF/**/*</exclude>
+                    </excludes>
+                    <jswarn>false</jswarn>
+                    <nosuffix>true</nosuffix>
+                    <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
+                    <webappDirectory>${project.build.directory}/min</webappDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>default-war</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>war</goal>
+                        </goals>
+                        <configuration>
+                            <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
+                            <failOnMissingWebXml>false</failOnMissingWebXml>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
+                    <webResources>
+                        <resource>
+                            <directory>${project.build.directory}/min</directory>
+                        </resource>
+                        <resource>
+                            <directory>${basedir}/src/main/webapp/WEB-INF</directory>
+                            <filtering>true</filtering>
+                            <targetPath>WEB-INF</targetPath>
+                            <includes>
+                                <include>version.properties</include>
+                            </includes>
+                        </resource>
+                    </webResources>
+                    <packagingExcludes>
+                        WEB-INF/lib/antlr-2.7.7.jar,
+                        WEB-INF/lib/derby-10.4.2.0.jar,
+                        WEB-INF/lib/dom4j-1.6.1.jar,
+                        WEB-INF/lib/jetty-6.1.26.jar,
+                        WEB-INF/lib/jetty-util-6.1.26.jar,
+                        WEB-INF/lib/netty-3.2.2.Final.jar,
+                        WEB-INF/lib/servlet-api-2.5-20081211.jar,
+                        WEB-INF/lib/jaxb-xjc-2.1.13.jar,
+                        WEB-INF/lib/jdo2-api-2.3-ec.jar,
+                        WEB-INF/lib/datanucleus-api-jdo-3.0.7.jar,
+                        WEB-INF/lib/datanucleus-core-3.0.9.jar,
+                        WEB-INF/lib/datanucleus-enhancer-3.0.1.jar,
+                        WEB-INF/lib/datanucleus-rdbms-3.0.8.jar,
+                        WEB-INF/lib/commons-beanutils-core-1.8.0.jar,
+                        WEB-INF/lib/mockito-all-1.8.2.jar,
+                        WEB-INF/lib/jersey-core-1.8.jar,
+                        WEB-INF/lib/jersey-json-1.8.jar,
+                        WEB-INF/lib/jersey-server-1.8.jar,
+                        WEB-INF/lib/h2-1.3.173.jar
+                    </packagingExcludes>
+                </configuration>
+            </plugin>
+            <plugin>
+ 				<artifactId>maven-eclipse-plugin</artifactId>
+ 				<version>2.8</version>
+				<configuration>
+					<wtpversion>2.0</wtpversion>
+					<wtpContextName>/</wtpContextName>
+				</configuration>
+			</plugin>
+        </plugins>
+    </build>
+
+	<properties>
+		<poi.version>3.13</poi.version>
+	</properties>
+
+    <dependencies>
+        <!-- ========== -->
+        <!--  ankus  -->
+        <!-- ========== -->
+
+        <!--<dependency>-->
+        <!--<groupId>org.ankus</groupId>-->
+        <!--<artifactId>ankus-workflow-engine</artifactId>-->
+        <!--<version>${project.version}</version>-->
+        <!--</dependency>-->
+
+
+		<!-- ================== -->
+        <!--  Excel Export  -->
+        <!-- ================== -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>dom4j</groupId>
+		    <artifactId>dom4j</artifactId>
+		    <version>1.4</version>
+		</dependency>
+		
+		<!-- ================== -->
+        <!-- CSV Parse  -->
+        <!-- ================== -->
+		<dependency>
+		   <groupId>net.sf.opencsv</groupId>
+		   <artifactId>opencsv</artifactId>
+		   <version>2.0</version>
+		</dependency>
+
+        <!-- ================== -->
+        <!--  Spring Framework  -->
+        <!-- ================== -->
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+
+        <!-- ================= -->
+        <!--  Spring Security  -->
+        <!-- ================= -->
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+        </dependency>
+
+        <!-- ===================== -->
+        <!--  Spring Dependencies  -->
+        <!-- ===================== -->
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+        </dependency>
+
+        <!-- ====== -->
+        <!--  JAXB  -->
+        <!-- ====== -->
+
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.moxy</artifactId>
+        </dependency>
+
+        <!-- ============== -->
+        <!--   HTTP Client  -->
+        <!-- ============== -->
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+
+        <!-- =================== -->
+        <!--  JDBC Dependencies  -->
+        <!-- =================== -->
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <dependency>
+	        <groupId>com.zaxxer</groupId>
+	        <artifactId>HikariCP</artifactId>
+	    </dependency>
+
+        <!-- ============= -->
+        <!--  Logging API  -->
+        <!-- ============= -->
+
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>oro</groupId>
+                    <artifactId>oro</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.mail</groupId>
+                    <artifactId>mail</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.lazyluke</groupId>
+            <artifactId>log4jdbc-remix</artifactId>
+        </dependency>
+
+        <!-- ================= -->
+        <!--  Jakarta Commons  -->
+        <!-- ================= -->
+
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
+
+        <!-- ============= -->
+        <!--  Java EE API  -->
+        <!-- ============= -->
+
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>el-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+        </dependency>
+
+        <!-- ============== -->
+        <!--  Google Guava  -->
+        <!-- ============== -->
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+        <!-- ========== -->
+        <!--  Test API  -->
+        <!-- ========== -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1</version>
+		</dependency>
+		
+<!-- Tajo & SSH API -->	
+     <dependency>
+		<groupId>org.apache.tajo</groupId>
+		<artifactId>tajo-jdbc</artifactId>
+		<version>0.11.1</version>
+	 </dependency>
+	 
+	 <dependency>
+		<groupId>sshtools</groupId>
+		<artifactId>j2ssh-core</artifactId>
+		<version>0.2.2</version>
+	 </dependency>
+		
+
+        <dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-client</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		
+<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+<dependency>
+    <groupId>org.mybatis</groupId>
+    <artifactId>mybatis</artifactId>
+    <version>3.2.3</version>
+</dependency>
+		
+<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
+<dependency>
+    <groupId>org.mybatis</groupId>
+    <artifactId>mybatis-spring</artifactId>
+    <version>1.2.1</version>
+</dependency>
+		
+<!-- https://mvnrepository.com/artifact/commons-el/commons-el -->
+<dependency>
+    <groupId>commons-el</groupId>
+    <artifactId>commons-el</artifactId>
+    <version>1.0</version>
+</dependency>
+		
+<dependency>
+        <groupId>org.apache.hive</groupId>
+        <artifactId>hive-metastore</artifactId>
+        <version>0.13.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.hive</groupId>
+        <artifactId>hive-jdbc</artifactId>
+        <version>0.13.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.hive.hcatalog</groupId>
+        <artifactId>hive-webhcat-java-client</artifactId>
+        <version>0.13.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.thrift</groupId>
+        <artifactId>libthrift</artifactId>
+        <version>0.9.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.thrift</groupId>
+        <artifactId>libfb303</artifactId>
+        <version>0.9.1</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.quartz-scheduler</groupId>
+        <artifactId>quartz</artifactId>
+        <version>2.2.1</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>3.6.10.Final</version>
+      </dependency>
+
+     <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk</artifactId>
+        <version>1.6.10</version>
+      </dependency>
+      
+	 <!-- https://mvnrepository.com/artifact/com.github.jinahya/cubrid-jdbc-driver-9.3.0.0206 -->
+	 <!-- <dependency>
+	    <groupId>com.github.jinahya</groupId>
+	    <artifactId>cubrid-jdbc-driver-9.3.0.0206</artifactId>
+	    <version>1.0</version>
+	 </dependency> -->
+	 
+	 <dependency>
+		<groupId>cubrid</groupId>
+		<artifactId>cubrid-jdbc</artifactId>
+		<version>8.4.3.1005</version>
+	</dependency>
+	
+	<dependency>	
+		<groupId>customer</groupId>
+		<artifactId>jar</artifactId>	
+		<version>1.0</version>
+	</dependency>
+
+    </dependencies>
+    
+    <repositories>
+        <repository>  
+			<id>CUBRID</id>
+			<name>CUBRID-releases</name>
+			<url>http://maven.cubrid.org</url>
+		</repository>     	
+    </repositories>
+  	
+
+    <profiles>
+        <profile>
+            <id>optimized</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>optimize</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <!--
+                        YUI Compressor
+                         http://alchim.sourceforge.net/yuicompressor-maven-plugin/
+                    -->
+                    <plugin>
+                        <groupId>net.alchim31.maven</groupId>
+                        <artifactId>yuicompressor-maven-plugin</artifactId>
+                        <version>1.3.2</version>
+                        <executions>
+                            <execution>
+                                <id>compress_js_css</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>compress</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!--
+                                <preProcessAggregates>true</preProcessAggregates>
+                                <aggregations>
+                                    <aggregation>
+                                        <insertNewLine>true</insertNewLine>
+                                        <includes>
+                                            <include>**/*.js</include>
+                                        </includes>
+                                        <excludes>
+                                            <exclude>**/*abc.js</exclude>
+                                            <exclude>**/compressed.css</exclude>
+                                        </excludes>
+                                    </aggregation>
+                                </aggregations>
+                            -->
+                            <excludes>
+                                <exclude>**/*_rTerm.js</exclude>
+                                <exclude>**/lib/**/*</exclude>
+                                <exclude>**/*.min.js</exclude>
+                                <exclude>**/*-min.css</exclude>
+                                <exclude>**/*.min.css</exclude>
+                                <exclude>**/WEB-INF/**/*</exclude>
+                            </excludes>
+                            <jswarn>false</jswarn>
+                            <nosuffix>true</nosuffix>
+                            <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
+                            <webappDirectory>${project.build.directory}/min</webappDirectory>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>2.4</version>
+                        <executions>
+                            <execution>
+                                <id>default-war</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>war</goal>
+                                </goals>
+                                <configuration>
+                                    <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
+                            <webResources>
+                                <resource>
+                                    <directory>${project.build.directory}/min</directory>
+                                </resource>
+                            </webResources>
+                            <packagingExcludes>
+                                WEB-INF/lib/antlr-2.7.7.jar,
+                                WEB-INF/lib/derby-10.4.2.0.jar,
+                                WEB-INF/lib/dom4j-1.6.1.jar,
+                                WEB-INF/lib/jetty-6.1.26.jar,
+                                WEB-INF/lib/jetty-util-6.1.26.jar,
+                                WEB-INF/lib/netty-3.2.2.Final.jar,
+                                WEB-INF/lib/servlet-api-2.5-20081211.jar,
+                                WEB-INF/lib/jaxb-xjc-2.1.13.jar,
+                                WEB-INF/lib/jdo2-api-2.3-ec.jar,
+                                WEB-INF/lib/datanucleus-api-jdo-3.0.7.jar,
+                                WEB-INF/lib/datanucleus-core-3.0.9.jar,
+                                WEB-INF/lib/datanucleus-enhancer-3.0.1.jar,
+                                WEB-INF/lib/datanucleus-rdbms-3.0.8.jar,
+                                WEB-INF/lib/commons-beanutils-core-1.8.0.jar,
+                                WEB-INF/lib/mockito-all-1.8.2.jar,
+                                WEB-INF/lib/jersey-core-1.8.jar,
+                                WEB-INF/lib/jersey-json-1.8.jar,
+                                WEB-INF/lib/jersey-server-1.8.jar,
+                                WEB-INF/lib/h2-1.3.173.jar
+                            </packagingExcludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

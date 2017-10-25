@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.member.MemberRepository">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+    <resultMap id="memberMap" type="com.ankus.web.member.Member">
+        <result property="username" column="USERNAME" jdbcType="VARCHAR"/>
+        <result property="password" column="PASSWD" jdbcType="VARCHAR"/>
+        <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        <result property="email" column="EMAIL" jdbcType="VARCHAR"/>
+        <result property="enabled" column="ENABLED" jdbcType="BOOLEAN"/>
+        <result property="ac_non_expired" column="AC_NON_EXPIRED" jdbcType="BOOLEAN"/>
+        <result property="ac_non_locked" column="AC_NON_LOCKED" jdbcType="BOOLEAN"/>
+        <result property="cr_non_expired" column="CR_NON_EXPIRED" jdbcType="BOOLEAN"/>
+        <result property="create_dt" column="CREATE_DT" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp"/>
+        <result property="authority" column="AUTHORITY" jdbcType="VARCHAR"/>
+        <result property="language" column="LANGUAGE" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== -->
+
+    <sql id="wherePK">WHERE USERNAME = #{username}</sql>
+    <sql id="whereEmail">WHERE EMAIL = #{email}</sql>
+    <sql id="wherePassword">WHERE USERNAME = #{username} AND EMAIL = #{email}</sql>
+    <sql id="whereUsernamePassword">WHERE USERNAME = #{username} AND PASSWD = #{password}</sql>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Check User Information -->
+    <!-- ==================================================================================== -->
+
+    <select id="selectByUser" resultMap="memberMap">
+        SELECT * FROM [USER]
+        <include refid="wherePK"/>
+    </select>
+
+    <select id="selectByEmail" resultMap="memberMap">
+        SELECT * FROM [USER]
+        <include refid="whereEmail"/>
+    </select>
+
+    <select id="selectByPassword" resultMap="memberMap">
+        SELECT * FROM [USER]
+        <include refid="wherePassword"/>
+    </select>
+
+    <select id="selectEmailCount" resultType="int">
+        SELECT COUNT(EMAIL) FROM [USER]
+        <include refid="whereEmail"/>
+    </select>
+
+    <select id="existUsername" resultType="int">
+        SELECT COUNT(USERNAME) FROM [USER]
+        <include refid="wherePK"/>
+    </select>
+    
+    <select id="existMember" resultType="int">
+        SELECT COUNT(*) FROM [USER] 
+        <include refid="whereUsernamePassword"/>
+    </select>
+
+    <select id="selectMembers" resultMap="memberMap">
+        SELECT * FROM [USER]
+        <where>
+            <if test=" username != null and username !='' ">
+                USERNAME = #{username}
+            </if>
+            <if test=" email != null and email !='' ">
+                and EMAIL = #{email}
+            </if>
+            <if test=" enabled != null and enabled !='' ">
+                and ENALBED = #{enabled}
+            </if>
+            <if test=" authority != null and authority !='' ">
+                and AUTHORITY = #{authority}
+            </if>
+        </where>
+        ORDER BY USERNAME
+    </select>
+
+    <insert id="registerMember" parameterType="list">
+        INSERT INTO [USER] (
+          USERNAME,
+          PASSWD,
+          [NAME],
+          EMAIL,
+          ENABLED,
+          AUTHORITY,
+          CREATE_DT,
+          LAST_LOGIN,
+          [LANGUAGE]
+        )
+        VALUES (
+          #{username},
+          #{password},
+          #{name},
+          #{email},
+          0,
+          #{authority},
+          NOW(),
+          NOW(),
+          #{language}
+        )
+    </insert>
+
+    <update id="updateByLanguage">
+    	UPDATE [USER]
+    	SET [LANGUAGE] = #{language}
+    	WHERE USERNAME = #{username}
+    </update>
+    
+    <update id="updateByPassword">
+    	UPDATE [USER] 
+    	SET PASSWD = #{password}
+    	WHERE USERNAME = #{username}
+    </update>
+    
+    <update id="updateByLastLogin">
+    	UPDATE [USER] 
+    	SET LAST_LOGIN = now()
+    	WHERE USERNAME = #{username}
+    </update>
+</mapper>

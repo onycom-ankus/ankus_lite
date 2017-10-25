@@ -1,0 +1,89 @@
+@CHARSET "UTF-8";
+
+/* Workflow Designer : StyleSheet of Node List Area */
+.node-list .x-panel-body {
+    background: white;
+    font: 11px Arial, Helvetica, sans-serif;
+}
+
+.node-list .thumb {
+    /*background: #dddddd;*/
+    padding: 3px;
+    padding-bottom: 0;
+}
+
+.x-quirks .node-list .thumb {
+    padding-bottom: 3px;
+}
+
+.node-list .thumb img {
+    height: 60px;
+    width: 60px;
+}
+
+.node-list .thumb-wrap {
+    float: left;
+    margin: 4px;
+    margin-right: 0;
+    padding: 5px;
+}
+
+.node-list .thumb-wrap-disable {
+    float: left;
+    margin: 4px;
+    margin-right: 0;
+    padding: 5px;
+}
+
+.node-list .thumb-wrap span {
+    display: block;
+    overflow: hidden;
+    text-align: center;
+    width: 66px; /* for ie to ensure that the text is centered */
+    font: 10px Arial, Helvetica, sans-serif;
+}
+
+.node-list .thumb-wrap-disable span {
+    display: block;
+    overflow: hidden;
+    text-align: center;
+    width: 66px; /* for ie to ensure that the text is centered */
+    font: 10px Arial, Helvetica, sans-serif;
+    text-decoration: line-through;
+}
+
+.node-list .x-item-over {
+    border: 1px solid #dddddd;
+    background: #efefef repeat-x left top;
+    padding: 4px;
+    cursor: pointer;
+}
+
+.node-list .x-item-selected {
+    background: #eff5fb no-repeat right bottom;
+    border: 1px solid #99bbe8;
+    padding: 4px;
+}
+
+.node-list .x-item-selected .thumb {
+    background: transparent;
+}
+
+.x-view-selector {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    border: 1px dotted;
+    opacity: .5;
+    -moz-opacity: .5;
+    filter: alpha(opacity=50);
+    zoom: 1;
+    background-color: #c3daf9;
+    border-color: #3399bb;
+}
+
+.ext-strict .ext-ie .x-tree .x-panel-bwrap {
+    position: relative;
+    overflow: hidden;
+}

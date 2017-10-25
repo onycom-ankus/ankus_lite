@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="innerData">
+
+	<select id="getLastDataId" resultType="DataMap">
+		SELECT
+			data_id
+		FROM
+			[inner_data_collection]
+		ORDER BY
+			data_id DESC
+		LIMIT 1
+	</select>
+	
+	<insert id="regist" parameterType="DataMap">
+		INSERT INTO
+			inner_data_collection (
+				data_id,
+				record_id,
+				data_nm,
+				file_nm,
+				title,
+				content,
+				content_type,
+				writer
+			)
+		VALUES
+		<foreach collection="dataList" item="d" separator=",">
+			(
+				#{d.data_id},
+				#{d.record_id},
+				#{d.data_nm},
+				#{d.file_nm},
+				#{d.title},
+				#{d.content},
+				#{d.content_type},
+				#{d.writer}
+			)
+		</foreach>
+	</insert>
+</mapper>

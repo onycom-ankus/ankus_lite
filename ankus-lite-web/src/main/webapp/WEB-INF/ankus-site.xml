@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration xmlns="http://www.openankus.org/schema/configuration">
+
+    <property>
+        <name>application.locale</name>
+        <value>English</value>
+        <description>Application Locale. If it's changed, log messages are also changed.</description>
+        <expose>true</expose>
+    </property>
+
+    <property>
+        <name>demo.mode</name>
+        <value>false</value>
+        <description>Demo mode. If it's true, app works in testing mode and the admin page appears hidden.</description>
+        <expose>true</expose>
+    </property>
+
+    <property>
+        <name>extjs.ajax.disable.cache</name>
+        <value>true</value>
+        <description>ExtJS Ajax Cache config. If set it to false, web browser's cache is enabled and modified JavaScript
+            doesn't get applied. So web browser's cache must be deleted.
+        </description>
+        <expose>true</expose>
+    </property>
+
+    <property>
+        <name>fs.browser.download.max.file.size</name>
+        <value>107374182400</value>
+        <description>Max size of download files in File System Browser</description>
+        <expose>true</expose>
+    </property>
+
+    <property>
+        <name>fs.browser.upload.max.file.size</name>
+        <value>107374182400</value>
+        <description>Max size of upload files in File System Browser.</description>
+        <expose>true</expose>
+    </property>
+
+    <property>
+        <name>fs.browser.upload.timeout</name>
+        <value>3600000</value>
+        <description>Sets HTTP timeout when uploading files in File System Browser.</description>
+        <expose>true</expose>
+    </property>
+
+    <property>
+        <name>hive.query.result.max.download.size</name>
+        <value>5242880</value>
+        <description>Max size of download query results in Hive Query Editor.</description>
+        <expose>true</expose>
+    </property>
+
+    <property>
+        <name>hdfs.delete.forbidden.paths</name>
+        <value>/tmp/**/*,/tmp,/user/hive/**/*,/usr/hive,/lib/**/*,/lib,/samples/**/*,/samples</value>
+        <description>Lis of non-deletable file paths in File System Browser</description>
+        <expose>false</expose>
+    </property>
+
+    <!-- Certainly add for preview hdfs from DesignerController -->
+    <property>
+        <name>hadoop.home</name>
+        <value>/Users/ankus/hadoop</value>
+        <description>Hadoop home directory.</description>
+        <expose>false</expose>
+    </property>
+    
+    <property>
+        <name>working.path</name>
+        <value>/tmp</value>
+        <description>Path to save logs for actions</description>
+        <expose>false</expose>
+    </property>
+    
+    <property>
+        <name>artifact.caching</name>
+        <value>true</value>
+        <description>Options for caching whether to save artifacs such as MapReduce jar files. If it's on, caching is
+            enabled so it might slow down.
+        </description>
+        <expose>false</expose>
+    </property>
+
+    <property>
+        <name>artifact.cache.path</name>
+        <value>/tmp/cache</value>
+        <description>Path where artifacs such as MapReduce JAR files are saved.</description>
+        <expose>false</expose>
+    </property>
+    
+    <property>
+        <name>innerData.cache.path</name>
+        <value>/tmp/innerDataCache</value>
+        <description>Path where artifacs such as MapReduce JAR files are saved.</description>
+        <expose>false</expose>
+    </property>
+
+    <property>
+        <name>maven.repository.url</name>
+        <value>http://www.openankus.com:8081/nexus/content/repositories/ankus</value>
+        <!--<value>http://maven.opencloudengine.org/content/groups/public</value>-->
+        <description>Maven Remote Repository URL</description>
+        <expose>false</expose>
+    </property>
+    
+
+
+</configuration>

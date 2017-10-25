@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.job.JobRepository">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+    <resultMap id="jobMap" type="com.ankus.model.rest.Job">
+        <result property="id" column="ID" jdbcType="BIGINT"/>
+        <result property="workflowId" column="WORKFLOW_ID" jdbcType="VARCHAR"/>
+        <result property="jobName" column="NAME" jdbcType="VARCHAR"/>
+        <result property="variables" column="VARIABLE" jdbcType="BLOB"/>
+        <result property="workflowXml" column="WORKFLOW_XML" jdbcType="BLOB"/>
+        <result property="designerXml" column="DESIGNER_XML" jdbcType="BLOB"/>
+        <result property="create" column="CREATE_DT" jdbcType="TIMESTAMP"/>
+        <result property="status" column="STATUS" jdbcType="VARCHAR"/>
+        <result property="username" column="USERNAME" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== -->
+
+    <sql id="wherePK">WHERE ID = #{id}</sql>
+
+    <sql id="whereWFID">WHERE WORKFLOW_ID = #{workflowId}</sql>
+
+    <sql id="whereUsername">WHERE USERNAME = #{username}</sql>
+
+    <sql id="whereStatus">WHERE USERNAME = #{username} AND STATUS = #{STATUS}</sql>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Select Statement -->
+    <!-- ==================================================================================== -->
+
+    <select id="select" resultMap="jobMap">
+        SELECT * FROM JOB
+        <include refid="wherePK"/>
+    </select>
+
+    <select id="selectAll" resultMap="jobMap">
+        SELECT * FROM JOB
+    </select>
+
+    <select id="selectByStatus" parameterType="job" resultMap="jobMap">
+        SELECT * FROM JOB
+        <include refid="whereStatus"/>
+    </select>
+
+    <select id="selectByUsername" resultMap="jobMap">
+        SELECT * FROM JOB
+        <include refid="whereUsername"/>
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Exist Statement -->
+    <!-- ==================================================================================== -->
+
+    <select id="exist" parameterType="string" resultType="Integer">
+        SELECT COUNT(*) FROM JOB
+        <include refid="wherePK"/>
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 4. Insert Statements -->
+    <!-- ==================================================================================== -->
+
+    <insert id="insert" parameterType="job" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+        INSERT INTO JOB
+        (
+        ID,
+        WORKFLOW_ID,
+        NAME,
+        VARIABLE,
+        WORKFLOW_XML,
+        DESIGNER_XML,
+        CREATE_DT,
+        STATUS,
+        USERNAME
+        )
+        VALUES
+        (
+        #{id},
+        #{workflowId},
+        #{workflowName},
+        #{variables},
+        #{workflowXml},
+        #{designerXml},
+        #{create},
+        #{status},
+        #{username}
+        )
+
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <!-- ==================================================================================== -->
+    <!-- 5. Update Statements -->
+    <!-- ==================================================================================== -->
+
+    <update id="update" parameterType="job">
+        UPDATE JOB
+        SET
+        WORKFLOW_ID = #{workflowId},
+        NAME = #{workflowName},
+        VARIABLE = #{variables},
+        WORKFLOW_XML = #{workflowXml},
+        DESIGNER_XML = #{designerXml},
+        CREATE_DT = #{create},
+        STATUS = #{status},
+        USERNAME = #{username}
+        <include refid="wherePK"/>
+    </update>
+
+    <!-- ==================================================================================== -->
+    <!-- 6. Delete Statements -->
+    <!-- ==================================================================================== -->
+
+    <delete id="delete" parameterType="string">
+        DELETE FROM JOB
+        <include refid="wherePK"/>
+    </delete>
+</mapper>

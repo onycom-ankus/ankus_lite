@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.menu.MenuRepository">
+
+    <resultMap id="menuMap" type="com.ankus.web.menu.Menu">
+        <result property="menuId" column="MENU_ID" jdbcType="INTEGER"/>
+        <result property="icon" column="ICON" jdbcType="VARCHAR"/>
+        <result property="label" column="LABEL" jdbcType="VARCHAR"/>
+        <result property="url" column="URL" jdbcType="VARCHAR"/>
+        <result property="topCode" column="T_CODE" jdbcType="VARCHAR"/>
+        <result property="subCode" column="S_CODE" jdbcType="VARCHAR"/>
+        <result property="title" column="TITLE" jdbcType="VARCHAR"/>
+        <result property="description" column="DESCRIPTION" jdbcType="VARCHAR"/>
+        <result property="depth" column="DEPTH" jdbcType="INTEGER"/>
+        <result property="parentId" column="PARENT_ID" jdbcType="INTEGER"/>
+        <result property="order" column="MENU_ORDER" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="select">
+        SELECT
+            MENU_ID,
+            ICON,
+            LABEL,
+            T_CODE,
+            S_CODE,
+            URL,
+            TITLE,
+            DESCRIPTION,
+            DEPTH,
+            PARENT_ID,
+            MENU_ORDER
+        FROM
+            MENU
+    </sql>
+
+    <sql id="sort">
+        ORDER BY MENU_ORDER
+    </sql>
+
+    <select id="selectUserMenu" resultMap="menuMap">
+        <include refid="select"/>
+        WHERE DEPTH = 0
+        <include refid="sort"/>
+    </select>
+
+    <select id="selectTopMenu" resultMap="menuMap">
+        <include refid="select"/>
+        WHERE DEPTH = 1
+        <include refid="sort"/>
+    </select>
+
+    <select id="selectSubMenu" parameterType="int" resultMap="menuMap">
+        <include refid="select"/>
+        WHERE DEPTH = 2 AND PARENT_ID = #{parentId}
+        <include refid="sort"/>
+    </select>
+
+    <select id="selectMenu" parameterType="int" resultMap="menuMap">
+        <include refid="select"/>
+        WHERE MENU_ID = #{menuId}
+    </select>
+
+    <select id="selectMenuByLabel" parameterType="string" resultMap="menuMap">
+        <include refid="select"/>
+        WHERE LABEL = #{label}
+    </select>
+
+    <select id="selectMenuByCode" parameterType="map" resultMap="menuMap">
+        <include refid="select"/>
+        WHERE T_CODE = #{topCode} AND S_CODE = #{subCode}
+    </select>
+
+    <insert id="insertMenu" parameterType="menu" useGeneratedKeys="true" keyProperty="menuId" keyColumn="MENU_ID">
+        INSERT INTO MENU
+        (
+        MENU_ID,
+        ICON,
+        LABEL,
+        T_CODE,
+        S_CODE,
+        URL,
+        TITLE,
+        DESCRIPTION,
+        DEPTH,
+        PARENT_ID
+        )
+        VALUES (
+        #{menuId},
+        #{icon},
+        #{label},
+        #{topCode},
+        #{subCode},
+        #{url},
+        #{title},
+        #{description},
+        #{depth},
+        #{parentId}
+        )
+
+        <selectKey resultType="int" keyProperty="menuId" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="updateMenu" parameterType="menu">
+        UPDATE MENU
+        SET
+            LABEL = #{label},
+            ICON = #{icon},
+            T_CODE = #{topCode},
+            S_CODE = #{subCode},
+            URL = #{url},
+            TITLE = #{title},
+            DESCRIPTION = #{description},
+            DEPTH = #{depth},
+            PARENT_ID = #{parentId}
+        WHERE MENU_ID = #{menuId}
+    </update>
+
+    <delete id="deleteMenu" parameterType="menu">
+        DELETE FROM MENU WHERE MENU_ID = #{menuId}
+    </delete>
+</mapper>
