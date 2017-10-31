@@ -32,7 +32,7 @@
     <!-- ==================================================================================== -->
    
     <select id="selectByCondition" parameterType="mallList" resultMap="mallListMap">
-        SELECT A.MNG_NO        
+        SELECT B.MNG_NO        
         	  ,B.GOODS_NO 	
               ,B.SHOPNG_KND
               ,B.GOODS_NM
@@ -41,24 +41,22 @@
               ,C.REVIEW_NO
         	  ,C.PURCH_DE              
               ,C.GOODS_REVIEW 
-          FROM SHOPNG_GOODS_MSTR A
-      		  ,SHOPNG_GOODS_DTLS B
+          FROM SHOPNG_GOODS_DTLS B
       		  ,SHOPNG_GOODS_REVIEW C
-      	 WHERE A.MNG_NO = B.MNG_NO
-      	   AND B.MNG_NO = C.MNG_NO
+      	 WHERE B.MNG_NO = C.MNG_NO
       	   AND B.GOODS_NO = C.GOODS_NO
       	   
       	 <if test=" from != null and from !='' ">
-	       AND C.PURCH_DE <![CDATA[>=]]> #{from}
+	       AND B.CRET_DT <![CDATA[>=]]> #{from}
 	     </if>
 	     <if test=" to != null and to !='' ">
-	       AND C.PURCH_DE <![CDATA[<=]]> #{to}
+	       AND B.CRET_DT <![CDATA[<=]]> #{to}
 	     </if>
 	     <if test=" shopng_knd != null and shopng_knd !='' ">
 	       AND B.SHOPNG_KND LIKE CONCAT('%', #{shopng_knd}, '%')
 	     </if>
 	     <if test=" kwrd != null and kwrd !='' ">
-	       AND A.KWRD LIKE CONCAT('%', #{kwrd}, '%')
+	       AND B.GOODS_NM LIKE CONCAT('%', #{goods_nm}, '%')
 	     </if>
 	     <if test=" goods_review != null and goods_review !='' ">
 	       AND C.GOODS_REVIEW LIKE CONCAT('%', #{goods_review}, '%')
@@ -79,24 +77,22 @@
 
     <select id="selectByConditionCnt" parameterType="mallList" resultType="int">
         SELECT COUNT(1) 
-          FROM SHOPNG_GOODS_MSTR A
-      		  ,SHOPNG_GOODS_DTLS B
+          FROM SHOPNG_GOODS_DTLS B
       		  ,SHOPNG_GOODS_REVIEW C
-      	 WHERE A.MNG_NO = B.MNG_NO
-      	   AND B.MNG_NO = C.MNG_NO
+      	 WHERE B.MNG_NO = C.MNG_NO
       	   AND B.GOODS_NO = C.GOODS_NO
         
          <if test=" from != null and from !='' ">
-	       AND C.PURCH_DE <![CDATA[>=]]> #{from}
+	       AND B.CRET_DT <![CDATA[>=]]> #{from}
 	     </if>
 	     <if test=" to != null and to !='' ">
-	       AND C.PURCH_DE <![CDATA[<=]]> #{to}
+	       AND B.CRET_DT <![CDATA[<=]]> #{to}
 	     </if>
 	     <if test=" shopng_knd != null and shopng_knd !='' ">
 	       AND B.SHOPNG_KND LIKE CONCAT('%', #{shopng_knd}, '%')
 	     </if>
 	     <if test=" kwrd != null and kwrd !='' ">
-	       AND A.KWRD LIKE CONCAT('%', #{kwrd}, '%')
+	       AND B.GOODS_NM LIKE CONCAT('%', #{goods_nm}, '%')
 	     </if>
 	     <if test=" goods_review != null and goods_review !='' ">
 	       AND C.GOODS_REVIEW LIKE CONCAT('%', #{goods_review}, '%')

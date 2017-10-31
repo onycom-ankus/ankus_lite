@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.lite.faultCauseList.FaultCauseListRepository">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+    <resultMap id="faultCauseListMap" type="com.ankus.web.lite.faultCauseList.FaultCauseList">
+        <result property="prdt_strt_dt" column="PRDT_STRT_DT" jdbcType="VARCHAR"/>
+        <result property="prdt_term_dt" column="PRDT_TERM_DT" jdbcType="VARCHAR"/>
+        <result property="cause_ptrn" column="CAUSE_PTRN" jdbcType="VARCHAR"/>
+        <result property="max_fault_ty" column="MAX_FAULT_TY" jdbcType="VARCHAR"/>
+        <result property="fault_ty_freq" column="FAULT_TY_FREQ" jdbcType="VARCHAR"/>
+        <result property="tot_num_data" column="TOT_NUM_DATA" jdbcType="INTEGER"/>
+        <result property="num_data" column="NUM_DATA" jdbcType="INTEGER"/>
+        <result property="anal_dt" column="ANAL_DT" jdbcType="VARCHAR"/>
+        <result property="str_year" column="STR_YEAR" jdbcType="VARCHAR"/>
+        <result property="str_term" column="STR_TERM" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== -->
+
+    <sql id="whereSTRT">WHERE PRDT_STRT_DT = #{prdt_strt_dt}</sql>    
+    <sql id="whereTERM">WHERE PRDT_TERM_DT = #{prdt_term_dt}</sql>
+    <sql id="wherePTRN">WHERE CAUSE_PTRN = #{cause_ptrn}</sql>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Select Statement -->
+    <!-- ==================================================================================== -->
+   
+    <select id="selectByCondition" parameterType="faultCauseList" resultMap="faultCauseListMap">
+        SELECT PRDT_STRT_DT
+              ,PRDT_TERM_DT
+        	  ,CAUSE_PTRN
+              ,MAX_FAULT_TY
+              ,FAULT_TY_FREQ            
+              ,TOT_NUM_DATA  
+              ,NUM_DATA  
+              ,TO_CHAR(ANAL_DT,'YYYY-MM-DD') AS ANAL_DT                                        
+          FROM FAULT_CAUSE_RESULT     		  
+      	 <where> 
+      	 	<if test=" prdt_strt_dt != null and prdt_strt_dt !='' ">
+	       		AND PRDT_STRT_DT <![CDATA[=]]> #{prdt_strt_dt}	       		
+	     	</if>	     	   	
+      	 </where>
+        ORDER BY 
+        <choose>
+        	<when test="sidx != null and sidx != ''"> ${sidx} </when>
+        	<otherwise> TOT_NUM_DATA </otherwise>
+        </choose>
+        <choose>
+        	<when test="sord != null and sord != ''"> ${sord} </when>
+        	<otherwise> DESC </otherwise>
+        </choose>
+        <if test="paging == true">
+        FOR ORDERBY_NUM() BETWEEN #{startRow} AND #{endRow};
+        </if>
+    </select>
+
+    <select id="selectByConditionCnt" parameterType="faultCauseList" resultType="int">
+        SELECT COUNT(1) 
+          FROM FAULT_CAUSE_RESULT     		  
+      	 <where> 
+      	 	<if test=" prdt_strt_dt != null and prdt_strt_dt !='' ">
+	       		AND PRDT_STRT_DT <![CDATA[=]]> #{prdt_strt_dt}	       		
+	     	</if>
+      	 </where>      
+    </select>
+    
+    <select id="selectByYearList" parameterType="faultCauseList" resultMap="faultCauseListMap">
+        SELECT DISTINCT YEAR(PRDT_STRT_DT) AS STR_YEAR
+          FROM FAULT_CAUSE_RESULT 
+    </select>
+    
+    <select id="selectByTermList" parameterType="faultCauseList" resultMap="faultCauseListMap">
+        SELECT DISTINCT PRDT_STRT_DT
+              ,PRDT_TERM_DT
+              ,CONCAT(TO_CHAR(prdt_strt_dt,'mm-dd'),' ~ ',TO_CHAR(prdt_term_dt,'mm-dd')) AS STR_TERM
+          FROM FAULT_CAUSE_RESULT 
+        <where> 
+        	<if test=" item != null and item !='' ">
+	       		AND YEAR(PRDT_STRT_DT) <![CDATA[=]]> #{item}
+	     	</if>		
+        </where>  
+    </select>
+   
+</mapper>

@@ -7,11 +7,11 @@
 		data.from	= $('#_ml_searchFrom').val();
 		data.to		= $('#_ml_searchTo').val();	
 		data.shopng_knd = $('#_ml_searchShopng_knd').val();
-		data.kwrd = $('#_ml_searchKwrd').val();		
+		data.good_nm = $('#_ml_searchKwrd').val();		
 		data.goods_review = $('#_ml_searchReview').val();		
 		data.paging	= true;
 		
-		console.log(data);
+		//console.log(data);
 		if (postData) {
 			data.page		= page ? 1 : postData.page;
 			data.rows		= postData.rows;
