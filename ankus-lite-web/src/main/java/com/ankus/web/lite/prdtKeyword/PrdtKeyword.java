@@ -20,13 +20,14 @@ public class PrdtKeyword implements Serializable {
     private String kwrd;
     private Double tf_idf;
     private String anal_dt;
-    private String srch_kwrd;   
+    private String srch_kwrd;    
     
     private String str_year;
     private String str_term;
     private String item;
     private String text;
     private Integer tf_total;
+    private Integer count;
     
     /* paging 처리용*/
     private boolean paging = false;
@@ -105,6 +106,12 @@ public class PrdtKeyword implements Serializable {
 	public void setTf_total(Integer tf_total) {
 		this.tf_total = tf_total;
 	}
+	public Integer getCount() {
+		return count;
+	}
+	public void setCount(Integer count) {
+		this.count = count;
+	}
 
 	public boolean isPaging() {
 		return paging;
@@ -163,6 +170,7 @@ public class PrdtKeyword implements Serializable {
 		result = prime * result + ((item == null) ? 0 : item.hashCode());
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
 		result = prime * result + ((tf_total == null) ? 0 : tf_total.hashCode());
+		result = prime * result + ((count == null) ? 0 : count.hashCode());
 		result = prime * result + ((page == null) ? 0 : page.hashCode());
 		result = prime * result + (paging ? 1231 : 1237);
 		result = prime * result + ((rows == null) ? 0 : rows.hashCode());
@@ -236,6 +244,11 @@ public class PrdtKeyword implements Serializable {
 				return false;
 		} else if (!tf_total.equals(other.tf_total))
 			return false;
+		if (count == null) {
+			if (other.count != null)
+				return false;
+		} else if (!count.equals(other.count))
+			return false;
 		if (endRow == null) {
 			if (other.endRow != null)
 				return false;
@@ -274,7 +287,7 @@ public class PrdtKeyword implements Serializable {
 	public String toString() {
 		return  "relatedKeyword [prdt_strt_dt=" + prdt_strt_dt + ", prdt_term_dt=" + prdt_term_dt + ", kwrd=" + kwrd + ", srch_kwrd=" + srch_kwrd 
 				+ ", tf_idf=" + tf_idf + ", anal_dt=" + anal_dt + ", str_year=" + str_year + ", str_term=" + str_term 
-				+ ", item=" + item + ", text=" + text + ", tf_total=" + tf_total
+				+ ", item=" + item + ", text=" + text + ", tf_total=" + tf_total + ", count=" + count
 				+ ", paging=" + paging + ", page=" + page + ", rows=" + rows + ", sidx=" + sidx + ", sord=" + sord + ", startRow=" + startRow + ", endRow=" + endRow + "]";
 	}
 }

@@ -14,12 +14,9 @@ margin-bottom:10px;
 display: none; 
 } 
 
-#_pk_cloud {
-    font-family:"Lucida Grande","Droid Sans",Arial,Helvetica,sans-serif;
+#_pk_cloud {   
     border: 1px dashed #48BAE4;
-    margin-left:20px;
-    font-size: 0.8em;
-    padding: 8px;
+    margin-left:20px; 
     font-weight: bold;
 }
 
@@ -36,25 +33,36 @@ display: none;
 			<select class="form-control" id="_pk_terms" class="form-control" style="width:150px;">
 				<option value="">기간 선택</option>
 			</select>
-			<button class="btn btn-default" id="_pk_btnSearch">조회</button>
-			<input type="hidden" class="form-control" id="_pk_prdt_strt_dt"/>			
+			<label class="form_label">키워드 갯수 : </label>			
+			<select class="form-control" id="_pk_count" style="width:70px;">
+				<option value="30" selected="selected">30</option>
+				<option value="40">40</option>
+				<option value="50">50</option>
+			</select>
+			<button class="btn btn-default" id="_pk_btnSearch">조회</button>			
+			<input type="hidden" class="form-control" id="_pk_prdt_strt_dt"/>
+			<input type="hidden" class="form-control" id="_pk_prdt_term_dt"/>
+			<input type="hidden" class="form-control" id="_pk_srch_kwrd"/>
+			<input type="hidden" class="form-control" id="_pk_kwrd"/>			
 		</div>
 	</div>	
-	<div class="row" style="border:0px;">
-		<div class="col-sm-6" id="_pk_cloud" style="width:600px;height:300px;"></div>
+	<div class="row" style="border:0px;margin-bottom:10px;" >
+		<div class="col-sm-6" id="_pk_cloud" style="width:600px;height:300px;">		</div>
 		<div class="col-sm-6">
 			<table id="_pk_grid"></table>
 			<div id="_pk_pager"></div>
 		</div>
 	</div>
+	<table id="_pk_grid_blog"></table>
+	<div id="_pk_pager_blog"></div>	
 </div>
 
-<!-- div id="_pk_Modal" class="modal fade" role="dialog">
+<div id="_pk_Modal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">블로그 자료 조회</h4>
+				<h4 class="modal-title">키워드 자료 조회</h4>
 			</div>
 			<div class="modal-body">
 				<div class="form-horizontal">	
@@ -107,5 +115,4 @@ display: none;
 			</div>
 		</div>
 	</div>
-</div-->
-
+</div>

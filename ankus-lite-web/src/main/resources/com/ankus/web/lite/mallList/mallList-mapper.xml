@@ -37,14 +37,11 @@
               ,B.SHOPNG_KND
               ,B.GOODS_NM
               ,B.GOODS_URL
-              ,B.SELER_NM              
               ,C.REVIEW_NO
-        	  ,C.PURCH_DE              
               ,C.GOODS_REVIEW 
           FROM SHOPNG_GOODS_DTLS B
       		  ,SHOPNG_GOODS_REVIEW C
-      	 WHERE B.MNG_NO = C.MNG_NO
-      	   AND B.GOODS_NO = C.GOODS_NO
+      	 WHERE B.GOODS_NO = C.GOODS_NO
       	   
       	 <if test=" from != null and from !='' ">
 	       AND B.CRET_DT <![CDATA[>=]]> #{from}
@@ -55,7 +52,7 @@
 	     <if test=" shopng_knd != null and shopng_knd !='' ">
 	       AND B.SHOPNG_KND LIKE CONCAT('%', #{shopng_knd}, '%')
 	     </if>
-	     <if test=" kwrd != null and kwrd !='' ">
+	     <if test=" goods_nm != null and goods_nm !='' ">
 	       AND B.GOODS_NM LIKE CONCAT('%', #{goods_nm}, '%')
 	     </if>
 	     <if test=" goods_review != null and goods_review !='' ">
@@ -79,8 +76,7 @@
         SELECT COUNT(1) 
           FROM SHOPNG_GOODS_DTLS B
       		  ,SHOPNG_GOODS_REVIEW C
-      	 WHERE B.MNG_NO = C.MNG_NO
-      	   AND B.GOODS_NO = C.GOODS_NO
+      	 WHERE B.GOODS_NO = C.GOODS_NO
         
          <if test=" from != null and from !='' ">
 	       AND B.CRET_DT <![CDATA[>=]]> #{from}
@@ -91,7 +87,7 @@
 	     <if test=" shopng_knd != null and shopng_knd !='' ">
 	       AND B.SHOPNG_KND LIKE CONCAT('%', #{shopng_knd}, '%')
 	     </if>
-	     <if test=" kwrd != null and kwrd !='' ">
+	     <if test=" goods_nm != null and goods_nm !='' ">
 	       AND B.GOODS_NM LIKE CONCAT('%', #{goods_nm}, '%')
 	     </if>
 	     <if test=" goods_review != null and goods_review !='' ">

@@ -112,9 +112,9 @@
           FROM DEMAND_PRDT_RESULT
       	 <where> 
       	 	<if test=" prdt_strt_dt != null and prdt_strt_dt !='' ">
-      	 		ROWNUM <![CDATA[<=]]> 5      	 	
 	       		AND PRDT_STRT_DT <![CDATA[=]]> #{prdt_strt_dt}	       		
-	       		ORDER BY PRDT_EST DESC;      		
+	       		ORDER BY PRDT_EST DESC
+	       		LIMIT 5;     		
 	     	</if>	     	   	
       	 </where>
    	</select>

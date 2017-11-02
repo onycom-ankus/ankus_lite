@@ -33,13 +33,7 @@
 				<h4 class="modal-title">쇼핑몰 자료조회 상세보기</h4>
 			</div>
 			<div class="modal-body">
-				<div class="form-horizontal">
-					<div class="form-group">
-						<label for="_ml_purch_de" class="col-sm-2 control-label">구매일자</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control" id="_ml_purch_de" disabled="disabled"/>
-						</div>
-					</div>						
+				<div class="form-horizontal">									
 					<div class="form-group">
 						<label for="_ml_goods_nm" class="col-sm-2 control-label">상품명</label>
 						<div class="col-sm-10">
@@ -57,19 +51,7 @@
 						<div class="col-sm-10">
 							<input rows="" cols="" class="form-control" id="_ml_goods_url" disabled="disabled"></input>
 						</div>
-					</div>			
-					<div class="form-group">
-						<label for="_ml_seler_nm" class="col-sm-2 control-label">판매자</label>
-						<div class="col-sm-10">
-							<input rows="" cols="" class="form-control" id="_ml_seler_nm" disabled="disabled"></input>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="_ml_tel_no" class="col-sm-2 control-label">연락처</label>
-						<div class="col-sm-10">
-							<input rows="" cols="" class="form-control" id="_ml_tel_no" disabled="disabled"></input>
-						</div>
-					</div>													
+					</div>										
 				</div>
 			</div>
 			<div class="modal-footer">						

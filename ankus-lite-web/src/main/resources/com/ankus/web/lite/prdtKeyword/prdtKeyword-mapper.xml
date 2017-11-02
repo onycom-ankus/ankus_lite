@@ -88,8 +88,9 @@
           FROM KWRD_IMP_RESULT
       	 <where> 
       	 	<if test=" srch_kwrd != null and srch_kwrd !='' ">
-      	 		ROWNUM <![CDATA[<=]]> 10    
 	       		AND SRCH_KWRD <![CDATA[=]]> #{srch_kwrd}
+	       		ORDER BY TF_IDF DESC
+	       		LIMIT #{count};
 	     	</if>	     	   	
       	 </where>
    	</select>

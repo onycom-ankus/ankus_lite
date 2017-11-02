@@ -78,12 +78,27 @@
 		var width = 550,
 	    height = 300;
 		
+		var tip = d3.tip()
+		  .attr('class', 'd3-tip')
+		  .offset([-10, 0])
+		  .html(function(d) {
+		    return "<strong>" + d.item_nm + ":</strong> <span style='color:orangered'>" + d.prdt_est + "</span>";
+		  })
+		
 		var svg = d3.select('#_dl_bar').append("svg")
 		          .attr("width",550)
-		          .attr("height",300);
+		          .attr("height",300);	
+		
+		svg.call(tip);
 		
 		var x = d3.scale.ordinal()
-		        .domain(data.map(function(d){return d.item_nm}))
+		        .domain(data.map(function(d){
+		        	var str_val = d.item_nm;
+		        	if(str_val.length > 9){
+		        		d.item_nm = d.item_nm.substring(0, 8) + "..."
+		        	}
+		        	return d.item_nm
+		        }))
 		        .rangeRoundBands([50, 550])
 		        
 		var y = d3.scale.linear()
@@ -98,8 +113,16 @@
 			        .attr("y", function(d){return y(d.prdt_est)})
 			        .attr("width", x.rangeBand()-20)
 			        .attr("height", function(d){return 250 - y(d.prdt_est)})
-			        .style("fill", "steelblue");
-					
+			        .style("fill", "steelblue")
+			        .on('mouseover', function(d) {
+			        	d3.select(this).style("fill", "orangered")
+			        	tip.show(d);
+			        })
+			        .on('mouseout', function(d) {
+			        	d3.select(this).style("fill", "steelblue")
+			        	tip.hide(d);
+			        })
+
 		var xAxis = d3.svg.axis()
         .scale(x)
         .outerTickSize(1)
@@ -110,7 +133,7 @@
 		        .scale(y)
 		        .outerTickSize(0)
 		        .ticks(5)		        
-		        .orient("right");
+		        .orient("right");			
 		
 		svg.append("g")
 		.attr("class", "x axis")
@@ -129,7 +152,8 @@
 		.attr('y', 20)
 		.attr('text-anchor', 'end')
 		.attr('font-size', '15px')
-		.attr('fill', 'steelblue');
+		.attr('fill', 'black')
+		.style("font-weight","bold");
     };
 
 	

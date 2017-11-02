@@ -207,6 +207,7 @@ if(isLogin == false){
 	<script src="/resources/lib/main/jqgrid/modules/grid.common.js"></script>
 	<script src="/resources/lib/main/d3/js/d3.v3.min.js"></script>
 	<script src="/resources/lib/main/d3/js/d3.layout.cloud.js"></script>
+	<script src="/resources/lib/main/d3/js/d3-tip.js"></script>
 	
 	<script src="/resources/lib/main/opengraph/OpenGraph-0.1-SNAPSHOT.js"></script>
 	<script src="/resources/lib/main/codemirror/lib/codemirror.js"></script>
