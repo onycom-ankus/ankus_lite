@@ -70,7 +70,7 @@
 	        },
 	        rownumbers		: true,
 	        pager			: '_fc_pager',
-	        rowNum			: 5,
+	        rowNum			: 20,
 	        colModel		: [	        	    	
 	        	{ name : 'prdt_strt_dt', hidden:true},
 	        	{ name : 'cause_ptrn', label : '불량발생 조건(원인)', width : 600, align : 'center'},

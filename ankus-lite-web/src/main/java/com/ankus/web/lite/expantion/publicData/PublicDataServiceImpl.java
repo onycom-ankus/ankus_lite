@@ -2,7 +2,9 @@ package com.ankus.web.lite.expantion.publicData;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -88,6 +90,7 @@ public class PublicDataServiceImpl implements PublicDataService {
 				
 				try {
 					reqVal = reqVal.replace(targetText, URLEncoder.encode(targetText, "UTF-8"));
+					System.out.println(reqVal);
 					
 				} catch (UnsupportedEncodingException e) {
 					result.put("statusMSG", getStatus("1"));
@@ -95,14 +98,36 @@ public class PublicDataServiceImpl implements PublicDataService {
 				}
 			}
 		}
-				
+//				20171010 2017/10/10 2017-10-10
+//		http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastGrib
+//		sKFr6fRSqXyfGEV5YXojRbKagXFZoyoDSnrgChtfwEhd0mcx%2BzF%2F8K60S4ZxZ%2F1hQvc%2BoRlrYqVKdVgWg7mGcg%3D%3D
+//		
+//		base_date={}{}{}&base_time=0600&nx=60&ny=127&numOfRows=10&pageSize=10&pageNo=1&startPage=1&_type=xml
+		
+		
 		String addr = url + "?serviceKey=" + certKey + (("".equals(reqVal)) ? "" : "&" + reqVal);
+		String addr_mac = "";
+		
+		if(addr.matches("\\{year\\}") || addr.matches("\\{month\\}") || addr.matches("\\{day\\}")) {
+			Date today = new Date();
+			SimpleDateFormat yearsdf = new SimpleDateFormat("yyyy");
+			String year = yearsdf.format(today);
+			SimpleDateFormat monthsdf = new SimpleDateFormat("MM");
+			String month = monthsdf.format(today);
+			SimpleDateFormat datesdf = new SimpleDateFormat("dd");
+			String day = datesdf.format(today);
+		
+			addr_mac = addr.replaceAll("\\{year\\}", year);
+			addr_mac = addr.replaceAll("\\{month\\}", month);
+			addr_mac = addr.replaceAll("\\{day\\}", day);
+		}
+		
 		String data_nm = request.getParameter("data_nm");
 		String reload_Cycle = request.getParameter("reload_cycle");
 		
 		logger.info("=================================== 공공데이터 등록 시작 ===================================");
 		
-		DataMap itemInfo = XmlToMapParser.parse(addr, "item");
+		DataMap itemInfo = XmlToMapParser.parse("".equals(addr_mac) ? addr : addr_mac, "item");
 		List<DataMap> itemList = (List<DataMap>) itemInfo.get("resultList");
 		
 		/* 리스트에 데이터가 없는 예외 체크 */

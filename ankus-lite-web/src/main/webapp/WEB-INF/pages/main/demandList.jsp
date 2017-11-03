@@ -72,8 +72,15 @@ display: none;
 			<input type="hidden" class="form-control" id="_dl_prdt_strt_dt"/>			
 		</div>
 	</div>
-		
-	<div class="row" style="border:0px;">
+	<div class="row" style="border:0px;">		
+		<div class="col-sm-6" style="width:630px;" align="center">
+			<h5 class="title" style="border-bottom: 1px solid #CECECE;">최고 예측수요 제품(TOP-5)</h5>			
+		</div>	
+		<div class="col-sm-6" style="width:650px;" align="center">
+			<h5 class="title" style="border-bottom: 1px solid #CECECE;">예측 수행 정보</h5>
+		</div> 
+	</div>	
+	<div class="row" style="border:0px;">		
 		<div class="col-sm-6" id="_dl_bar"></div>
 		<div class="col-sm-6" id="_dl_model">
 			<table class="table table-striped table-bordered table-hover" id="_dl_model_table" >				

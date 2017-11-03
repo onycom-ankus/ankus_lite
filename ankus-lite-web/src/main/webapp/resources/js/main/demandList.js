@@ -82,7 +82,7 @@
 		  .attr('class', 'd3-tip')
 		  .offset([-10, 0])
 		  .html(function(d) {
-		    return "<strong>" + d.item_nm + ":</strong> <span style='color:orangered'>" + d.prdt_est + "</span>";
+		    return "<strong>" + d.item_cd + ":</strong> <span style='color:orangered'>" + d.prdt_est + "</span><br>";
 		  })
 		
 		var svg = d3.select('#_dl_bar').append("svg")
@@ -144,16 +144,7 @@
 		.attr("class", "y axis")
 		.attr("transform", "translate(0,0)")
 		.call(yAxis);
-		
-		svg.append("text")		
-		.transition()		
-		.text('TOP-5 예측 수요량')
-		.attr('x', 350)
-		.attr('y', 20)
-		.attr('text-anchor', 'end')
-		.attr('font-size', '15px')
-		.attr('fill', 'black')
-		.style("font-weight","bold");
+
     };
 
 	
@@ -191,18 +182,6 @@
 	        	{ name : 'prdt_est', label : '수요예측치', width : 400, align : 'center'}	        		        
 	        ]
 	    });
-		/*
-		function changeLength(cellvalue, options, rowObject){
-			
-			var lang = cellvalue.length;			
-			cellvalue = cellvalue.replace(/\r/g, '').replace(/\n/g, '');	
-			if(lang > 30){
-				cellvalue = cellvalue.substring(0, 40) + "..."
-			}
-			
-			return cellvalue;
-		}
-		*/
 	};
 	
 	var _getYearList = function(){

@@ -283,16 +283,18 @@ function dateFormat(cellValue, options, rowdata, action) {
 
 function reloadCycleFormatter(cellValue, options, rowdata, action) {
 	switch (cellValue) {
-	case '1d':
+	case 'd':
 		return 'Day';
 		break;
-	case '1w':
+	case 'w':
 		return 'Week';
 		break;
-	case '1m':
+	case 'm':
 		return 'Month';
 		break;
-
+	case 'nr':
+		return 'No Renewal';
+		break;
 	default:
 		return '오류';
 		break;
