@@ -65,7 +65,7 @@
     </category>
 
     <logger name="jdbc.sqlonly" additivity="false">
-        <level value="WARN"/>
+        <level value="INFO"/>
         <appender-ref ref="CONSOLE"/>
     </logger>
 

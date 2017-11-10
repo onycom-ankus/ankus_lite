@@ -11,6 +11,7 @@
 				<option value="수요(긍정)">수요(긍정)</option>
 				<option value="수요(부정)">수요(부정)</option>
 				<option value="불량">불량</option>
+				<option value="불량키워드">불량키워드</option>
 			</select>
 			<button class="btn btn-default" id="_wd_btnSearch">조회</button>
 		</div>

@@ -17,7 +17,7 @@
 			url			: '/newsoid/list',
 			data		: data,
 			success		: function(res){
-				//console.log(res);
+				console.log(res);
 				var obj = res.map;
 				obj.rows = res.list;
 				$('#_ns_grid').jqGrid('resetSelection');

@@ -7,11 +7,11 @@
 		data.from	= $('#_ml_searchFrom').val();
 		data.to		= $('#_ml_searchTo').val();	
 		data.shopng_knd = $('#_ml_searchShopng_knd').val();
-		data.kwrd = $('#_ml_searchKwrd').val();		
+		data.good_nm = $('#_ml_searchKwrd').val();		
 		data.goods_review = $('#_ml_searchReview').val();		
 		data.paging	= true;
 		
-		console.log(data);
+		//console.log(data);
 		if (postData) {
 			data.page		= page ? 1 : postData.page;
 			data.rows		= postData.rows;
@@ -42,7 +42,7 @@
 						}
 					}
 				}				
-							
+					
 				$('#_ml_grid').jqGrid('resetSelection');
 				$('#_ml_grid').jqGrid('clearGridData');
 				$('#_ml_grid')[0].addJSONData(obj);
@@ -65,9 +65,9 @@
 			},
 			jsonReader		: {
 				repeatitems	: false,
-				id			: 'mng_no'
+				id			: 'good_no'
 			},
-			sortname		: 'C.PURCH_DE, B.GOODS_NM, C.GOODS_REVIEW',
+			sortname		: 'B.GOODS_NM, C.GOODS_REVIEW',
 			sortorder		: 'desc',
 	        multiselect		: false,
 	        idPrefix		: '_grid_',
@@ -85,11 +85,8 @@
 	        	{ name : 'mng_no', hidden : true },
 	        	{ name : 'goods_no', hidden : true },
 	        	{ name : 'review_no', hidden : true },
-	        	{ name : 'goods_url', hidden : true },
-	        	{ name : 'seler_nm', hidden : true },
-	        	{ name : 'tel_no', hidden : true },
-	        	{ name : 'shopng_knd', label : '구분', width : 100, align : 'center', formatter:changeShopng_knd},
-	        	{ name : 'purch_de', label : '구매일자', width : 100, align : 'center'},	        	
+	        	{ name : 'goods_url', hidden : true },	        	        
+	        	{ name : 'shopng_knd', label : '구분', width : 100, align : 'center', formatter:changeShopng_knd},	        	        	
 	        	{ name : 'goods_nm', label : '상품명', width : 450, formatter:changeLength},
 	        	{ name : 'goods_review', label : '구매평', width : 450, formatter:changeLength},
 	        	{ name : 'org_goods_nm', hidden : true },

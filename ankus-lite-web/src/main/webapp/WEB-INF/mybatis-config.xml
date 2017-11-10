@@ -23,6 +23,11 @@
         <typeAlias type="com.ankus.web.scheduler.Scheduler" alias="scheduler"/>       
         
         <!-- DataMap -->
+        <typeAlias type="com.ankus.web.lite.demandList.DemandList" alias="demandList"/>
+        <typeAlias type="com.ankus.web.lite.faultCauseList.FaultCauseList" alias="faultCauseList"/>
+        <typeAlias type="com.ankus.web.lite.prdtKeyword.PrdtKeyword" alias="prdtKeyword"/>
+        <typeAlias type="com.ankus.web.lite.relatedKeyword.RelatedKeyword" alias="relatedKeyword"/>
+        
         <typeAlias type="com.ankus.web.lite.expantion.util.DataMap" alias="DataMap"/> 
         <typeAlias type="com.ankus.web.lite.worddic.Worddic" alias="worddic"/>
         <typeAlias type="com.ankus.web.lite.newsoid.NewsOid" alias="newsoid"/>
@@ -51,7 +56,12 @@
         <!-- Member -->
         <mapper resource="com/ankus/web/member/member-mapper.xml"/>
         
-        <!-- main -->      
+        <!-- main -->   
+        <mapper resource="com/ankus/web/lite/demandList/demandList-mapper.xml"/>
+        <mapper resource="com/ankus/web/lite/faultCauseList/faultCauseList-mapper.xml"/>
+        <mapper resource="com/ankus/web/lite/prdtKeyword/prdtKeyword-mapper.xml"/>
+        <mapper resource="com/ankus/web/lite/relatedKeyword/relatedKeyword-mapper.xml"/>
+           
         <mapper resource="com/ankus/web/scheduler/scheduler-mapper.xml"/>    
         <mapper resource="com/ankus/web/lite/worddic/worddic-mapper.xml"/>
         <mapper resource="com/ankus/web/lite/newsoid/newsoid-mapper.xml"/>

@@ -57,7 +57,10 @@
 	     	</if> 
 	     	<if test=" srch_kwrd != null and srch_kwrd !='' ">
 	      		AND SRCH_KWRD LIKE CONCAT('%', #{srch_kwrd}, '%')
-	     	</if> 
+	     	</if>
+	     	<if test=" kwrd_sj != null and kwrd_sj !='' ">
+	      		AND KWRD_SJ LIKE CONCAT('%,', #{kwrd_sj}, ',%')
+	     	</if>  
 	     	<if test=" caution != null and caution !='' ">
 	      		AND CAUTION = #{caution}
 	     	</if>  
@@ -92,6 +95,9 @@
 	     	<if test=" srch_kwrd != null and srch_kwrd !='' ">
 	      		AND SRCH_KWRD LIKE CONCAT('%', #{srch_kwrd}, '%')
 	     	</if>  
+	     	<if test=" kwrd_sj != null and kwrd_sj !='' ">
+	      		AND KWRD_SJ LIKE CONCAT('%,', #{kwrd_sj}, ',%')
+	     	</if> 
 	     	<if test=" caution != null and caution !='' ">
 	      		AND CAUTION = #{caution}
 	     	</if> 

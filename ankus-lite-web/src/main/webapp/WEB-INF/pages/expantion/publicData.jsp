@@ -71,9 +71,10 @@
 					<label class="col-sm-2 control-label" style="font-size: 0.9em;">갱신 주기</label>
 					<div class="col-sm-3">
 						<select id="_pd_reload_cycle" class="form-control">
-							<option value="1d">Day</option>
-							<option value="1w">Week</option>
-							<option value="1m">Month</option>
+							<option value="nr">No Renewal</option>
+							<option value="d">Day</option>
+							<option value="w">Week</option>
+							<option value="m">Month</option>
 						</select>
 					</div>
 				</div>

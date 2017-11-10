@@ -1,7 +1,10 @@
 package com.ankus.web.lite.expantion.InnerData;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.ankus.web.lite.expantion.util.CommonDao;
-import com.ankus.web.lite.expantion.util.CsvParser;
 import com.ankus.web.lite.expantion.util.DataMap;
 import com.ankus.web.lite.expantion.util.GetUserInfo;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 @Service
 public class InnerDataServiceImpl implements InnerDataService {
@@ -109,45 +113,93 @@ public class InnerDataServiceImpl implements InnerDataService {
 				e.printStackTrace();
 			}
 			
-			DataMap ori_data = CsvParser.read(file);
-			List<DataMap> ori_dataList = (List<DataMap>) ori_data.get("dataList");
-			List<String> title = (List<String>) ori_data.get("title");
-			
-			List<DataMap> dataList = new ArrayList<DataMap>();
+			List<DataMap> ori_dataList = new ArrayList<DataMap>();
+			List<String> title = new ArrayList<String>();
 			
 			DataMap last_data_id = dao.selectOne("innerData.getLastDataId");
 			int data_id = (last_data_id == null ? 1 : last_data_id.getInt("data_id") + 1);
 			int record_id = 1;
 			
-			for(DataMap m : ori_dataList) {
-				for(String s : title) {
-					DataMap data = new DataMap();
-					data.put("data_id", data_id);
-					data.put("record_id", record_id);
-					data.put("data_nm", data_nm);
-					data.put("file_nm", file_nm);
-					data.put("title", s);
-					data.put("content", m.getString(s));
+			try {
+				CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(file), "euc-kr"));
+				
+				String[] s;
+				int titleFlag = 0;
+//				while((s = reader.readNext()) != null) {
+				while(true) {
+					s = reader.readNext();
 					
-					try {
-						Double.parseDouble(m.getString(s));
-						data.put("content_type", "Double");
+					if(s != null) {
+						DataMap data = new DataMap();
 						
-					} catch (NumberFormatException e) {
-						data.put("content_type", "String");
+						for(int i=0; i<s.length; i++) {
+							if(titleFlag == 0) {
+								title.add(s[i]);
+							} else {
+								data.put(title.get(i), s[i]);
+							}
+						} // end for
+						
+						if(titleFlag > 0) {
+							ori_dataList.add(data);
+						}
+						
+						titleFlag++;
 					}
 					
-					data.put("writer", userInfo.getString("username"));
+					if(titleFlag % 100 == 0 || s == null) {
+						List<DataMap> dataList = new ArrayList<DataMap>();
+						
+						for(DataMap od : ori_dataList) {
+							for(String t : title) {
+								DataMap idata = new DataMap();
+								idata.put("data_id", data_id);
+								idata.put("record_id", record_id);
+								idata.put("data_nm", data_nm);
+								idata.put("file_nm", file_nm);
+								idata.put("title", t);
+								idata.put("content", od.getString(t));
+								
+								try {
+									Double.parseDouble(od.getString(t));
+									idata.put("content_type", "Double");
+									
+								} catch (NumberFormatException e) {
+									idata.put("content_type", "String");
+								}
+								
+								idata.put("writer", userInfo.getString("username"));
+								
+								dataList.add(idata);
+							}
+							record_id++;
+						}
+						
+						DataMap param = new DataMap();
+						param.put("dataList", dataList);
+						
+						for(DataMap m : dataList) {
+							System.out.println(m);
+						}
+						
+						dao.insert("innerData.regist", param);
+						
+						System.out.println("-----------------------------DB INSERT--------------------------");
+						
+						ori_dataList = new ArrayList<DataMap>();
+						
+						if(s == null) {
+							break;
+						}
+					}
 					
-					dataList.add(data);
-				}
-				record_id++;
+				} // end while
+						
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			
-			DataMap param = new DataMap();
-			param.put("dataList", dataList);
-			
-			dao.insert("innerData.regist", param);
 		}
 		
 		return msg;

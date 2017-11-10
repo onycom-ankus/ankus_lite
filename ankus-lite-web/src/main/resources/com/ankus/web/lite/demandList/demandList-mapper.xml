@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.lite.demandList.DemandListRepository">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+    <resultMap id="demandListMap" type="com.ankus.web.lite.demandList.DemandList">
+        <result property="prdt_strt_dt" column="PRDT_STRT_DT" jdbcType="VARCHAR"/>
+        <result property="prdt_term_dt" column="PRDT_TERM_DT" jdbcType="VARCHAR"/>
+        <result property="item_cd" column="ITEM_CD" jdbcType="VARCHAR"/>
+        <result property="item_nm" column="ITEM_NM" jdbcType="VARCHAR"/>
+        <result property="prdt_est" column="PRDT_EST" jdbcType="DOUBLE"/>       
+        <result property="str_year" column="STR_YEAR" jdbcType="VARCHAR"/>
+        <result property="str_term" column="STR_TERM" jdbcType="VARCHAR"/>    
+        
+        <result property="prdt_dt" column="PRDT_DT" jdbcType="VARCHAR"/>    
+        <result property="train_strt_dt" column="TRAIN_STRT_DT" jdbcType="VARCHAR"/>    
+        <result property="train_term_dt" column="TRAIN_TERM_DT" jdbcType="VARCHAR"/>    
+        <result property="train_num_data" column="TRAIN_NUM_DATA" jdbcType="INTEGER"/>    
+        <result property="prdt_rmse" column="PRDT_RMSE" jdbcType="INTEGER"/>    
+        <result property="prdt_rrse" column="PRDT_RRSE" jdbcType="INTEGER"/>             
+    </resultMap>
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== -->
+
+    <sql id="whereSTRT">WHERE PRDT_STRT_DT = #{prdt_strt_dt}</sql>    
+    <sql id="whereTERM">WHERE PRDT_TERM_DT = #{prdt_term_dt}</sql>
+    <sql id="whereITEMCD">WHERE ITEM_CD = #{item_cd}</sql>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Select Statement -->
+    <!-- ==================================================================================== -->
+   
+    <select id="selectByCondition" parameterType="demandList" resultMap="demandListMap">
+        SELECT PRDT_STRT_DT
+              ,PRDT_TERM_DT
+        	  ,ITEM_CD
+              ,ITEM_NM
+              ,PRDT_EST             
+          FROM DEMAND_PRDT_RESULT      		  
+      	 <where> 
+      	 	<if test=" prdt_strt_dt != null and prdt_strt_dt !='' ">
+	       		AND PRDT_STRT_DT <![CDATA[=]]> #{prdt_strt_dt}	       		
+	     	</if>	     	   	
+      	 </where>
+        ORDER BY 
+        <choose>
+        	<when test="sidx != null and sidx != ''"> ${sidx} </when>
+        	<otherwise> PRDT_STRT_DT </otherwise>
+        </choose>
+        <choose>
+        	<when test="sord != null and sord != ''"> ${sord} </when>
+        	<otherwise> DESC </otherwise>
+        </choose>
+        <if test="paging == true">
+        FOR ORDERBY_NUM() BETWEEN #{startRow} AND #{endRow};
+        </if>
+    </select>
+
+    <select id="selectByConditionCnt" parameterType="demandList" resultType="int">
+        SELECT COUNT(1) 
+          FROM DEMAND_PRDT_RESULT      		  
+      	 <where> 
+      	 	<if test=" prdt_strt_dt != null and prdt_strt_dt !='' ">
+	       		AND PRDT_STRT_DT <![CDATA[=]]> #{prdt_strt_dt}	       		
+	     	</if>
+      	 </where>      
+    </select>
+    
+    <select id="selectByYearList" parameterType="demandList" resultMap="demandListMap">
+        SELECT DISTINCT YEAR(PRDT_STRT_DT) AS STR_YEAR
+          FROM DEMAND_PRDT_RESULT 
+    </select>
+    
+    <select id="selectByTermList" parameterType="demandList" resultMap="demandListMap">
+        SELECT DISTINCT PRDT_STRT_DT
+              ,PRDT_TERM_DT
+              ,CONCAT(TO_CHAR(prdt_strt_dt,'mm-dd'),' ~ ',TO_CHAR(prdt_term_dt,'mm-dd')) AS STR_TERM
+          FROM DEMAND_PRDT_RESULT 
+        <where> 
+        	<if test=" item != null and item !='' ">
+	       		AND YEAR(PRDT_STRT_DT) <![CDATA[=]]> #{item}
+	     	</if>		
+        </where>  
+    </select>
+    <select id="selectByModelList" parameterType="demandList" resultMap="demandListMap">
+        SELECT PRDT_DT
+              ,TRAIN_STRT_DT
+        	  ,TRAIN_TERM_DT
+              ,TRAIN_NUM_DATA
+              ,PRDT_RMSE
+              ,PRDT_RRSE            
+          FROM DEMAND_PRDT_MODEL      		  
+      	 <where> 
+      	 	<if test=" prdt_dt != null and prdt_dt !='' ">
+	       		AND PRDT_STRT_DT <![CDATA[=]]> #{prdt_strt_dt}	       		
+	     	</if>	     	   	
+      	 </where>
+     </select>
+     
+     <select id="selectByChartList" parameterType="demandList" resultMap="demandListMap">
+         SELECT PRDT_STRT_DT
+               ,PRDT_TERM_DT
+        	   ,ITEM_CD
+               ,ITEM_NM
+               ,PRDT_EST             
+          FROM DEMAND_PRDT_RESULT
+      	 <where> 
+      	 	<if test=" prdt_strt_dt != null and prdt_strt_dt !='' ">
+	       		AND PRDT_STRT_DT <![CDATA[=]]> #{prdt_strt_dt}	       		
+	       		ORDER BY PRDT_EST DESC
+	       		LIMIT 5;     		
+	     	</if>	     	   	
+      	 </where>
+   	</select>
+</mapper>

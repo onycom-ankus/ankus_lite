@@ -85,9 +85,15 @@ if(isLogin == false){
 			<div class="container-fluid">				
 				<ul class="nav navbar-nav" style="line-height:0px;">
 				
-					<li id="_tabDemandForecast" data-body="_conDemandForecast" class="active"><a href="#">수요량예측</a></li>
-					<li id="_tabCauseBad" data-body="_conCauseBad"><a href="#">수요및불량원인분석</a></li>
-					<li id="_tabPredictionBad" data-body="_conPredictionBad"><a href="#">불량예측및원인분석</a></li>
+					<li id="_tabDemandPrdt" data-body="_conDemandPrdt" class="active"><a href="#">수요량예측결과</a></li>
+					<li id="_tabFaultCause" data-body="_conFaultCause"><a href="#">불량원인분석결과</a></li>					
+					<li class="dropdown">
+						<a href = "#" class = "dropdown-toggle" data-toggle = "dropdown">키워드분석<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li id="_tabPrdtKeyword" data-body="_conPrdtKeyword"><a href="#">제품키워드분석</a></li>
+							<li id="_tabRelatedKeyword" data-body="_conRelatedKeyword"><a href="#">키워드연관분석</a></li>	
+						</ul>
+					</li>
 					
 					<li class="dropdown">
 						<a href = "#" class = "dropdown-toggle" data-toggle = "dropdown">외부데이터관리<span class="caret"></span></a>
@@ -118,7 +124,7 @@ if(isLogin == false){
 						<ul class="dropdown-menu">
 							<li id="_tabAnalyzer" data-body="_conAnalyzer"><a href="#"><spring:message code="MENU_WORKFLOW"/></a></li>
 							<li id="_tabDashboard" data-body="_conDashboard"><a href="#"><spring:message code="MENU_FLOWMANAGE"/></a></li> 
-							<!-- li id="_tabFileSystem" data-body="_conFileSystem"><a href="#"><spring:message code="MENU_HDFS_BROWSER"/></a></li-->
+							<li id="_tabFileSystem" data-body="_conFileSystem"><a href="#"><spring:message code="MENU_HDFS_BROWSER"/></a></li>
 							<li id="_tabVisual" data-body="_conVisual"><a href="#"><spring:message code="MENU_CHART_TOOL"/></a></li>
 						</ul>
 					</li>
@@ -156,9 +162,10 @@ if(isLogin == false){
 		<div class="_body" id="_conInnerData" style="display:none"><jsp:include page="../expantion/innerData.jsp"/></div>		
 		<div class="_body" id="_conDataMgr" style="display:none"><jsp:include page="../expantion/dataMgr.jsp"/></div>
 		
-		<div class="_body" id="_conDemandForecast" style="display:none"></div>	
-		<div class="_body" id="_conCauseBad" style="display:none"></div>
-		<div class="_body" id="_conPredictionBad" style="display:none"></div>			
+		<div class="_body" id="_conDemandPrdt" style="display:none"><jsp:include page="../main/demandList.jsp"/></div>	
+		<div class="_body" id="_conFaultCause" style="display:none"><jsp:include page="../main/faultCause.jsp"/></div>
+		<div class="_body" id="_conPrdtKeyword" style="display:none"><jsp:include page="../main/prdtKeyword.jsp"/></div>			
+		<div class="_body" id="_conRelatedKeyword" style="display:none"><jsp:include page="../main/relatedKeyword.jsp"/></div>
 		<div class="_body" id="_conWorddic" style="display:none"><jsp:include page="../main/worddic.jsp"/></div>
 		<div class="_body" id="_conNewsOid" style="display:none"><jsp:include page="../main/newsoid.jsp"/></div>
 		<div class="_body" id="_conNewsList" style="display:none"><jsp:include page="../main/newsList.jsp"/></div>
@@ -199,6 +206,8 @@ if(isLogin == false){
 	<script src="/resources/lib/main/jqgrid/modules/grid.formedit.js"></script>
 	<script src="/resources/lib/main/jqgrid/modules/grid.common.js"></script>
 	<script src="/resources/lib/main/d3/js/d3.v3.min.js"></script>
+	<script src="/resources/lib/main/d3/js/d3.layout.cloud.js"></script>
+	<script src="/resources/lib/main/d3/js/d3-tip.js"></script>
 	
 	<script src="/resources/lib/main/opengraph/OpenGraph-0.1-SNAPSHOT.js"></script>
 	<script src="/resources/lib/main/codemirror/lib/codemirror.js"></script>
@@ -235,6 +244,11 @@ if(isLogin == false){
 	<script src="/resources/js/main/blogList.js"></script>
 	<script src="/resources/js/main/mallList.js"></script>
 	
+	<script src="/resources/js/main/faultCause.js"></script>
+	<script src="/resources/js/main/demandList.js"></script>
+	<script src="/resources/js/main/prdtKeyword.js"></script>
+	<script src="/resources/js/main/relatedKeyword.js"></script>
+	
 	<!--  
 	<script src="/resources/js/main/monitoring.js"></script>	
 	<script src="/resources/js/main/hmetamgr.js"></script>
@@ -243,7 +257,7 @@ if(isLogin == false){
 
 	<script>
 	$(document).ready(function () {
-		$('#_tabDemandForecast').trigger('click'); 
+		$('#_tabDemandPrdt').trigger('click'); 
 	});
 	</script>
 </body>
