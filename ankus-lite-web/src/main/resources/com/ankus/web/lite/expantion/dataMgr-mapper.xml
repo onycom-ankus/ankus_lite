@@ -33,6 +33,21 @@
 			writer = #{username}
 		AND
 			data_id = #{data_id}
+		AND
+			record_id BETWEEN (#{page}*#{rows})-(#{rows}-1) AND (#{page}*#{rows})
+		ORDER BY
+			record_id ASC
+	</select>
+	
+	<select id="searchDataCnt" parameterType="DataMap" resultType="DataMap">
+		SELECT
+			COUNT(DISTINCT record_id) as cnt
+		FROM
+			inner_data_collection
+		WHERE 
+			writer = #{username}
+		AND
+			data_id = #{data_id}
 		ORDER BY
 			record_id ASC
 	</select>

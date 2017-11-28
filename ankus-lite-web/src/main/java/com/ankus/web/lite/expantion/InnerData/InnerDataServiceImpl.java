@@ -28,55 +28,6 @@ public class InnerDataServiceImpl implements InnerDataService {
 	@Autowired
 	private CommonDao dao;
 
-/*	private DataMap getDataList(File file) {
-		List<DataMap> dataList = new ArrayList<DataMap>();
-		List<String> title = new ArrayList<String>();
-		
-		BufferedReader br = null;
-		
-		try {
-			br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "euc-kr"));
-			String line = "";
-			
-			List<String> lines = new ArrayList<String>();
-			
-			while((line = br.readLine()) != null) {
-				lines.add(line);
-			}
-			
-			for(int i=0; i<lines.size(); i++) {
-				String[] item_arr = lines.get(i).split(",");
-				DataMap data = new DataMap();
-				
-				for(int j=0; j<item_arr.length; j++) {
-					if(i==0) {
-						title.add(item_arr[j]);
-						
-					} else {
-						data.put(title.get(j), item_arr[j]);
-					}
-				}
-				
-				if(i > 0) {
-					dataList.add(data);
-				}
-			}
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if(br != null) try {br.close();} catch (IOException e2) {e2.printStackTrace();}
-		}
-		
-		DataMap result = new DataMap();
-		result.put("dataList", dataList);
-		result.put("title", title);
-		
-		return result;
-	}*/
-
 	@Override
 	public String regist(MultipartHttpServletRequest request) {
 		String msg = "OK";

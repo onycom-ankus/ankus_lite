@@ -13,4 +13,6 @@ public interface DataMgrService {
 	DataMap searchData(HttpServletRequest request);
 
 	String remove(HttpServletRequest request);
+
+	DataMap searchTitle(HttpServletRequest request);
 }

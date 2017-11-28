@@ -169,6 +169,30 @@ public class MemberRepositoryImpl extends PersistentRepositoryImpl<Member, Long>
 		}
 		return null;
 	}
+	
+	@Override
+	public int select_cnt_sql(String sql)
+	{
+		try {
+			Connection conn = getSqlSessionTemplate().getConnection();
+			
+			if(conn==null) return -1;
+			Statement stmt = conn.createStatement();
+			
+			ResultSet rs =  stmt.executeQuery(sql);
+//			conn.close();
+			rs.next();
+			int ret = rs.getInt("count(*)");
+			rs.close();
+			
+			return ret;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return -1;
+	}
 
 	@Override
 	public int update_sql(String sql)

@@ -37,7 +37,7 @@ $(function(){
 		/* 파일등록 view */
 		$("#_id_btnFindFile").on("click", function(event) {
 			event.preventDefault();
-			$("#_id_file").click();
+//			$("#_id_file").click();
 		});
 		
 		$("#_id_file").on("change", function() {
@@ -91,6 +91,8 @@ $(function(){
 									if(msg === 'OK') {
 //										$("#_id_createModal").ankusModal('hide');
 										_dataStoreSelect();
+										ANKUS_API.util.alert("저장이 완료되면 데이터 저장소에 추가됩니다.");
+										$("#_id_createModal").ankusModal('hide');
 									} else {
 										ANKUS_API.util.alert(msg);
 									}
@@ -99,9 +101,6 @@ $(function(){
 						}
 					}
 				});
-				
-				ANKUS_API.util.alert("저장이 완료되면 데이터 저장소에 추가됩니다.");
-				$("#_id_createModal").ankusModal('hide');
 			});
 		});
 	});

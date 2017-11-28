@@ -5,13 +5,17 @@
 		var postData = $('#_ml_grid').jqGrid('getGridParam', 'postData');
 		var data = {};
 		data.from	= $('#_ml_searchFrom').val();
-		data.to		= $('#_ml_searchTo').val();	
-		data.shopng_knd = $('#_ml_searchShopng_knd').val();
-		data.good_nm = $('#_ml_searchKwrd').val();		
-		data.goods_review = $('#_ml_searchReview').val();		
+		data.to		= $('#_ml_searchTo').val();
+		var type = $('#_ml_searchType').val();
+		
+		if(type == 'brand'){
+			data.brand = $('#_ml_searchItem').val();	
+		}else if(type == 'goods_nm'){
+			data.goods_nm = $('#_ml_searchItem').val();	
+		}
+			
 		data.paging	= true;
 		
-		//console.log(data);
 		if (postData) {
 			data.page		= page ? 1 : postData.page;
 			data.rows		= postData.rows;
@@ -23,7 +27,7 @@
 			url			: '/mallList/list',
 			data		: data,
 			success		: function(res){
-				//console.log(res);
+				console.log(res);
 				var obj = res.map;
 				obj.rows = res.list;
 				
@@ -65,9 +69,9 @@
 			},
 			jsonReader		: {
 				repeatitems	: false,
-				id			: 'good_no'
+				id			: 'goods_no'
 			},
-			sortname		: 'B.GOODS_NM, C.GOODS_REVIEW',
+			sortname		: 'A.BRAND, A.GOODS_NM',
 			sortorder		: 'desc',
 	        multiselect		: false,
 	        idPrefix		: '_grid_',
@@ -82,39 +86,37 @@
 	        pager			: '_ml_pager',
 	        rowNum			: 20,
 	        colModel		: [
-	        	{ name : 'mng_no', hidden : true },
-	        	{ name : 'goods_no', hidden : true },
-	        	{ name : 'review_no', hidden : true },
+	        	{ name : 'goods_no', hidden : true },	        	
 	        	{ name : 'goods_url', hidden : true },	        	        
-	        	{ name : 'shopng_knd', label : '구분', width : 100, align : 'center', formatter:changeShopng_knd},	        	        	
-	        	{ name : 'goods_nm', label : '상품명', width : 450, formatter:changeLength},
-	        	{ name : 'goods_review', label : '구매평', width : 450, formatter:changeLength},
+	        	{ name : 'shopng_knd', label : '구분', width : 100, align : 'center'},
+	        	{ name : 'brand', label : '브랜드', width : 100, align : 'center'},
+	        	{ name : 'item', label : '아이템', width : 100, align : 'center'},
+	        	{ name : 'goods_nm', label : '상품명', width : 200, formatter:changeLength},
+	        	{ name : 'goods_review', label : '구매평', width : 300, formatter:changeReviewLength},
+	        	{ name : 'recommand', label : '추천', width : 100, align : 'center'},
+	        	{ name : 'delivery', label : '배송', width : 100, align : 'center'},
 	        	{ name : 'org_goods_nm', hidden : true },
 	        	{ name : 'org_goods_review', hidden : true }	        	
 	        ]
 	    });
-		
-		function changeShopng_knd(cellvalue, options, rowObject){
 				
-			if(cellvalue == 'elevenst'){
-				cellvalue = '11번가';
-			}else if(cellvalue == 'gmarket'){
-				cellvalue = 'G마켓';
-			}else if(cellvalue == 'auction'){
-				cellvalue = '옥션';
-			}else{
-				cellvalue = '';
+		function changeLength(cellvalue, options, rowObject){
+			
+			var lang = cellvalue.length;			
+			cellvalue = cellvalue.replace(/\r/g, '').replace(/\n/g, '');	
+			if(lang > 17){
+				cellvalue = cellvalue.substring(0, 17) + "..."
 			}
 			
 			return cellvalue;
 		}
 		
-		function changeLength(cellvalue, options, rowObject){
+		function changeReviewLength(cellvalue, options, rowObject){
 			
 			var lang = cellvalue.length;			
 			cellvalue = cellvalue.replace(/\r/g, '').replace(/\n/g, '');	
-			if(lang > 30){
-				cellvalue = cellvalue.substring(0, 40) + "..."
+			if(lang > 28){
+				cellvalue = cellvalue.substring(0, 28) + "..."
 			}
 			
 			return cellvalue;
@@ -125,13 +127,14 @@
 	var _editAction = function(row, isAdd){
 		
 		$('#_ml_Modal input, #_ml_Modal textarea').prop('disabled', true).val('');
-		$('#_ml_purch_de').val(row.purch_de);
-		$('#_ml_score').val(row.score);
+		$('#_ml_shopng_knd').val(row.shopng_knd);
+		$('#_ml_brand').val(row.brand);
+		$('#_ml_item').val(row.item);
 		$('#_ml_goods_nm').val(row.org_goods_nm);
 		$('#_ml_goods_review').val(row.org_goods_review);
 		$('#_ml_goods_url').val(row.goods_url);
-		$('#_ml_seler_nm').val(row.seler_nm);
-		$('#_ml_tel_no').val(row.tel_no);
+		$('#_ml_recommand').val(row.recommand);
+		$('#_ml_delivery').val(row.delivery);
 		
 		$('#_ml_Modal').ankusModal('show');
 	};	

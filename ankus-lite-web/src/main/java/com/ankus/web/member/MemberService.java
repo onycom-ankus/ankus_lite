@@ -55,6 +55,8 @@ public interface MemberService {
     int updateByLastLogin(String username);
     
 	ArrayList<HashMap<String,Object>> select_sql(String sql);
+	
+	int select_cnt_sql(String sql);
 	 
 	int update_sql(String sql);
 	

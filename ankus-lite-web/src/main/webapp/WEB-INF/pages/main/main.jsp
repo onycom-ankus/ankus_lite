@@ -4,8 +4,10 @@
 <%
 Member member = (Member)session.getAttribute("user");
 String userId = "admin";
-if(null != member){
+String user_role = "";
+if(null != member){	
 	userId = member.getUsername();
+	user_role = member.getAuthority();
 }
 
 Cookie[] cookies = request.getCookies();
@@ -96,15 +98,10 @@ if(isLogin == false){
 					</li>
 					
 					<li class="dropdown">
-						<a href = "#" class = "dropdown-toggle" data-toggle = "dropdown">외부데이터관리<span class="caret"></span></a>
+						<a href = "#" class = "dropdown-toggle" data-toggle = "dropdown">외부데이터<span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li id="_tabWorddic" data-body="_conWorddic"><a href="#">단어사전관리</a></li>
 							<li id="_tabNewsOid" data-body="_conNewsOid"><a href="#">뉴스관리</a></li>	
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href = "#" class = "dropdown-toggle" data-toggle = "dropdown">외부데이터조회<span class="caret"></span></a>
-						<ul class="dropdown-menu">
 							<li id="_tabNewsList" data-body="_conNewsList"><a href="#">뉴스조회</a></li>
 							<li id="_tabBlogList" data-body="_conBlogList"><a href="#">블로그자료조회</a></li>
 							<li id="_tabMallList" data-body="_conMallList"><a href="#">쇼핑몰자료조회</a></li>	
@@ -114,11 +111,16 @@ if(isLogin == false){
 					<li class="dropdown">
 						<a href = "#" class = "dropdown-toggle" data-toggle = "dropdown">내부데이터<span class="caret"></span></a>
 						<ul class="dropdown-menu">
+							<li id="_tabInnerDataDemand" data-body="_conInnerDataDemand"><a href="#">내부데이터수요예측</a></li>			
+							<li id="_tabInnerDataFault" data-body="_conInnerDataFault"><a href="#">내부데이터불량원인</a></li>
+							<!--  
 							<li id="_tabInnerData" data-body="_conInnerData"><a href="#">내부데이터등록</a></li>	
-							<li id="_tabDataMgr" data-body="_conDataMgr"><a href="#">내부데이터관리</a></li>													
+							<li id="_tabDataMgr" data-body="_conDataMgr"><a href="#">내부데이터관리</a></li>
+							 -->													
 						</ul>
 					</li>
 					
+					<!--  
 					<li class="dropdown">
 						<a href = "#" class = "dropdown-toggle" data-toggle = "dropdown">분석도구<span class="caret"></span></a>
 						<ul class="dropdown-menu">
@@ -128,18 +130,30 @@ if(isLogin == false){
 							<li id="_tabVisual" data-body="_conVisual"><a href="#"><spring:message code="MENU_CHART_TOOL"/></a></li>
 						</ul>
 					</li>
-					<li id="_tabMyInfo" data-body="_conMyInfo"><a href="#"><spring:message code="MENU_MY_INFO"/></a></li>	
+					-->
+					
+					<li id="_tabMyInfo" data-body="_conMyInfo"><a href="#">나의정보</a></li>	
+					
+					<%
+					if("ROLE_ADMIN".equals(user_role)){
+					%>
 					<li class="dropdown">
-						<a href = "#" class = "dropdown-toggle" data-toggle = "dropdown"><spring:message code="MENU_ADMIN_TOOLS"/><span class="caret"></span></a> 
+						<a href = "#" class = "dropdown-toggle" data-toggle = "dropdown">관리자도구<span class="caret"></span></a> 
 						<ul class="dropdown-menu">
 							<li id="_tabScheduler" data-body="_conSchduler"><a href="#"><spring:message code="MENU_SCHEDULER"/></a></li>
+							<li id="_tabModelCfg" data-body="_conModelCfg"><a href="#">모델설정</a></li>
 							<li id="_tabUserMgr" data-body="_conUserMgr"><a href="#"><spring:message code="MENU_USER_MANAGE"/></a></li>	
+							<!--
 							<li id="_tabHadoopMgr" data-body="_conHadoopMgr"><a href="#"><spring:message code="MENU_HADOOP_MANAGE"/></a></li>
 							<li id="_tabSrvMgr" data-body="_conSrvMgr"><a href="#"><spring:message code="MENU_SERVER_MANAGE"/></a></li>
-			            	<li id="_tabAlgMgr" data-body="_conAlgMgr"><a href="#"><spring:message code="MENU_ALGORITHM_MANAGE"/></a></li>	
-			            	<li id="_tabLanguage" data-body="_conLanguage"><a href="#"><spring:message code="MENU_LANGUAGE_SETTING"/></a></li>	
+			            	<li id="_tabAlgMgr" data-body="_conAlgMgr"><a href="#"><spring:message code="MENU_ALGORITHM_MANAGE"/></a></li>
+			            	<li id="_tabLanguage" data-body="_conLanguage"><a href="#"><spring:message code="MENU_LANGUAGE_SETTING"/></a></li>
+			            	-->	
 						</ul>
 					</li>
+					<%	
+					}
+					%>	
 					<li id="_tabLogout"><a href="javascript:logout();"><spring:message code="MENU_LOGOUT"/></a></li>
 				</ul>
 			</div>
@@ -171,6 +185,9 @@ if(isLogin == false){
 		<div class="_body" id="_conNewsList" style="display:none"><jsp:include page="../main/newsList.jsp"/></div>
 		<div class="_body" id="_conBlogList" style="display:none"><jsp:include page="../main/blogList.jsp"/></div>
 		<div class="_body" id="_conMallList" style="display:none"><jsp:include page="../main/mallList.jsp"/></div>
+		<div class="_body" id="_conInnerDataDemand" style="display:none"><jsp:include page="../main/innerDataDemand.jsp"/></div>
+		<div class="_body" id="_conInnerDataFault" style="display:none"><jsp:include page="../main/innerDataFault.jsp"/></div>
+		<div class="_body" id="_conModelCfg" style="display:none"><jsp:include page="../main/modelCfg.jsp"/></div>
 	</div>
 	<style>
 	.wrap-loading{
@@ -248,6 +265,9 @@ if(isLogin == false){
 	<script src="/resources/js/main/demandList.js"></script>
 	<script src="/resources/js/main/prdtKeyword.js"></script>
 	<script src="/resources/js/main/relatedKeyword.js"></script>
+	<script src="/resources/js/main/innerDataDemand.js"></script>
+	<script src="/resources/js/main/innerDataFault.js"></script>
+	<script src="/resources/js/main/modelCfg.js"></script>
 	
 	<!--  
 	<script src="/resources/js/main/monitoring.js"></script>	

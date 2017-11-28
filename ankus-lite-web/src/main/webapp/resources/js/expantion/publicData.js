@@ -1,6 +1,7 @@
 /**
  * 
  */
+var selrowObj = {};
 
 $(function() {
 	var _firstLoad = false;
@@ -8,7 +9,7 @@ $(function() {
 	$('#_pd_grid').ankusGrid({
 		datatype		: function(postData) {
 			if (_firstLoad) {
-				_getGrid();
+				_getPdGrid();
 			} else {
 				_firstLoad = true;
 			}
@@ -23,7 +24,23 @@ $(function() {
         idPrefix		: '_infoGrid_',
         multiboxonly	: true,
         ondblClickRow	: function(id){
-        	_detailView($('#_pd_grid').getRowData(id), true);
+        	var data = {};
+        	data.data_id = $('#_pd_grid').getRowData(id).data_id;
+        	
+        	selrowObj = $('#_pd_grid').getRowData(id);
+        	
+        	ANKUS_API.ajax({
+        		url : "/publicData/ajax/detailTitle",
+        		data : data,
+        		success : function(res) {
+        			var colModel = [];
+        			for(var i=0; i<res.title.length; i++) {
+        				colModel.push({ name : res.title[i], label : res.title[i], align : 'center'});
+        			}
+        			_setPdDetailGrid(colModel);
+        			_getPdDetailGrid(selrowObj, true);
+        		}
+        	});
         },
         refreshfunc		: function(){
         },
@@ -33,6 +50,7 @@ $(function() {
         rowNum			: 10,
         autowidth		:true,
         rownumbers 		:true,
+        shrinkToFit		:false,
       //  scrollerbar		:true,
       //  height			:'150px',
         colModel		: [
@@ -40,7 +58,7 @@ $(function() {
         	{ name : 'pid', label : "INDEX", hidden : true, width : 100, align : 'center'},	        	
         	{ name : 'data_id', label : "저장소 인덱스", width : 150, align : 'center', hidden : true},	        	
         	{ name : 'data_nm', label : "데이터 명", width : 300, align : 'center'},
-        	{ name : 'reload_cycle', label : "갱신 주기", width : 80, align : 'center', formatter : reloadCycleFormatter},
+//        	{ name : 'reload_cycle', label : "갱신 주기", width : 80, align : 'center', formatter : reloadCycleFormatter},
         	{ name : 'name', label : "작성자", width : 150, align : 'center'},
         	{ name : 'reg_dttm', label : "등록일", width : 150, align : 'center', formatter : dateFormat},
         ]
@@ -48,7 +66,7 @@ $(function() {
 	
 	/* 공공데이터 그리드 표시 */
 	$("#_tabPublicData").on("click", function() {
-		_getGrid();
+		_getPdGrid();
 	});
 	
 	/* 생성일시 datepicker */
@@ -95,7 +113,7 @@ $(function() {
 						async : false,
 						success : function(res) {
 							if(res) {
-								_getGrid();
+								_getPdGrid();
 								$("#_pd_detailModal").ankusModal('hide');
 							} else {
 								ANKUS_API.util.alert("삭제를 실패하였습니다. 관리자에게 문의하세요.");
@@ -139,10 +157,10 @@ $(function() {
 			return;
 		}
 		
-		if(param.reload_cycle === '') {
+		/*if(param.reload_cycle === '') {
 			ANKUS_API.util.alert('갱신 주기를 선택하세요.');
 			return;
-		}
+		}*/
 		
 		ANKUS_API.ajax({
 			url : "/publicData/ajax/regist",
@@ -155,7 +173,7 @@ $(function() {
 					
 				} else {
 					$("#_pd_createModal").ankusModal('hide');
-					_getGrid();
+					_getPdGrid();
 				}
 			}
 		});
@@ -163,7 +181,7 @@ $(function() {
 	
 	/* 검색조건으로 조회 */
 	$("#_pd_btnSearch").on("click", function() {
-		_getGrid();
+		_getPdGrid();
 	});
 	
 	/* 초기화 버튼 */
@@ -182,7 +200,7 @@ $(function() {
 
 });
 
-function _getGrid(page) {
+function _getPdGrid(page) {
 	var postData = $('#_pd_grid').jqGrid('getGridParam', 'postData');
 	var data = {};
 	
@@ -197,75 +215,88 @@ function _getGrid(page) {
 		data.sord		= postData.sord;
 	}
 	
-	
 	ANKUS_API.ajax({
 		url			: '/publicData/ajax/pdGrid',
 		data		: data,
 		success		: function(res){
+			console.log(res);
+			var obj = res.map;
+			obj.rows = res.list;
 			$('#_pd_grid').jqGrid('resetSelection');
 			$('#_pd_grid').jqGrid('clearGridData');
-			$('#_pd_grid')[0].addJSONData(res);
+			$('#_pd_grid')[0].addJSONData(obj);
 		}
 	});
 }
 
-function _detailView(selrowObj) {
+function _setPdDetailGrid(colModel) {
 	$('#_pd_datailGrid').jqGrid('GridUnload');
+	var _firstLoad = false;
 	
-	var param = {};
-	param.data_id = selrowObj.data_id;
+	$('#_pd_datailGrid').ankusGrid({
+		datatype		: function(postData) {
+			if (_firstLoad) {
+				_getPdDetailGrid(selrowObj);
+			} else {
+				_firstLoad = true;
+			}
+		},
+		jsonReader		: {
+			repeatitems	: false,
+			id			: 'id'
+		},
+		sortname		: 'name',
+		sortorder		: 'desc',
+        multiselect		: false,
+        idPrefix		: '_infoGrid_',
+        multiboxonly	: true,
+        refreshfunc		: function(){
+        },
+//        pager			: false,
+//        rowNum			: -1,
+        pager			: '_pd_datailPager',
+        rowNum			: 10,
+        autowidth		:true,
+        shrinkToFit		:false,
+//        scrollerbar		:true,
+        height			:'500px',
+        colModel		: colModel
+    });
+}
+
+function _getPdDetailGrid(selrowObj) {
+	var postData = $('#_pd_datailGrid').jqGrid('getGridParam', 'postData');
+	
+	var data = {};
+	data.data_id = selrowObj.data_id;
+	
+	data.paging	= true;
+	if (postData) {
+		data.page		= postData.page;
+		data.rows		= postData.rows;
+		data.sidx		= postData.sidx;
+		data.sord		= postData.sord;
+	}
 	
 	ANKUS_API.ajax({
 		url : "/publicData/ajax/detail",
-		data : param,
+		data : data,
 		success : function(res) {
-			var colModel = [];
-			
-			for(var i=0; i<res.title.length; i++) {
-				colModel.push({ name : res.title[i], label : res.title[i], align : 'center'});
-			}
-			
-			var _firstLoad = false;
-			
-			$('#_pd_datailGrid').ankusGrid({
-				datatype		: function(postData) {
-					if (_firstLoad) {
-//						_detailView();
-					} else {
-						_firstLoad = true;
-					}
-				},
-				jsonReader		: {
-					repeatitems	: false,
-					id			: 'id'
-				},
-				sortname		: 'name',
-				sortorder		: 'desc',
-		        multiselect		: false,
-		        idPrefix		: '_infoGrid_',
-		        multiboxonly	: true,
-		        refreshfunc		: function(){
-		        },
-		        pager			: false,
-		        rowNum			: -1,
-		        autowidth		:true,
-		        shrinkToFit		:false,
-		        scrollerbar		:true,
-		        height			:'500px',
-		        colModel		: colModel
-		    });
+			var obj = res.map;
+			obj.rows = res.list;
 			
 			$("#_pd_btnRemove").attr("data-data_id", selrowObj.data_id);
 			$("#_pd_btnRemove").attr("data-data_pid", selrowObj.pid);
 			$("#_pd_btnExcelExport").attr("data-data_id", selrowObj.data_id);
 			$("#_pd_btnExcelExport").attr("data-data_pid", selrowObj.pid);
 			$("#_pd_datailGridTitle").text("[ " + selrowObj.data_nm + " ]");
-			$("#_pd_datailGridCnt").text(res.dataList.length + ' 건');
+			$("#_pd_datailGridCnt").text(res.list.length + ' 건');
 			
-			$('#_pd_datailGrid').jqGrid('setGridWidth', 765);
 			$('#_pd_datailGrid').jqGrid('resetSelection');
 			$('#_pd_datailGrid').jqGrid('clearGridData');
-			$('#_pd_datailGrid')[0].addJSONData(res.dataList);
+			$('#_pd_datailGrid').jqGrid('setGridWidth', 765);
+			$('#_pd_datailGrid')[0].addJSONData(obj);
+			
 			
 			$("#_pd_detailModal").ankusModal('show');
 		}

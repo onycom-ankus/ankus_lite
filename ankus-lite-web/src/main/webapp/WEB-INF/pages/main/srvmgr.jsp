@@ -5,8 +5,20 @@
 .datepicker {
 	z-index : 1100 !important;
 }
+.greyRule { 
+background: #CECECE; 
+width: 1280px; 
+height: 1px; 
+padding: 0;
+margin-bottom:10px;
+} 
+.greyRule hr { 
+display: none; 
+} 
 </style>
 <div class="ui-layout-center">
+	<h4 class="title" style="border:1px;">서버관리</h4>
+	<div class="greyRule"><hr/></div>	
 	<div class="form-inline" style="margin-bottom:10px;">
 		<div class="forms">		
 			<button class="btn btn-default" id="_ei_btnNew"><spring:message code="COMMON_ADD"/></button>						

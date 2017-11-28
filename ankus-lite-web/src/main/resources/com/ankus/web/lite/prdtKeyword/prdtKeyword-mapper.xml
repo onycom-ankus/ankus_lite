@@ -83,12 +83,13 @@
     </select>
     
     <select id="selectByChartList" parameterType="prdtKeyword" resultMap="prdtKeywordMap">
-         SELECT KWRD AS TEXT              
+         SELECT KWRD AS TEXT             
                ,TF_IDF               
           FROM KWRD_IMP_RESULT
       	 <where> 
       	 	<if test=" srch_kwrd != null and srch_kwrd !='' ">
 	       		AND SRCH_KWRD <![CDATA[=]]> #{srch_kwrd}
+	       		AND LENGTH(KWRD) > 1
 	       		ORDER BY TF_IDF DESC
 	       		LIMIT #{count};
 	     	</if>	     	   	

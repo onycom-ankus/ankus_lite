@@ -1,7 +1,20 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" trimDirectiveWhitespaces="true" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-
+<style>
+.greyRule { 
+background: #CECECE; 
+width: 1280px; 
+height: 1px; 
+padding: 0;
+margin-bottom:10px;
+} 
+.greyRule hr { 
+display: none; 
+} 
+</style>
 <div class="ui-layout-center">
+	<h4 class="title" style="border:1px;">스케쥴러</h4>
+	<div class="greyRule"><hr/></div>	
 	<div class="form-inline" style="margin-bottom:10px;">
 		<div class="forms">
 			<label class="form_label"><spring:message code="SCHE_SCHEDULE_KINDS"/> : </label>
