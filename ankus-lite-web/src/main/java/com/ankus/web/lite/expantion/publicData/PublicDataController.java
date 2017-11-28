@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ankus.model.rest.Response;
+import com.ankus.util.ExceptionUtils;
 import com.ankus.web.lite.expantion.util.DataMap;
 
 
@@ -26,11 +28,29 @@ public class PublicDataController {
 	
 	@RequestMapping("/ajax/pdGrid")
 	@ResponseBody
-	public List<DataMap> pdGrid(HttpServletRequest request) {
+	public Response pdGrid(HttpServletRequest request) {
 		
-		List<DataMap> list = service.getPublicDataList(request);
+		DataMap data = service.getPublicDataList(request);
 		
-		return list;
+        Response response = new Response();
+        try {
+        		response.getMap().put("page", data.getInt("page"));
+        		response.getMap().put("records", data.getInt("records"));
+        		response.getMap().put("total", data.getInt("total"));
+        		
+        	List<DataMap> list = (List<DataMap>) data.get("list");
+        	
+            response.getList().addAll(list);
+            response.setTotal(list.size());
+            response.setSuccess(true);
+            
+        } catch (Exception ex) {
+            response.setSuccess(false);
+            response.getError().setMessage(ex.getMessage());
+            if (ex.getCause() != null) response.getError().setCause(ex.getCause().getMessage());
+            response.getError().setException(ExceptionUtils.getFullStackTrace(ex));
+        }
+        return response;
 	}
 	
 	@RequestMapping("/ajax/regist")
@@ -44,11 +64,39 @@ public class PublicDataController {
 	
 	@RequestMapping("/ajax/detail")
 	@ResponseBody
-	public DataMap pdDetailGrid(HttpServletRequest request) {
+	public Response pdDetailGrid(HttpServletRequest request) {
 		
-		DataMap result = service.pdDetailGrid(request);
+		DataMap data = service.pdDetailGrid(request);
 		
-		return result;
+        Response response = new Response();
+        try {
+        		response.getMap().put("page", data.getInt("page"));
+        		response.getMap().put("records", data.getInt("records"));
+        		response.getMap().put("total", data.getInt("total"));
+        		
+	        	List<DataMap> list = (List<DataMap>) data.get("list");
+	        	
+	            response.getList().addAll(list);
+	            response.setTotal(list.size());
+	            response.setSuccess(true);
+            
+        } catch (Exception ex) {
+            response.setSuccess(false);
+            response.getError().setMessage(ex.getMessage());
+            if (ex.getCause() != null) response.getError().setCause(ex.getCause().getMessage());
+            response.getError().setException(ExceptionUtils.getFullStackTrace(ex));
+        }
+        
+        return response;
+	}
+	
+	@RequestMapping("/ajax/detailTitle")
+	@ResponseBody
+	public DataMap pdDetailGridTitle(HttpServletRequest request) {
+		
+		DataMap data = service.pdDetailGridTitle(request);
+		
+		return data;
 	}
 	
 	@RequestMapping("/ajax/remove")

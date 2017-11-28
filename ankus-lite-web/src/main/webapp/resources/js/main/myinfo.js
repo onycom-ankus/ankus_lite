@@ -82,8 +82,8 @@
 			return;
 		}
 		
-		if(newPwd1.length < 5) {
-			ANKUS_API.util.alert(i18nP('JS_MYINFO_INPUT_CHECK_NEW_PW_FIVE'));
+		if(!vaildationCheck(newPwd1)) {
+			ANKUS_API.util.alert('비밀번호는 영문자+숫자+특수문자로  8~15 자리  입력하시기 바랍니다.');
 			return;
 		}
 		
@@ -112,6 +112,14 @@
 			}
 		});
 	}
+	
+	function vaildationCheck(strValue) 
+	{
+		var regExp = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+		if(strValue.length == 0) {return false;}
+		if (!regExp.test(strValue)) {return false;}
+		return true;
+	} 
 	
 	/* 이메일 유효성 체크 */
     function validateEmail(text) {

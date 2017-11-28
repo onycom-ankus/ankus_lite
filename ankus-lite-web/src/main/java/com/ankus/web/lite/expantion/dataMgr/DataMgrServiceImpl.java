@@ -31,8 +31,11 @@ public class DataMgrServiceImpl implements DataMgrService {
 	public DataMap searchData(HttpServletRequest request) {
 		DataMap param = GetUserInfo.inCookie(request);	
 		param.put("data_id", request.getParameter("data_id"));
+		param.put("page", request.getParameter("page"));
+		param.put("rows", request.getParameter("rows"));
 		// param key : username, auth, data_id
 		
+		DataMap sdc = dao.selectOne("dataMgr.searchDataCnt", param);
 		List<DataMap> ori_dataList = dao.selectList("dataMgr.searchData", param);	// 수직방향 데이터
 		List<DataMap> title = dao.selectList("dataMgr.getTitle", param);
 		
@@ -57,8 +60,10 @@ public class DataMgrServiceImpl implements DataMgrService {
 		}
 		
 		DataMap result = new DataMap();
-		result.put("dataList", dataList);
-		result.put("title", title);
+		result.put("list", dataList);
+		result.put("page", Integer.parseInt(request.getParameter("page")));
+		result.put("records", sdc.getInt("cnt"));
+		result.put("total", (int)Math.ceil((double)sdc.getInt("cnt") / (double)Integer.parseInt(request.getParameter("rows"))));
 		
 		return result;
 	}
@@ -81,5 +86,17 @@ public class DataMgrServiceImpl implements DataMgrService {
 		
 		
 		return msg;
+	}
+
+	@Override
+	public DataMap searchTitle(HttpServletRequest request) {
+		DataMap param = GetUserInfo.inCookie(request);	
+		param.put("data_id", request.getParameter("data_id"));
+		List<DataMap> title = dao.selectList("dataMgr.getTitle", param);
+		
+		DataMap result = new DataMap();
+		result.put("title", title);
+		
+		return result;
 	}
 }

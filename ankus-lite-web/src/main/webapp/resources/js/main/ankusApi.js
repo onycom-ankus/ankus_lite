@@ -1490,7 +1490,7 @@ var ANKUS_API = function(w){
 			line				: _line,
 			pie					: _pie,
 			bubble				: _bubble,
-			wordCloud			: _wordCloud,
+			wordCloud			: _wordCloud,			
 			getChartD3Option	: _getChartD3Option
 		};
 	}();
@@ -1559,6 +1559,13 @@ var ANKUS_API = function(w){
 					drawFn = _pie;
 					dataType = option.dataType || defaultOptionObj.dataType;
 					break;
+				case 'bar' :
+					defaultOptionObj = chartNvDefaultOption.bar;
+					url = option.url || defaultOptionObj.url;
+					param = defaultOptionObj.param;
+					drawFn = _bar;
+					dataType = option.dataType || defaultOptionObj.dataType;
+					break;	
 				default :
 					break;
 			}

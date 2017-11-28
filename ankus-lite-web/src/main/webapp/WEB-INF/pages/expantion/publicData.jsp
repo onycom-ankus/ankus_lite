@@ -10,9 +10,20 @@
 	    float: right;
 	    color: red;
 	}
-
+.greyRule { 
+background: #CECECE; 
+width: 1280px; 
+height: 1px; 
+padding: 0;
+margin-bottom:10px;
+} 
+.greyRule hr { 
+display: none; 
+} 
 </style>
 <div class="ui-layout-center">
+	<h4 class="title" style="border:1px;">공공데이터조회</h4>
+	<div class="greyRule"><hr/></div>
 	<div class="form-inline" style="margin-bottom:10px;">
 		<div class="forms">		
 			<button class="btn btn-default" id="_pd_btnAdd">등록</button>						
@@ -67,16 +78,17 @@
 						<input type="text" class="form-control" id="_pd_requestValue"/>
 					</div>
 				</div>
-				<div class="form-group">
+				<!-- <div class="form-group">
 					<label class="col-sm-2 control-label" style="font-size: 0.9em;">갱신 주기</label>
 					<div class="col-sm-3">
 						<select id="_pd_reload_cycle" class="form-control">
-							<option value="1d">Day</option>
-							<option value="1w">Week</option>
-							<option value="1m">Month</option>
+							<option value="nr">No Renewal</option>
+							<option value="d">Day</option>
+							<option value="w">Week</option>
+							<option value="m">Month</option>
 						</select>
 					</div>
-				</div>
+				</div> -->
 			</div>
 			</div>
 			<div class="modal-footer">
@@ -100,6 +112,7 @@
 					<label class="form_label" id="_pd_datailGridCnt"></label>
 				</div>
 				<table id="_pd_datailGrid"></table>
+				<div id="_pd_datailPager"></div>
 			</div>
 			<div class="modal-footer">
 				<button class="btn btn-default" id="_pd_btnExcelExport" data-data_id="" data-pid="">엑셀다운로드</button>

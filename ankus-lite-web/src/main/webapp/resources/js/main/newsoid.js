@@ -3,7 +3,8 @@
 	var _getGrid = function(page){
 		var postData = $('#_ns_grid').jqGrid('getGridParam', 'postData');
 		var data = {};
-		data.nsite	= $('#_ns_searchItem').val();	
+		var nsite = $('#_ns_searchItem').val();
+		data.nsite	= nsite.toLowerCase();	
 		data.enable	= $('#_ns_searchEnable').val();
 		data.paging		= true;
 		if (postData) {
@@ -17,7 +18,7 @@
 			url			: '/newsoid/list',
 			data		: data,
 			success		: function(res){
-				//console.log(res);
+				console.log(res);
 				var obj = res.map;
 				obj.rows = res.list;
 				$('#_ns_grid').jqGrid('resetSelection');

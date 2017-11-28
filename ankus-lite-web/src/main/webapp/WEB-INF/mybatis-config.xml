@@ -17,18 +17,25 @@
         <typeAlias type="com.ankus.model.rest.Engine" alias="engine"/>
         <typeAlias type="com.ankus.model.rest.HadoopCluster" alias="hadoopCluster"/>
         <typeAlias type="com.ankus.model.rest.HiveServer" alias="hiveServer"/>
-        <typeAlias type="com.ankus.model.rest.User" alias="user"/>
         
         <!-- main -->
         <typeAlias type="com.ankus.web.scheduler.Scheduler" alias="scheduler"/>       
         
         <!-- DataMap -->
+        <typeAlias type="com.ankus.web.lite.demandList.DemandList" alias="demandList"/>
+        <typeAlias type="com.ankus.web.lite.faultCauseList.FaultCauseList" alias="faultCauseList"/>
+        <typeAlias type="com.ankus.web.lite.prdtKeyword.PrdtKeyword" alias="prdtKeyword"/>
+        <typeAlias type="com.ankus.web.lite.relatedKeyword.RelatedKeyword" alias="relatedKeyword"/>
+        <typeAlias type="com.ankus.web.lite.innerDataDemand.InnerDataDemand" alias="innerDataDemand"/>
+        <typeAlias type="com.ankus.web.lite.innerDataFault.InnerDataFault" alias="innerDataFault"/>
+        
         <typeAlias type="com.ankus.web.lite.expantion.util.DataMap" alias="DataMap"/> 
         <typeAlias type="com.ankus.web.lite.worddic.Worddic" alias="worddic"/>
         <typeAlias type="com.ankus.web.lite.newsoid.NewsOid" alias="newsoid"/>
         <typeAlias type="com.ankus.web.lite.newsList.NewsList" alias="newsList"/>
         <typeAlias type="com.ankus.web.lite.blogList.BlogList" alias="blogList"/>
         <typeAlias type="com.ankus.web.lite.mallList.MallList" alias="mallList"/>
+        <typeAlias type="com.ankus.web.lite.userMgr.UserMgr" alias="userMgr"/>
         
     </typeAliases>
 
@@ -51,13 +58,21 @@
         <!-- Member -->
         <mapper resource="com/ankus/web/member/member-mapper.xml"/>
         
-        <!-- main -->      
+        <!-- main -->   
+        <mapper resource="com/ankus/web/lite/demandList/demandList-mapper.xml"/>
+        <mapper resource="com/ankus/web/lite/faultCauseList/faultCauseList-mapper.xml"/>
+        <mapper resource="com/ankus/web/lite/prdtKeyword/prdtKeyword-mapper.xml"/>
+        <mapper resource="com/ankus/web/lite/relatedKeyword/relatedKeyword-mapper.xml"/>
+        <mapper resource="com/ankus/web/lite/innerDataDemand/innerDataDemand-mapper.xml"/>
+        <mapper resource="com/ankus/web/lite/innerDataFault/innerDataFault-mapper.xml"/>        
+           
         <mapper resource="com/ankus/web/scheduler/scheduler-mapper.xml"/>    
         <mapper resource="com/ankus/web/lite/worddic/worddic-mapper.xml"/>
         <mapper resource="com/ankus/web/lite/newsoid/newsoid-mapper.xml"/>
         <mapper resource="com/ankus/web/lite/newsList/newsList-mapper.xml"/>
         <mapper resource="com/ankus/web/lite/blogList/blogList-mapper.xml"/>
         <mapper resource="com/ankus/web/lite/mallList/mallList-mapper.xml"/>
+        <mapper resource="com/ankus/web/lite/userMgr/userMgr-mapper.xml"/>
         
         <!-- Language -->      
         <mapper resource="com/ankus/web/language/language-mapper.xml"/>

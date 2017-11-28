@@ -2,7 +2,9 @@ package com.ankus.web.lite.expantion.publicData;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -56,17 +58,35 @@ public class PublicDataServiceImpl implements PublicDataService {
 	}
 	
 	@Override
-	public List<DataMap> getPublicDataList(HttpServletRequest request) {
+	public DataMap getPublicDataList(HttpServletRequest request) {
 		
-		DataMap userInfo = GetUserInfo.inCookie(request);
+		DataMap param = GetUserInfo.inCookie(request);	
 		String data_nm = request.getParameter("data_nm");
 		String reg_dttm = request.getParameter("reg_dttm");
-		userInfo.put("data_nm", data_nm);
-		userInfo.put("reg_dttm", reg_dttm);
+		int page = Integer.parseInt(request.getParameter("page"));
+		int rows = Integer.parseInt(request.getParameter("rows"));
+		String sidx = request.getParameter("sidx");
+		String sord = request.getParameter("sord");
 		
-		List<DataMap> list = dao.selectList("publicData.getList", userInfo);
-				
-		return list;
+		param.put("data_nm", data_nm);
+		param.put("reg_dttm", reg_dttm);
+		param.put("page", page);
+		param.put("rows", rows);
+		param.put("start", (page - 1) * rows + 1);
+		param.put("end", page * rows);
+		param.put("sidx", sidx);
+		param.put("sord", sord);
+		
+		DataMap sdc = dao.selectOne("publicData.publicDataCnt", param);
+		List<DataMap> list = dao.selectList("publicData.getList", param);
+		
+		DataMap result = new DataMap();
+		result.put("list", list);
+		result.put("page", Integer.parseInt(request.getParameter("page")));
+		result.put("records", sdc.getInt("records"));
+		result.put("total", (int)Math.ceil((double)sdc.getInt("records") / (double)Integer.parseInt(request.getParameter("rows"))));
+		
+		return result;
 	}
 	
 	@Override
@@ -88,6 +108,7 @@ public class PublicDataServiceImpl implements PublicDataService {
 				
 				try {
 					reqVal = reqVal.replace(targetText, URLEncoder.encode(targetText, "UTF-8"));
+					System.out.println(reqVal);
 					
 				} catch (UnsupportedEncodingException e) {
 					result.put("statusMSG", getStatus("1"));
@@ -95,14 +116,30 @@ public class PublicDataServiceImpl implements PublicDataService {
 				}
 			}
 		}
-				
+		
 		String addr = url + "?serviceKey=" + certKey + (("".equals(reqVal)) ? "" : "&" + reqVal);
+		String addr_mac = "";
+		
+		if(addr.matches("\\{year\\}") || addr.matches("\\{month\\}") || addr.matches("\\{day\\}")) {
+			Date today = new Date();
+			SimpleDateFormat yearsdf = new SimpleDateFormat("yyyy");
+			String year = yearsdf.format(today);
+			SimpleDateFormat monthsdf = new SimpleDateFormat("MM");
+			String month = monthsdf.format(today);
+			SimpleDateFormat datesdf = new SimpleDateFormat("dd");
+			String day = datesdf.format(today);
+		
+			addr_mac = addr.replaceAll("\\{year\\}", year);
+			addr_mac = addr.replaceAll("\\{month\\}", month);
+			addr_mac = addr.replaceAll("\\{day\\}", day);
+		}
+		
 		String data_nm = request.getParameter("data_nm");
 		String reload_Cycle = request.getParameter("reload_cycle");
 		
 		logger.info("=================================== 공공데이터 등록 시작 ===================================");
 		
-		DataMap itemInfo = XmlToMapParser.parse(addr, "item");
+		DataMap itemInfo = XmlToMapParser.parse("".equals(addr_mac) ? addr : addr_mac, "item");
 		List<DataMap> itemList = (List<DataMap>) itemInfo.get("resultList");
 		
 		/* 리스트에 데이터가 없는 예외 체크 */
@@ -165,8 +202,113 @@ public class PublicDataServiceImpl implements PublicDataService {
 		String data_id = request.getParameter("data_id");
 		DataMap param = new DataMap();
 		param.put("data_id", data_id);
+		param.put("page", request.getParameter("page"));
+		param.put("rows", request.getParameter("rows"));
 		
+		DataMap sdc = dao.selectOne("publicData.pdDetailGridCnt", param);
 		List<DataMap> pdList = dao.selectList("publicData.pdDetailGrid", param);
+		
+		List<DataMap> dataList = new ArrayList<DataMap>();
+		DataMap data = new DataMap();
+		
+		String keyTmp = "";
+		int i=0;
+		for(DataMap m : pdList) {
+			i++;
+			
+			String key = m.getString("key");
+			String value = m.getString("value");
+			
+			if(keyTmp.contains(key)) {
+				keyTmp = "";
+				dataList.add(data);
+				data = new DataMap();
+			} 
+
+			keyTmp += key + ",";
+			data.put(key, value);
+			
+			if(i == pdList.size()) {
+				dataList.add(data);
+			}
+		}
+		
+		DataMap result = new DataMap();
+		result.put("list", dataList);
+//		result.put("data_nm", pdList.get(0).getString("data_nm"));
+		result.put("page", Integer.parseInt(request.getParameter("page")));
+		result.put("records", sdc.getInt("records"));
+		result.put("total", (int)Math.ceil((double)sdc.getInt("records") / (double)Integer.parseInt(request.getParameter("rows"))));
+		result.put("data_id", data_id);
+		
+		return result;
+	}
+	
+	@Override
+	public DataMap pdDetailGridTitle(HttpServletRequest request) {
+		String data_id = request.getParameter("data_id");
+		DataMap param = new DataMap();
+		param.put("data_id", data_id);
+		
+		List<DataMap> pdList = dao.selectList("publicData.pdDetailGridTitle", param);
+		
+		List<String> title = new ArrayList<>();
+		DataMap data = new DataMap();
+		
+		String keyTmp = "";
+		int i=0;
+		for(DataMap m : pdList) {
+			i++;
+			
+			String key = m.getString("key");
+			String value = m.getString("value");
+			
+			if(!(keyTmp.contains(key))) {
+				title.add(key);
+			}
+			
+			keyTmp += key + ",";
+			data.put(key, value);
+		}
+		
+		HashSet<String> hs = new HashSet<String>(title);
+		title = new ArrayList<>(hs);
+		
+		param.put("data_nm", pdList.get(0).getString("data_nm"));
+		param.put("title", title);
+		
+		return param;
+		
+	}
+
+	@Override
+	public boolean remove(HttpServletRequest request) {
+		String pid = request.getParameter("pid");
+		String data_id = request.getParameter("data_id");
+		
+		DataMap param = new DataMap();
+		param.put("pid", pid);
+		param.put("data_id", data_id);
+		
+		try {
+			dao.delete("publicData.removePublicData", param);
+			dao.delete("publicData.removePublicDataCollection", param);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
+
+	@Override
+	public DataMap pdDetailExecel(HttpServletRequest request) {
+		String data_id = request.getParameter("data_id");
+		DataMap param = new DataMap();
+		param.put("data_id", data_id);
+		
+		List<DataMap> pdList = dao.selectList("publicData.pdDetailExecel", param);
 		
 		List<String> title = new ArrayList<>();
 		List<DataMap> dataList = new ArrayList<>();
@@ -206,33 +348,11 @@ public class PublicDataServiceImpl implements PublicDataService {
 		param.put("dataList", dataList);
 		
 		return param;
-		
 	}
-
-	@Override
-	public boolean remove(HttpServletRequest request) {
-		String pid = request.getParameter("pid");
-		String data_id = request.getParameter("data_id");
-		
-		DataMap param = new DataMap();
-		param.put("pid", pid);
-		param.put("data_id", data_id);
-		
-		try {
-			dao.delete("publicData.removePublicData", param);
-			dao.delete("publicData.removePublicDataCollection", param);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-		
-		return true;
-	}
-
+	
 	@Override
 	public void excelExport(HttpServletRequest request, HttpServletResponse response) {
-		DataMap data = pdDetailGrid(request);
+		DataMap data = pdDetailExecel(request);
 		ExcelUtil.excelExport(request, response, data);
 	}
 }

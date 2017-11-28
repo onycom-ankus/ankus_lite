@@ -106,6 +106,11 @@ public class MemberServiceImpl implements MemberService {
 	public ArrayList<HashMap<String,Object>> select_sql(String sql) {
 		return memberRepository.select_sql(sql);
 	}
+	
+	@Override
+	public int select_cnt_sql(String sql) {
+		return memberRepository.select_cnt_sql(sql);
+	}
 	 
 	@Override
 	public int update_sql(String sql) {

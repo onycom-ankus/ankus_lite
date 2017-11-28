@@ -1,7 +1,20 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" trimDirectiveWhitespaces="true" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-
+<style>
+.greyRule { 
+background: #CECECE; 
+width: 1280px; 
+height: 1px; 
+padding: 0;
+margin-bottom:10px;
+} 
+.greyRule hr { 
+display: none; 
+} 
+</style>
 <div class="ui-layout-center">
+	<h4 class="title" style="border:1px;">사용자관리</h4>
+	<div class="greyRule"><hr/></div>	
 	<div class="form-inline" style="margin-bottom:10px;">
 		<div class="forms">
 			<label class="form_label"><spring:message code="USERMGR_USER_NAME"/> : </label>
@@ -11,8 +24,8 @@
 			<label class="form_label" style="padding-left:20px;"><spring:message code="USERMGR_ACTIVATION"/> : </label>
 			<select id="_user_findenabled" class="form-control">
 				<option value=""><spring:message code="COMMON_TOTAL"/></option>
-				<option value="true">true</option>
-				<option value="false">false</option>
+				<option value="-128">true</option>
+				<option value="0">false</option>
 			</select>
 			<label class="form_label" style="padding-left:20px;"><spring:message code="USERMGR_AUTH"/> : </label>
 			<select id="_user_findauthority" class="form-control">
@@ -25,10 +38,7 @@
 
 			<button class="btn btn-default" id="_user_btnSearch"><spring:message code="COMMON_SEARCH"/></button>
 		</div>
-	</div>
-	<!-- 
-	<button id="_user_btnCreate" class="btn btn-info btn-xs browser_button">추가</button>
-	<button id="_user_btnDelete" class="btn btn-info btn-xs browser_button">삭제</button> -->
+	</div>	
 	<table id="_user_grid"></table>
 	<div id="_user_pager"></div>
 </div>
@@ -54,15 +64,7 @@
 					<div class="col-sm-10">
 						<input type="text" class="form-control" id="_user_email"/>
 					</div>
-				</div>
-				<!-- 
-				<div class="form-group">
-					<label for="_sc_stype" class="col-sm-2 control-label" style="font-size: 0.9em;">비밀번호</label>
-					<div class="col-sm-10">
-						<input type="text" class="form-control" id="_user_passwd"/>
-					</div>
-				</div>
-				 -->
+				</div>			
 				<div class="form-group">
 					<label for="_user_enabled" class="col-sm-2 control-label" style="font-size: 0.9em;"><spring:message code="USERMGR_ACTIVATION"/></label>
 					<div class="col-sm-10">

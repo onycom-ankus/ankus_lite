@@ -1,5 +1,19 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" trimDirectiveWhitespaces="true" pageEncoding="UTF-8" %>
+<style>
+.greyRule { 
+background: #CECECE; 
+width: 1280px; 
+height: 1px; 
+padding: 0;
+margin-bottom:10px;
+} 
+.greyRule hr { 
+display: none; 
+} 
+</style>
 <div class="ui-layout-center">
+	<h4 class="title" style="border:1px;">단어사전</h4>
+	<div class="greyRule"><hr/></div>
 	<div class="form-inline" style="margin-bottom:10px;">
 		<div class="forms">
 			<label class="form_label">대표어 : </label>
@@ -11,6 +25,7 @@
 				<option value="수요(긍정)">수요(긍정)</option>
 				<option value="수요(부정)">수요(부정)</option>
 				<option value="불량">불량</option>
+				<option value="불량키워드">불량키워드</option>
 			</select>
 			<button class="btn btn-default" id="_wd_btnSearch">조회</button>
 		</div>
