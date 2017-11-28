@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.lite.userMgr.UserMgrRepository">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+    <resultMap id="userMgrMap" type="com.ankus.web.lite.userMgr.UserMgr">
+        <result property="username" column="USERNAME" jdbcType="VARCHAR"/>
+        <result property="passwd" column="PASSWD" jdbcType="VARCHAR"/>
+        <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        <result property="email" column="EMAIL" jdbcType="VARCHAR"/>
+        <result property="enabled" column="ENABLED" jdbcType="VARCHAR"/>        
+        <result property="authority" column="AUTHORITY" jdbcType="VARCHAR"/>
+        <result property="create_dt" column="CREATE_DT" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp"/>
+        <result property="last_login" column="LAST_LOGIN" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp"/>
+    </resultMap>
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== --> 
+
+    <sql id="wherePK">WHERE username = #{username}</sql>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Select Statement -->
+    <!-- ==================================================================================== -->
+
+    <select id="selectByCondition" parameterType="userMgr" resultMap="userMgrMap">
+        SELECT USERNAME 
+        	  ,[NAME]
+        	  ,EMAIL
+        	  ,ENABLED
+        	  ,AUTHORITY
+        	  ,CREATE_DT
+        	  ,LAST_LOGIN
+        FROM [USER]
+        <where>
+	       <if test=" username != null and username != '' ">
+	           AND USERNAME LIKE CONCAT('%', #{username}, '%')
+	       </if>
+	       <if test=" email != null and email != '' ">
+	           AND EMAIL LIKE CONCAT('%', #{email}, '%')
+	       </if>
+	       <if test=" enabled != null and enabled != '' and enabled != 'ALL' ">
+	           AND ENABLED = #{enabled}
+	       </if>
+	       <if test=" authority != null and authority != '' and authority != 'ALL' ">
+	           AND AUTHORITY = #{authority}
+	       </if>
+	       <if test=" to != null and to != '' ">
+	           AND TO_CHAR(CREATE_DT,'yyyy-mm-dd') = #{to}
+	       </if>
+        </where>
+         ORDER BY 
+        <choose>
+        	<when test=" sidx != null and sidx != '' "> ${sidx} </when>
+        	<otherwise> username </otherwise>
+        </choose>
+        <choose>
+        	<when test=" sord != null and sord != '' "> ${sord} </when>
+        	<otherwise> ASC </otherwise>
+        </choose>
+        <if test="paging == true">
+        FOR ORDERBY_NUM() BETWEEN #{startRow} AND #{endRow};
+        </if>
+    </select>
+    
+    <select id="selectByConditionCnt" parameterType="userMgr" resultType="int">
+    	SELECT COUNT(1) 
+          FROM [USER]
+        <where>
+        	<if test="username != null and username != ''">
+            AND USERNAME LIKE CONCAT('%', #{username}, '%')
+        </if>
+        <if test="email != null and email != ''">
+            AND EMAIL LIKE CONCAT('%', #{email}, '%')
+        </if>
+        <if test="enabled != null and enabled != '' and enabled != 'ALL'">
+            AND ENABLED = #{enabled}
+        </if>
+        <if test="authority != null and authority != '' and authority != 'ALL'">
+            AND AUTHORITY = #{authority}
+        </if>
+        <if test="to != null and to != ''">
+            AND TO_CHAR(CREATE_DT,'yyyy-mm-dd') = #{to}
+        </if>
+        </where>  	
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 4. Exist Statement -->
+    <!-- ==================================================================================== -->
+
+    <select id="exist" parameterType="string" resultType="Integer">
+        SELECT COUNT(*) FROM [USER]
+        <include refid="wherePK"/>
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 5. Update Statements -->
+    <!-- ==================================================================================== -->
+
+    <update id="update" parameterType="userMgr">
+        UPDATE [USER]
+        SET
+        EMAIL = #{email},
+        ENABLED = #{chg_enabled},
+        AUTHORITY = #{authority}
+        <include refid="wherePK"/>
+    </update>
+
+    <!-- ==================================================================================== -->
+    <!-- 6. Delete Statements -->
+    <!-- ==================================================================================== -->
+
+    <delete id="delete">
+        DELETE FROM [USER] WHERE USERNAME = #{username}	 	
+    </delete>
+ 
+</mapper>

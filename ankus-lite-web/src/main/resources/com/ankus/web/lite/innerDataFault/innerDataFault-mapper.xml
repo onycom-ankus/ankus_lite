@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.lite.innerDataFault.InnerDataFaultRepository">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+    <resultMap id="innerDataFaultMap" type="com.ankus.web.lite.innerDataFault.InnerDataFault">
+    	<result property="seq" column="SEQ" jdbcType="INTEGER"/>
+        <result property="date" column="DATE" jdbcType="VARCHAR"/>
+		<result property="prdt_cd" column="PRDT_CD" jdbcType="VARCHAR"/>
+		<result property="prdt_nm" column="PRDT_NM" jdbcType="VARCHAR"/>
+		<result property="imp_prdt_stat" column="IMP_PRDT_STAT" jdbcType="VARCHAR"/>
+		<result property="brand" column="BRAND" jdbcType="VARCHAR"/>
+		<result property="item" column="ITEM" jdbcType="VARCHAR"/>
+		<result property="std" column="STD" jdbcType="VARCHAR"/>
+		<result property="pack" column="PACK" jdbcType="VARCHAR"/>
+		<result property="ddc" column="DDC" jdbcType="VARCHAR"/>
+		<result property="sale_type" column="SALE_TYPE" jdbcType="VARCHAR"/>
+		<result property="dpsl_cnt" column="DPSL_CNT" jdbcType="INTEGER"/>
+		<result property="ocrc" column="OCRC" jdbcType="VARCHAR"/>
+		<result property="bad_item" column="BAD_ITEM" jdbcType="VARCHAR"/>
+		<result property="bad_kwrd" column="BAD_KWRD" jdbcType="VARCHAR"/>
+		<result property="bad_ctnt" column="BAD_CTNT" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== -->
+
+    <sql id="wherePk">WHERE [SEQ] = #{seq}</sql>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Select Statement -->
+    <!-- ==================================================================================== -->
+
+    <select id="selectByCondition" parameterType="innerDataFault" resultMap="innerDataFaultMap">
+        SELECT [SEQ]
+              ,[DATE]
+			  ,PRDT_CD
+			  ,PRDT_NM
+			  ,IMP_PRDT_STAT
+			  ,BRAND
+			  ,ITEM
+			  ,STD
+			  ,PACK
+			  ,DDC
+			  ,SALE_TYPE
+			  ,DPSL_CNT
+			  ,OCRC
+			  ,BAD_ITEM
+			  ,BAD_KWRD
+			  ,BAD_CTNT			 
+          FROM INNER_DATA_FAULT
+        <where>
+        	<if test=" from != null and from !='' ">
+	       		AND [DATE] <![CDATA[>=]]> #{from}
+	     	</if>
+	     	<if test=" to != null and to !='' ">
+	      		AND [DATE] <![CDATA[<=]]> #{to}
+	     	</if>
+            <if test=" prdt_nm != null and prdt_nm !='' ">
+                AND [PRDT_NM] LIKE CONCAT('%',#{prdt_nm},'%')
+            </if> 
+            <if test=" prdt_cd != null and prdt_cd !='' ">
+                AND [PRDT_CD] LIKE CONCAT('%',#{prdt_cd},'%')
+            </if>  
+        </where>
+        ORDER BY 
+        <choose>
+        	<when test="sidx != null and sidx != ''"> ${sidx} </when>
+        	<otherwise> [DATE] </otherwise>
+        </choose>
+        <choose>
+        	<when test="sord != null and sord != ''"> ${sord} </when>
+        	<otherwise> ASC </otherwise>
+        </choose>
+        <if test="paging == true">
+        FOR ORDERBY_NUM() BETWEEN #{startRow} AND #{endRow};
+        </if>
+    </select>
+
+    <select id="selectByConditionCnt" parameterType="innerDataFault" resultType="int">
+        SELECT COUNT(1) FROM INNER_DATA_FAULT
+        <where>
+            <if test=" from != null and from !='' ">
+	       		AND [DATE] <![CDATA[>=]]> #{from}
+	     	</if>
+	     	<if test=" to != null and to !='' ">
+	      		AND [DATE] <![CDATA[<=]]> #{to}
+	     	</if>
+            <if test=" prdt_nm != null and prdt_nm !='' ">
+                AND [PRDT_NM] LIKE CONCAT('%',#{prdt_nm},'%')
+            </if>  
+            <if test=" prdt_cd != null and prdt_cd !='' ">
+                AND [PRDT_CD] LIKE CONCAT('%',#{prdt_cd},'%')
+            </if>   
+        </where>
+    </select>
+    
+    <select id="selectByExcelCondition" parameterType="innerDataFault" resultMap="innerDataFaultMap">
+        SELECT [SEQ]
+              ,[DATE]
+			  ,PRDT_CD
+			  ,PRDT_NM
+			  ,IMP_PRDT_STAT
+			  ,BRAND
+			  ,ITEM
+			  ,STD
+			  ,PACK
+			  ,DDC
+			  ,SALE_TYPE
+			  ,DPSL_CNT
+			  ,OCRC
+			  ,BAD_ITEM
+			  ,BAD_KWRD
+			  ,BAD_CTNT			 
+          FROM INNER_DATA_FAULT
+        <where>
+        	<if test=" from != null and from !='' ">
+	       		AND [DATE] <![CDATA[>=]]> #{from}
+	     	</if>
+	     	<if test=" to != null and to !='' ">
+	      		AND [DATE] <![CDATA[<=]]> #{to}
+	     	</if>
+            <if test=" prdt_nm != null and prdt_nm !='' ">
+                AND [PRDT_NM] LIKE CONCAT('%',#{prdt_nm},'%')
+            </if> 
+            <if test=" prdt_cd != null and prdt_cd !='' ">
+                AND [PRDT_CD] LIKE CONCAT('%',#{prdt_cd},'%')
+            </if>  
+        </where>
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Exist Statement -->
+    <!-- ==================================================================================== -->
+    
+    <select id="exist" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM INNER_DATA_FAULT 
+        <include refid="wherePk"/>
+    </select>
+    
+    <!-- ==================================================================================== -->
+    <!-- 4. Insert Statements -->
+    <!-- ==================================================================================== -->
+    
+    <insert id="insert" parameterType="innerDataFault" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO INNER_DATA_FAULT (
+         [DATE]
+		 ,PRDT_CD
+		 ,PRDT_NM
+		 ,IMP_PRDT_STAT
+		 ,BRAND
+		 ,ITEM
+		 ,STD
+		 ,PACK
+		 ,DDC
+		 ,SALE_TYPE
+		 ,DPSL_CNT
+		 ,OCRC
+		 ,BAD_ITEM
+		 ,BAD_KWRD
+		 ,BAD_CTNT			
+        )
+        VALUES (
+		 #{date}
+		,#{prdt_cd}
+		,#{prdt_nm}
+		,#{imp_prdt_stat}
+		,#{brand}
+		,#{item}
+		,#{std}
+		,#{pack}
+		,#{ddc}
+		,#{sale_type}
+		,#{dpsl_cnt}
+		,#{ocrc}
+		,#{bad_item}
+		,#{bad_kwrd}
+		,#{bad_ctnt}
+        )
+    </insert>
+    
+    <!-- ==================================================================================== -->
+    <!-- 5. Update Statements -->
+    <!-- ==================================================================================== -->
+    
+    <update id="update" parameterType="innerDataFault" >
+    	UPDATE INNER_DATA_FAULT SET
+    		[DATE] = #{date}
+    		,PRDT_CD = #{prdt_cd}
+			,PRDT_NM = #{prdt_nm}
+			,IMP_PRDT_STAT = #{imp_prdt_stat}
+			,BRAND = #{brand}
+			,ITEM = #{item}
+			,STD = #{std}
+			,PACK = #{pack}
+			,DDC = #{ddc}
+			,SALE_TYPE = #{sale_type}
+			,DPSL_CNT = #{dpsl_cnt}
+			,OCRC = #{ocrc}
+			,BAD_ITEM = #{bad_item}
+			,BAD_KWRD = #{bad_kwrd}
+			,BAD_CTNT = #{bad_ctnt}					
+        <include refid="wherePk"/>
+    </update>
+    
+    <!-- ==================================================================================== -->
+    <!-- 6. Delete Statements -->
+    <!-- ==================================================================================== -->
+	
+	<delete id="deleteList">
+        DELETE FROM INNER_DATA_FAULT WHERE [SEQ] IN
+        <foreach collection="array" open="(" separator="," close=")" index="index" item="items">
+        #{items}
+        </foreach>
+    </delete>
+
+</mapper>
