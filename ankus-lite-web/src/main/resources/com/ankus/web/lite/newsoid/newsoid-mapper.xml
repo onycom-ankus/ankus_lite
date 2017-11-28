@@ -37,7 +37,7 @@
         SELECT * FROM NEWSSITE
         <where>
             <if test=" nsite != null and nsite !='' ">
-                AND [NSITE] LIKE CONCAT('%',#{nsite},'%')
+                AND lcase([NSITE]) LIKE CONCAT('%',#{nsite},'%')
             </if>
             <if test=" enable != null and enable !='' ">
                 AND [ENABLE] LIKE CONCAT('%',#{enable},'%')

@@ -40,10 +40,10 @@
         SELECT * FROM [USER]
         WHERE 1=1
         <if test="username != null and username != ''">
-            AND USERNAME = '%${username}%'
+            AND USERNAME LIKE CONCAT('%', #{username}, '%')
         </if>
         <if test="email != null and email != ''">
-            AND EMAIL LIKE '%${email}%'
+            AND EMAIL LIKE CONCAT('%', #{email}, '%')
         </if>
         <if test="enabled != null and enabled != '' and enabled != 'ALL'">
             AND ENABLED = #{enabled}
@@ -79,6 +79,7 @@
     <update id="updateUser" parameterType="user">
         UPDATE [USER]
         SET
+        EMAIL = #{email},
         ENABLED = #{enabled},
         AUTHORITY = #{authority}
         <include refid="wherePK"/>

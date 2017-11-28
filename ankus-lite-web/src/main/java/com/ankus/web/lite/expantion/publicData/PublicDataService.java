@@ -9,14 +9,18 @@ import com.ankus.web.lite.expantion.util.DataMap;
 
 public interface PublicDataService {
 
-	List<DataMap> getPublicDataList(HttpServletRequest request);
+	DataMap getPublicDataList(HttpServletRequest request);
 
 	DataMap regist(HttpServletRequest request);
 
-	DataMap pdDetailGrid(HttpServletRequest request);
+	DataMap pdDetailGridTitle(HttpServletRequest request);
 
 	boolean remove(HttpServletRequest request);
 
 	void excelExport(HttpServletRequest request, HttpServletResponse response);
+
+	DataMap pdDetailGrid(HttpServletRequest request);
+
+	DataMap pdDetailExecel(HttpServletRequest request);
 
 }

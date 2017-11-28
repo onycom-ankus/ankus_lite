@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ankus.web.lite.innerDataDemand.InnerDataDemandRepository">
+
+    <!-- ==================================================================================== -->
+    <!-- 1. Result and Parameter Maps -->
+    <!-- ==================================================================================== -->
+
+    <resultMap id="innerDataDemandMap" type="com.ankus.web.lite.innerDataDemand.InnerDataDemand">
+        <result property="date" column="DATE" jdbcType="VARCHAR"/>
+		<result property="prdt_cd" column="PRDT_CD" jdbcType="VARCHAR"/>
+		<result property="prdt_nm" column="PRDT_NM" jdbcType="VARCHAR"/>
+		<result property="imp_prdt_stat" column="IMP_PRDT_STAT" jdbcType="VARCHAR"/>
+		<result property="brand" column="BRAND" jdbcType="VARCHAR"/>
+		<result property="item" column="ITEM" jdbcType="VARCHAR"/>
+		<result property="std" column="STD" jdbcType="VARCHAR"/>
+		<result property="pack" column="PACK" jdbcType="VARCHAR"/>
+		<result property="ddc" column="DDC" jdbcType="VARCHAR"/>
+		<result property="sale_type" column="SALE_TYPE" jdbcType="VARCHAR"/>
+		<result property="sale_cnt" column="SALE_CNT" jdbcType="INTEGER"/>
+		<result property="supply_cnt" column="SUPPLY_CNT" jdbcType="INTEGER"/>
+		<result property="sale_on_mkt_cnt" column="SALE_ON_MKT_CNT" jdbcType="INTEGER"/>
+		<result property="sale_on_home_cnt" column="SALE_ON_HOME_CNT" jdbcType="INTEGER"/>
+		<result property="sale_on_bmkt_cnt" column="SALE_ON_BMKT_CNT" jdbcType="INTEGER"/>
+		<result property="sale_on_dpt_cnt" column="SALE_ON_DPT_CNT" jdbcType="INTEGER"/>
+		<result property="sale_on_mall_cnt" column="SALE_ON_MALL_CNT" jdbcType="INTEGER"/>
+		<result property="sale_on_etc_cnt" column="SALE_ON_ETC_CNT" jdbcType="INTEGER"/>
+		<result property="sale_off_mkt_cnt" column="SALE_OFF_MKT_CNT" jdbcType="INTEGER"/>
+		<result property="sale_off_24mkt_cnt" column="SALE_OFF_24MKT_CNT" jdbcType="INTEGER"/>
+		<result property="sale_off_rmkt_cnt" column="SALE_OFF_RMKT_CNT" jdbcType="INTEGER"/>
+		<result property="sale_off_md_cnt" column="SALE_OFF_MD_CNT" jdbcType="INTEGER"/>
+		<result property="sale_off_bmkt_cnt" column="SALE_OFF_BMKT_CNT" jdbcType="INTEGER"/>
+		<result property="sale_off_rt_cnt" column="SALE_OFF_RT_CNT" jdbcType="INTEGER"/>
+		<result property="sale_off_dpt_cnt" column="SALE_OFF_DPT_CNT" jdbcType="INTEGER"/>
+		<result property="sale_off_etc_cnt" column="SALE_OFF_ETC_CNT" jdbcType="INTEGER"/>
+		<result property="sale_etc_emp_cnt" column="SALE_ETC_EMP_CNT" jdbcType="INTEGER"/>
+		<result property="sale_etc_agcy_cnt" column="SALE_ETC_AGCY_CNT" jdbcType="INTEGER"/>
+		<result property="sale_etc_deal_cnt" column="SALE_ETC_DEAL_CNT" jdbcType="INTEGER"/>
+		<result property="sale_etc_imp_cnt" column="SALE_ETC_IMP_CNT" jdbcType="INTEGER"/>  
+    </resultMap>
+
+    <!-- ==================================================================================== -->
+    <!-- 2. Sql Fragments -->
+    <!-- ==================================================================================== -->
+
+    <sql id="wherePk">WHERE [DATE] = #{date} and PRDT_CD = #{prdt_cd} </sql>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Select Statement -->
+    <!-- ==================================================================================== -->
+
+    <select id="selectByCondition" parameterType="innerDataDemand" resultMap="innerDataDemandMap">
+        SELECT [DATE]
+			  ,PRDT_CD
+			  ,PRDT_NM
+			  ,IMP_PRDT_STAT
+			  ,BRAND
+			  ,ITEM
+			  ,STD
+			  ,PACK
+			  ,DDC
+			  ,SALE_TYPE
+			  ,SALE_CNT
+			  ,SUPPLY_CNT
+			  ,SALE_ON_MKT_CNT
+			  ,SALE_ON_HOME_CNT
+			  ,SALE_ON_BMKT_CNT
+			  ,SALE_ON_DPT_CNT
+			  ,SALE_ON_MALL_CNT
+			  ,SALE_ON_ETC_CNT
+			  ,SALE_OFF_MKT_CNT
+			  ,SALE_OFF_24MKT_CNT
+			  ,SALE_OFF_RMKT_CNT
+			  ,SALE_OFF_MD_CNT
+			  ,SALE_OFF_BMKT_CNT
+			  ,SALE_OFF_RT_CNT
+			  ,SALE_OFF_DPT_CNT
+			  ,SALE_OFF_ETC_CNT
+			  ,SALE_ETC_EMP_CNT
+			  ,SALE_ETC_AGCY_CNT
+			  ,SALE_ETC_DEAL_CNT
+			  ,SALE_ETC_IMP_CNT 
+          FROM INNER_DATA_DEMAND
+        <where>
+        	<if test=" from != null and from !='' ">
+	       		AND [DATE] <![CDATA[>=]]> #{from}
+	     	</if>
+	     	<if test=" to != null and to !='' ">
+	      		AND [DATE] <![CDATA[<=]]> #{to}
+	     	</if>
+            <if test=" prdt_nm != null and prdt_nm !='' ">
+                AND [PRDT_NM] LIKE CONCAT('%',#{prdt_nm},'%')
+            </if> 
+            <if test=" prdt_cd != null and prdt_cd !='' ">
+                AND [PRDT_CD] LIKE CONCAT('%',#{prdt_cd},'%')
+            </if>  
+        </where>
+        ORDER BY 
+        <choose>
+        	<when test="sidx != null and sidx != ''"> ${sidx} </when>
+        	<otherwise> [DATE] </otherwise>
+        </choose>
+        <choose>
+        	<when test="sord != null and sord != ''"> ${sord} </when>
+        	<otherwise> ASC </otherwise>
+        </choose>
+        <if test="paging == true">
+        FOR ORDERBY_NUM() BETWEEN #{startRow} AND #{endRow};
+        </if>
+    </select>
+
+    <select id="selectByConditionCnt" parameterType="innerDataDemand" resultType="int">
+        SELECT COUNT(1) FROM INNER_DATA_DEMAND
+        <where>
+            <if test=" from != null and from !='' ">
+	       		AND [DATE] <![CDATA[>=]]> #{from}
+	     	</if>
+	     	<if test=" to != null and to !='' ">
+	      		AND [DATE] <![CDATA[<=]]> #{to}
+	     	</if>
+            <if test=" prdt_nm != null and prdt_nm !='' ">
+                AND [PRDT_NM] LIKE CONCAT('%',#{prdt_nm},'%')
+            </if>  
+            <if test=" prdt_cd != null and prdt_cd !='' ">
+                AND [PRDT_CD] LIKE CONCAT('%',#{prdt_cd},'%')
+            </if>   
+        </where>
+    </select>
+
+    <!-- ==================================================================================== -->
+    <!-- 3. Exist Statement -->
+    <!-- ==================================================================================== -->
+    
+    <select id="exist" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM INNER_DATA_DEMAND 
+        <include refid="wherePk"/>
+    </select>
+    
+    <!-- ==================================================================================== -->
+    <!-- 4. Insert Statements -->
+    <!-- ==================================================================================== -->
+    
+    <insert id="insert" parameterType="innerDataDemand" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO INNER_DATA_DEMAND (			
+		  [DATE]
+		  ,PRDT_CD
+		  ,PRDT_NM
+		  ,IMP_PRDT_STAT
+		  ,BRAND
+		  ,ITEM
+		  ,STD
+		  ,PACK
+		  ,DDC
+		  ,SALE_TYPE
+		  ,SALE_CNT
+		  ,SUPPLY_CNT
+		  ,SALE_ON_MKT_CNT
+		  ,SALE_ON_HOME_CNT
+		  ,SALE_ON_BMKT_CNT
+		  ,SALE_ON_DPT_CNT
+		  ,SALE_ON_MALL_CNT
+		  ,SALE_ON_ETC_CNT
+		  ,SALE_OFF_MKT_CNT
+		  ,SALE_OFF_24MKT_CNT
+		  ,SALE_OFF_RMKT_CNT
+		  ,SALE_OFF_MD_CNT
+		  ,SALE_OFF_BMKT_CNT
+		  ,SALE_OFF_RT_CNT
+		  ,SALE_OFF_DPT_CNT
+		  ,SALE_OFF_ETC_CNT
+		  ,SALE_ETC_EMP_CNT
+		  ,SALE_ETC_AGCY_CNT
+		  ,SALE_ETC_DEAL_CNT
+		  ,SALE_ETC_IMP_CNT 		
+        )
+        VALUES (
+		 #{date}
+		,#{prdt_cd}
+		,#{prdt_nm}
+		,#{imp_prdt_stat}
+		,#{brand}
+		,#{item}
+		,#{std}
+		,#{pack}
+		,#{ddc}
+		,#{sale_type}
+		,#{sale_cnt}
+		,#{supply_cnt}
+		,#{sale_on_mkt_cnt}
+		,#{sale_on_home_cnt}
+		,#{sale_on_bmkt_cnt}
+		,#{sale_on_dpt_cnt}
+		,#{sale_on_mall_cnt}
+		,#{sale_on_etc_cnt}
+		,#{sale_off_mkt_cnt}
+		,#{sale_off_24mkt_cnt}
+		,#{sale_off_rmkt_cnt}
+		,#{sale_off_md_cnt}
+		,#{sale_off_bmkt_cnt}
+		,#{sale_off_rt_cnt}
+		,#{sale_off_dpt_cnt}
+		,#{sale_off_etc_cnt}
+		,#{sale_etc_emp_cnt}
+		,#{sale_etc_agcy_cnt}
+		,#{sale_etc_deal_cnt}
+		,#{sale_etc_imp_cnt}
+        )
+    </insert>
+    
+    <!-- ==================================================================================== -->
+    <!-- 5. Update Statements -->
+    <!-- ==================================================================================== -->
+    
+    <update id="update" parameterType="innerDataDemand" >
+    	UPDATE INNER_DATA_DEMAND SET
+			PRDT_NM = #{prdt_nm}
+			,IMP_PRDT_STAT = #{imp_prdt_stat}
+			,BRAND = #{brand}
+			,ITEM = #{item}
+			,STD = #{std}
+			,PACK = #{pack}
+			,DDC = #{ddc}
+			,SALE_TYPE = #{sale_type}
+			,SALE_CNT = #{sale_cnt}
+			,SUPPLY_CNT = #{supply_cnt}
+			,SALE_ON_MKT_CNT = #{sale_on_mkt_cnt}
+			,SALE_ON_HOME_CNT = #{sale_on_home_cnt}
+			,SALE_ON_BMKT_CNT = #{sale_on_bmkt_cnt}
+			,SALE_ON_DPT_CNT = #{sale_on_dpt_cnt}
+			,SALE_ON_MALL_CNT = #{sale_on_mall_cnt}
+			,SALE_ON_ETC_CNT = #{sale_on_etc_cnt}
+			,SALE_OFF_MKT_CNT = #{sale_off_mkt_cnt}
+			,SALE_OFF_24MKT_CNT = #{sale_off_24mkt_cnt}
+			,SALE_OFF_RMKT_CNT = #{sale_off_rmkt_cnt}
+			,SALE_OFF_MD_CNT = #{sale_off_md_cnt}
+			,SALE_OFF_BMKT_CNT = #{sale_off_bmkt_cnt}
+			,SALE_OFF_RT_CNT = #{sale_off_rt_cnt}
+			,SALE_OFF_DPT_CNT = #{sale_off_dpt_cnt}
+			,SALE_OFF_ETC_CNT = #{sale_off_etc_cnt}
+			,SALE_ETC_EMP_CNT = #{sale_etc_emp_cnt}
+			,SALE_ETC_AGCY_CNT = #{sale_etc_agcy_cnt}
+			,SALE_ETC_DEAL_CNT = #{sale_etc_deal_cnt}
+			,SALE_ETC_IMP_CNT = #{sale_etc_imp_cnt} 				
+        <include refid="wherePk"/>
+    </update>
+    
+    <!-- ==================================================================================== -->
+    <!-- 6. Delete Statements -->
+    <!-- ==================================================================================== -->
+	
+	<delete id="deleteList">
+        DELETE FROM INNER_DATA_DEMAND WHERE (TO_CHAR([DATE],'yyyy-mm-dd')+'!'+PRDT_CD) IN
+        <foreach collection="array" open="(" separator="," close=")" index="index" item="items">
+        #{items}
+        </foreach>
+    </delete>
+
+</mapper>

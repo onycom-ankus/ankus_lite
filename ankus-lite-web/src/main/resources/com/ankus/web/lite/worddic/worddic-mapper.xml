@@ -35,7 +35,7 @@
  		FROM WORDDIC
         <where>
             <if test=" word != null and word !='' ">
-                AND WORD LIKE #{word}
+                AND WORD LIKE CONCAT('%', #{word}, '%')
             </if>            
             <if test=" wtype != null and wtype !='' ">
                 AND WTYPE = #{wtype}

@@ -58,17 +58,35 @@ public class PublicDataServiceImpl implements PublicDataService {
 	}
 	
 	@Override
-	public List<DataMap> getPublicDataList(HttpServletRequest request) {
+	public DataMap getPublicDataList(HttpServletRequest request) {
 		
-		DataMap userInfo = GetUserInfo.inCookie(request);
+		DataMap param = GetUserInfo.inCookie(request);	
 		String data_nm = request.getParameter("data_nm");
 		String reg_dttm = request.getParameter("reg_dttm");
-		userInfo.put("data_nm", data_nm);
-		userInfo.put("reg_dttm", reg_dttm);
+		int page = Integer.parseInt(request.getParameter("page"));
+		int rows = Integer.parseInt(request.getParameter("rows"));
+		String sidx = request.getParameter("sidx");
+		String sord = request.getParameter("sord");
 		
-		List<DataMap> list = dao.selectList("publicData.getList", userInfo);
-				
-		return list;
+		param.put("data_nm", data_nm);
+		param.put("reg_dttm", reg_dttm);
+		param.put("page", page);
+		param.put("rows", rows);
+		param.put("start", (page - 1) * rows + 1);
+		param.put("end", page * rows);
+		param.put("sidx", sidx);
+		param.put("sord", sord);
+		
+		DataMap sdc = dao.selectOne("publicData.publicDataCnt", param);
+		List<DataMap> list = dao.selectList("publicData.getList", param);
+		
+		DataMap result = new DataMap();
+		result.put("list", list);
+		result.put("page", Integer.parseInt(request.getParameter("page")));
+		result.put("records", sdc.getInt("records"));
+		result.put("total", (int)Math.ceil((double)sdc.getInt("records") / (double)Integer.parseInt(request.getParameter("rows"))));
+		
+		return result;
 	}
 	
 	@Override
@@ -98,12 +116,6 @@ public class PublicDataServiceImpl implements PublicDataService {
 				}
 			}
 		}
-//				20171010 2017/10/10 2017-10-10
-//		http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastGrib
-//		sKFr6fRSqXyfGEV5YXojRbKagXFZoyoDSnrgChtfwEhd0mcx%2BzF%2F8K60S4ZxZ%2F1hQvc%2BoRlrYqVKdVgWg7mGcg%3D%3D
-//		
-//		base_date={}{}{}&base_time=0600&nx=60&ny=127&numOfRows=10&pageSize=10&pageNo=1&startPage=1&_type=xml
-		
 		
 		String addr = url + "?serviceKey=" + certKey + (("".equals(reqVal)) ? "" : "&" + reqVal);
 		String addr_mac = "";
@@ -190,8 +202,113 @@ public class PublicDataServiceImpl implements PublicDataService {
 		String data_id = request.getParameter("data_id");
 		DataMap param = new DataMap();
 		param.put("data_id", data_id);
+		param.put("page", request.getParameter("page"));
+		param.put("rows", request.getParameter("rows"));
 		
+		DataMap sdc = dao.selectOne("publicData.pdDetailGridCnt", param);
 		List<DataMap> pdList = dao.selectList("publicData.pdDetailGrid", param);
+		
+		List<DataMap> dataList = new ArrayList<DataMap>();
+		DataMap data = new DataMap();
+		
+		String keyTmp = "";
+		int i=0;
+		for(DataMap m : pdList) {
+			i++;
+			
+			String key = m.getString("key");
+			String value = m.getString("value");
+			
+			if(keyTmp.contains(key)) {
+				keyTmp = "";
+				dataList.add(data);
+				data = new DataMap();
+			} 
+
+			keyTmp += key + ",";
+			data.put(key, value);
+			
+			if(i == pdList.size()) {
+				dataList.add(data);
+			}
+		}
+		
+		DataMap result = new DataMap();
+		result.put("list", dataList);
+//		result.put("data_nm", pdList.get(0).getString("data_nm"));
+		result.put("page", Integer.parseInt(request.getParameter("page")));
+		result.put("records", sdc.getInt("records"));
+		result.put("total", (int)Math.ceil((double)sdc.getInt("records") / (double)Integer.parseInt(request.getParameter("rows"))));
+		result.put("data_id", data_id);
+		
+		return result;
+	}
+	
+	@Override
+	public DataMap pdDetailGridTitle(HttpServletRequest request) {
+		String data_id = request.getParameter("data_id");
+		DataMap param = new DataMap();
+		param.put("data_id", data_id);
+		
+		List<DataMap> pdList = dao.selectList("publicData.pdDetailGridTitle", param);
+		
+		List<String> title = new ArrayList<>();
+		DataMap data = new DataMap();
+		
+		String keyTmp = "";
+		int i=0;
+		for(DataMap m : pdList) {
+			i++;
+			
+			String key = m.getString("key");
+			String value = m.getString("value");
+			
+			if(!(keyTmp.contains(key))) {
+				title.add(key);
+			}
+			
+			keyTmp += key + ",";
+			data.put(key, value);
+		}
+		
+		HashSet<String> hs = new HashSet<String>(title);
+		title = new ArrayList<>(hs);
+		
+		param.put("data_nm", pdList.get(0).getString("data_nm"));
+		param.put("title", title);
+		
+		return param;
+		
+	}
+
+	@Override
+	public boolean remove(HttpServletRequest request) {
+		String pid = request.getParameter("pid");
+		String data_id = request.getParameter("data_id");
+		
+		DataMap param = new DataMap();
+		param.put("pid", pid);
+		param.put("data_id", data_id);
+		
+		try {
+			dao.delete("publicData.removePublicData", param);
+			dao.delete("publicData.removePublicDataCollection", param);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
+
+	@Override
+	public DataMap pdDetailExecel(HttpServletRequest request) {
+		String data_id = request.getParameter("data_id");
+		DataMap param = new DataMap();
+		param.put("data_id", data_id);
+		
+		List<DataMap> pdList = dao.selectList("publicData.pdDetailExecel", param);
 		
 		List<String> title = new ArrayList<>();
 		List<DataMap> dataList = new ArrayList<>();
@@ -231,33 +348,11 @@ public class PublicDataServiceImpl implements PublicDataService {
 		param.put("dataList", dataList);
 		
 		return param;
-		
 	}
-
-	@Override
-	public boolean remove(HttpServletRequest request) {
-		String pid = request.getParameter("pid");
-		String data_id = request.getParameter("data_id");
-		
-		DataMap param = new DataMap();
-		param.put("pid", pid);
-		param.put("data_id", data_id);
-		
-		try {
-			dao.delete("publicData.removePublicData", param);
-			dao.delete("publicData.removePublicDataCollection", param);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-		
-		return true;
-	}
-
+	
 	@Override
 	public void excelExport(HttpServletRequest request, HttpServletResponse response) {
-		DataMap data = pdDetailGrid(request);
+		DataMap data = pdDetailExecel(request);
 		ExcelUtil.excelExport(request, response, data);
 	}
 }

@@ -33,7 +33,7 @@ display: none;
 			<select class="form-control" id="_pk_terms" class="form-control" style="width:150px;">
 				<option value="">기간 선택</option>
 			</select>
-			<label class="form_label">키워드 갯수 : </label>			
+			<label class="form_label">키워드 개수 : </label>			
 			<select class="form-control" id="_pk_count" style="width:70px;">
 				<option value="30" selected="selected">30</option>
 				<option value="40">40</option>

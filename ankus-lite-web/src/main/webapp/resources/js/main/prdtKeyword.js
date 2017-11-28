@@ -76,8 +76,8 @@
 	var _getGridBlog = function(page){
 		var postData = $('#_pk_grid_blog').jqGrid('getGridParam', 'postData');
 		var data = {};
-		data.from	= $('#_pk_prdt_strt_dt').val();	
-		data.to	= $('#_pk_prdt_term_dt').val();	
+		//data.from	= $('#_pk_prdt_strt_dt').val();	
+		//data.to	= $('#_pk_prdt_term_dt').val();	
 		data.srch_kwrd	= $('#_pk_srch_kwrd').val();	
 		data.kwrd_sj = $('#_pk_kwrd').val();
 		
@@ -88,7 +88,7 @@
 			data.sidx		= postData.sidx;
 			data.sord		= postData.sord;
 		}
-		//console.log(data);
+		console.log(data);
 		ANKUS_API.ajax({
 			url			: '/blogList/list',
 			data		: data,
@@ -217,9 +217,7 @@
 		var fields = str_val.split('|');
 		
 		var strt = fields[0];
-		var term = fields[1];
-		console.log(strt);
-		console.log(term);
+		var term = fields[1];		
 		$('#_pk_prdt_strt_dt').val(strt);	
 		$('#_pk_prdt_term_dt').val(term);
 	}
@@ -239,7 +237,7 @@
 			type		: 'GET',
 			success		: function(res){
 				d3.select("#_pk_cloud").selectAll("svg").remove();
-				setCloud(res.list);
+				setCloud(res.list);				
 			},
 			error : function(xhr, status, error) {
 	//	        	alert("에러발생");
@@ -277,7 +275,8 @@
 	var fill = d3.scale.category20();
 	
 	function setCloud(data) {
-		var size;
+		var size;	
+		var max;
 		d3.layout.cloud().size([550, 250])
 	    .words(data)	    
 	    .rotate(function(d) { return 0; })
@@ -286,16 +285,11 @@
 	    .font("Impact")
 	    .text(function(d) { return d.text; })
 	    .fontSize(function(d, i) {
-	    	if(i == 0){
-	    		if(d.tf_idf > 80){	    			
-	    			size = 1;
-	    		}else{
-	    			size = 80 / Math.ceil(d.tf_idf);
-	    		}
-	    	}    	
-	    
-	    	return d.tf_idf * size; 
-	    	
+	    	if(i == 0){	  		
+	    		max = d.tf_idf;
+	    	}
+	    	size = (d.tf_idf * 80) / max;
+	    	return  size;
 	    })
 	    .on("end", draw)
 	    .start();

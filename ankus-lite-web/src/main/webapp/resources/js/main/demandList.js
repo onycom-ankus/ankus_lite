@@ -10,9 +10,17 @@
 			data.rows		= postData.rows;
 			data.sidx		= postData.sidx;
 			data.sord		= postData.sord;
+		}	
+		
+		var year = $('#_dl_years').val();
+		var term = $('#_dl_terms').val();
+		
+		if(year == ''){
+			ANKUS_API.util.alert('년도를 선택하여 주세요.');
+			return;
 		}
 
-		if(data.prdt_strt_dt == ''){
+		if(term == ''){
 			ANKUS_API.util.alert('기간을 선택하여 주세요.');
 			return;
 		}
@@ -253,6 +261,19 @@
 	$('#_dl_terms').on('change', _setTerms);
 	
 	$('#_dl_btnSearch').on('click', function() {
+		var year = $('#_dl_years').val();
+		var term = $('#_dl_terms').val();
+		
+		if(year == ''){
+			ANKUS_API.util.alert('년도를 선택하여 주세요.');
+			return;
+		}
+
+		if(term == ''){
+			ANKUS_API.util.alert('기간을 선택하여 주세요.');
+			return;
+		}
+		
 		_getGrid(true);
 		_getModelList();
 		_getChartList();

@@ -4,8 +4,20 @@
 ._am_width400 {
 	width: 400px;
 }
+.greyRule { 
+background: #CECECE; 
+width: 1280px; 
+height: 1px; 
+padding: 0;
+margin-bottom:10px;
+} 
+.greyRule hr { 
+display: none; 
+} 
 </style>
 <div class="ui-layout-center">
+	<h4 class="title" style="border:1px;">알고리즘관리</h4>
+	<div class="greyRule"><hr/></div>	
 	<div class="form-inline" style="margin-bottom: 10px;">
 		<div class="forms">
 			<button class="btn btn-default" id="_am_btnUpload"><spring:message code="ALGMGR_BTN_ALG_UPLOAD" /></button>

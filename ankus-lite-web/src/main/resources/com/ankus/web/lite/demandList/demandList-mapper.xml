@@ -41,8 +41,8 @@
               ,PRDT_TERM_DT
         	  ,ITEM_CD
               ,ITEM_NM
-              ,PRDT_EST             
-          FROM DEMAND_PRDT_RESULT      		  
+              ,PRDT_SALE_AMNT AS PRDT_EST              
+          FROM DEMAND_PRDT      		  
       	 <where> 
       	 	<if test=" prdt_strt_dt != null and prdt_strt_dt !='' ">
 	       		AND PRDT_STRT_DT <![CDATA[=]]> #{prdt_strt_dt}	       		
@@ -64,7 +64,7 @@
 
     <select id="selectByConditionCnt" parameterType="demandList" resultType="int">
         SELECT COUNT(1) 
-          FROM DEMAND_PRDT_RESULT      		  
+          FROM DEMAND_PRDT      		  
       	 <where> 
       	 	<if test=" prdt_strt_dt != null and prdt_strt_dt !='' ">
 	       		AND PRDT_STRT_DT <![CDATA[=]]> #{prdt_strt_dt}	       		
@@ -74,14 +74,14 @@
     
     <select id="selectByYearList" parameterType="demandList" resultMap="demandListMap">
         SELECT DISTINCT YEAR(PRDT_STRT_DT) AS STR_YEAR
-          FROM DEMAND_PRDT_RESULT 
+          FROM DEMAND_PRDT
     </select>
     
     <select id="selectByTermList" parameterType="demandList" resultMap="demandListMap">
         SELECT DISTINCT PRDT_STRT_DT
               ,PRDT_TERM_DT
               ,CONCAT(TO_CHAR(prdt_strt_dt,'mm-dd'),' ~ ',TO_CHAR(prdt_term_dt,'mm-dd')) AS STR_TERM
-          FROM DEMAND_PRDT_RESULT 
+          FROM DEMAND_PRDT 
         <where> 
         	<if test=" item != null and item !='' ">
 	       		AND YEAR(PRDT_STRT_DT) <![CDATA[=]]> #{item}
@@ -96,11 +96,8 @@
               ,PRDT_RMSE
               ,PRDT_RRSE            
           FROM DEMAND_PRDT_MODEL      		  
-      	 <where> 
-      	 	<if test=" prdt_dt != null and prdt_dt !='' ">
-	       		AND PRDT_STRT_DT <![CDATA[=]]> #{prdt_strt_dt}	       		
-	     	</if>	     	   	
-      	 </where>
+      	  ORDER BY PRDT_DT DESC	
+      	  LIMIT 1;  
      </select>
      
      <select id="selectByChartList" parameterType="demandList" resultMap="demandListMap">
@@ -108,12 +105,12 @@
                ,PRDT_TERM_DT
         	   ,ITEM_CD
                ,ITEM_NM
-               ,PRDT_EST             
-          FROM DEMAND_PRDT_RESULT
+               ,PRDT_SALE_AMNT AS PRDT_EST             
+          FROM DEMAND_PRDT
       	 <where> 
       	 	<if test=" prdt_strt_dt != null and prdt_strt_dt !='' ">
 	       		AND PRDT_STRT_DT <![CDATA[=]]> #{prdt_strt_dt}	       		
-	       		ORDER BY PRDT_EST DESC
+	       		ORDER BY PRDT_SALE_AMNT DESC
 	       		LIMIT 5;     		
 	     	</if>	     	   	
       	 </where>

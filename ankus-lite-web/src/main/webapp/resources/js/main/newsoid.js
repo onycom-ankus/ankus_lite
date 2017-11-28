@@ -3,7 +3,8 @@
 	var _getGrid = function(page){
 		var postData = $('#_ns_grid').jqGrid('getGridParam', 'postData');
 		var data = {};
-		data.nsite	= $('#_ns_searchItem').val();	
+		var nsite = $('#_ns_searchItem').val();
+		data.nsite	= nsite.toLowerCase();	
 		data.enable	= $('#_ns_searchEnable').val();
 		data.paging		= true;
 		if (postData) {

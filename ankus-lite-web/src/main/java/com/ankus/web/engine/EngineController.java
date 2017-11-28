@@ -174,8 +174,6 @@ public class EngineController {
                     param.put("ip", engine.getIp());
                     param.put("port", engine.getPort());
                     param.put("permission", engine.getPermission());
-                    
-                    System.out.println("------->" + type);
 
                     if (("ALL".equals(type) || "HADOOP".equals(type))) {
                         param.put("hadoopClusterId", engine.getHadoopClusterId());

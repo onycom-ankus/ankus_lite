@@ -15,18 +15,15 @@ public class MallList implements Serializable {
      */
     private static final long serialVersionUID = 1;
 
-    private String mng_no;			//관리_번호(mstr)
-    private String kwrd;			//식품(mstr)
-    private String goods_no;		//상품_번호(dtls)
-    private String goods_url;		//상품URL(dtls)
-    private String goods_nm;		//상품명(dtls)
-    private String shopng_knd;		//쇼핑구분(dtls)
-    private String seler;			//판매자(dtls)
-    private String tel_no;			//연락처(dtls)
-    private Integer review_no;		//리뷰번호
-    private String purch_de;		//구매일자
-    private String goods_review;	//구매평
-    private String score;			//점수
+    private String goods_no;		
+    private String goods_url;		
+    private String goods_nm;		
+    private String shopng_knd;		
+    private String brand;			
+    private String item;	
+    private String goods_review;	
+    private String recommand;
+    private String delivery;		
     
     private String from;
     private String to;
@@ -40,18 +37,7 @@ public class MallList implements Serializable {
     private Integer startRow;
     private Integer endRow;
     
-	public String getMng_no() {
-		return mng_no;
-	}
-	public void setMng_no(String mng_no) {
-		this.mng_no = mng_no;
-	}
-	public String getKwrd() {
-		return kwrd;
-	}
-	public void setKwrd(String kwrd) {
-		this.kwrd = kwrd;
-	}
+
 	public String getGoods_no() {
 		return goods_no;
 	}
@@ -76,29 +62,17 @@ public class MallList implements Serializable {
 	public void setShopng_knd(String shopng_knd) {
 		this.shopng_knd = shopng_knd;
 	}
-	public String getSeler() {
-		return seler;
+	public String getBrand() {
+		return brand;
 	}
-	public void setSeler(String seler) {
-		this.seler = seler;
+	public void setBrand(String brand) {
+		this.brand = brand;
 	}
-	public String getTel_no() {
-		return tel_no;
+	public String getItem() {
+		return item;
 	}
-	public void setTel_no(String tel_no) {
-		this.tel_no = tel_no;
-	}
-	public Integer getReview_no() {
-		return review_no;
-	}
-	public void setReview_no(Integer review_no) {
-		this.review_no = review_no;
-	}
-	public String getPurch_de() {
-		return purch_de;
-	}
-	public void setPurch_de(String purch_de) {
-		this.purch_de = purch_de;
+	public void setItem(String item) {
+		this.item = item;
 	}
 	public String getGoods_review() {
 		return goods_review;
@@ -106,12 +80,18 @@ public class MallList implements Serializable {
 	public void setGoods_review(String goods_review) {
 		this.goods_review = goods_review;
 	}
-	public String getScore() {
-		return score;
+	public String getRecommand() {
+		return recommand;
 	}
-	public void setScore(String score) {
-		this.score = score;
+	public void setRecommand(String recommand) {
+		this.recommand = recommand;
 	}	
+	public String getDelivery() {
+		return delivery;
+	}
+	public void setDelivery(String delivery) {
+		this.delivery = delivery;
+	}
 	public String getFrom() {
 		return from;
 	}
@@ -170,18 +150,16 @@ public class MallList implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((mng_no == null) ? 0 : mng_no.hashCode());
-		result = prime * result + ((kwrd == null) ? 0 : kwrd.hashCode());
+
 		result = prime * result + ((goods_no == null) ? 0 : goods_no.hashCode());
 		result = prime * result + ((goods_url == null) ? 0 : goods_url.hashCode());
 		result = prime * result + ((goods_nm == null) ? 0 : goods_nm.hashCode());
 		result = prime * result + ((shopng_knd == null) ? 0 : shopng_knd.hashCode());
-		result = prime * result + ((seler == null) ? 0 : seler.hashCode());
-		result = prime * result + ((tel_no == null) ? 0 : tel_no.hashCode());
-		result = prime * result + ((review_no == null) ? 0 : review_no.hashCode());
-		result = prime * result + ((purch_de == null) ? 0 : purch_de.hashCode());
+		result = prime * result + ((brand == null) ? 0 : brand.hashCode());
+		result = prime * result + ((item == null) ? 0 : item.hashCode());
 		result = prime * result + ((goods_review == null) ? 0 : goods_review.hashCode());
-		result = prime * result + ((score == null) ? 0 : score.hashCode());
+		result = prime * result + ((recommand == null) ? 0 : recommand.hashCode());
+		result = prime * result + ((delivery == null) ? 0 : delivery.hashCode());
 		result = prime * result + ((to == null) ? 0 : to.hashCode());
 		result = prime * result + ((from == null) ? 0 : from.hashCode());
 		result = prime * result + ((endRow == null) ? 0 : endRow.hashCode());		
@@ -202,16 +180,6 @@ public class MallList implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		MallList other = (MallList) obj;
-		if (mng_no == null) {
-			if (other.mng_no != null)
-				return false;
-		} else if (!mng_no.equals(other.mng_no))
-			return false;
-		if (kwrd == null) {
-			if (other.kwrd != null)
-				return false;
-		} else if (!kwrd.equals(other.kwrd))
-			return false;
 		if (goods_no == null) {
 			if (other.goods_no != null)
 				return false;
@@ -232,35 +200,30 @@ public class MallList implements Serializable {
 				return false;
 		} else if (!shopng_knd.equals(other.shopng_knd))
 			return false;
-		if (seler == null) {
-			if (other.seler != null)
+		if (brand == null) {
+			if (other.brand != null)
 				return false;
-		} else if (!seler.equals(other.seler))
+		} else if (!brand.equals(other.brand))
 			return false;	
-		if (tel_no == null) {
-			if (other.tel_no != null)
+		if (item == null) {
+			if (other.item != null)
 				return false;
-		} else if (!tel_no.equals(other.tel_no))
-			return false;
-		if (review_no == null) {
-			if (other.review_no != null)
-				return false;
-		} else if (!review_no.equals(other.review_no))
-			return false;
-		if (purch_de == null) {
-			if (other.purch_de != null)
-				return false;
-		} else if (!purch_de.equals(other.purch_de))
+		} else if (!item.equals(other.item))
 			return false;
 		if (goods_review == null) {
 			if (other.goods_review != null)
 				return false;
 		} else if (!goods_review.equals(other.goods_review))
 			return false;
-		if (score == null) {
-			if (other.score != null)
+		if (recommand == null) {
+			if (other.recommand != null)
 				return false;
-		} else if (!score.equals(other.score))
+		} else if (!recommand.equals(other.recommand))
+			return false;
+		if (delivery == null) {
+			if (other.delivery != null)
+				return false;
+		} else if (!delivery.equals(other.delivery))
 			return false;
 		if (to == null) {
 			if (other.to != null)
@@ -307,9 +270,9 @@ public class MallList implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "MallList [mng_no=" + mng_no + ", kwrd=" + kwrd + ", goods_no=" + goods_no + ", goods_url=" + goods_url + ", goods_nm=" + goods_nm + 
-				", shopng_knd=" + shopng_knd + ", seler=" + seler + ", tel_no=" + tel_no + ", review_no=" + review_no + ", purch_de=" + purch_de +
-				", goods_review=" + goods_review + ", score=" + score +", from=" + from + ", to=" + to + ", paging=" + paging + ", page=" + page + 
+		return "MallList [goods_no=" + goods_no + ", goods_url=" + goods_url + ", goods_nm=" + goods_nm + 
+				", shopng_knd=" + shopng_knd + ", brand=" + brand + ", item=" + item + ", recommand=" + recommand +
+				", goods_review=" + goods_review + ", delivery=" + delivery +", from=" + from + ", to=" + to + ", paging=" + paging + ", page=" + page + 
 				", rows=" + rows + ", sidx=" + sidx + ", sord=" + sord + ", startRow=" + startRow + ", endRow=" + endRow + "]";
 	}
     

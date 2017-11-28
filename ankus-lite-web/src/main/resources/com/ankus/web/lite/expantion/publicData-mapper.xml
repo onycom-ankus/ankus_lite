@@ -29,22 +29,41 @@
     <!-- ==================================================================================== -->
 
 	<select id="getList" resultType="DataMap" parameterType="DataMap">
-		SELECT
-			pd.pid as pid,
-			pd.data_id as data_id,
-			pd.data_nm as data_nm,
-			pd.reload_cycle as reload_cycle,
-			pd.writer as writer,
-			pd.reg_dttm as reg_dttm,
-			pd.updt_dttm as updt_dttm,
-			u.name as name
-		FROM
-			[public_data] pd 
-			LEFT OUTER JOIN [user] u ON (pd.writer = u.username)
+		SELECT 
+			s2.*
+		FROM (
+			SELECT 
+				ROWNUM as rnum,
+				s1.*
+			FROM (
+				SELECT
+						pd.pid as pid,
+						pd.data_id as data_id,
+						pd.data_nm as data_nm,
+						pd.writer as writer,
+						pd.reg_dttm as reg_dttm,
+						pd.updt_dttm as updt_dttm,
+						u.name as name
+					FROM
+						[public_data] pd 
+						LEFT OUTER JOIN [user] u ON (pd.writer = u.username)
+					WHERE 
+						pd.writer = #{username}
+					<if test="data_nm != ''">AND pd.data_nm LIKE '%' || #{data_nm} || '%'</if>
+					<if test="reg_dttm != ''">AND pd.reg_dttm = #{reg_dttm}</if>
+					 ORDER BY 
+			        <choose>
+			        	<when test="sidx != null and sidx != ''"> ${sidx} </when>
+			        	<otherwise> pd.reg_Dttm </otherwise>
+			        </choose>
+			        <choose>
+			        	<when test="sord != null and sord != ''"> ${sord} </when>
+			        	<otherwise> DESC </otherwise>
+			        </choose>
+			)as s1
+		)as s2
 		WHERE 
-			pd.writer = #{username}
-		<if test="data_nm != ''">AND pd.data_nm LIKE '%' || #{data_nm} || '%'</if>
-		<if test="reg_dttm != ''">AND reg_dttm = #{reg_dttm}</if>
+			rnum BETWEEN #{start} AND #{end}
 	</select>
 	
 	<select id="getLastDataId" resultType="DataMap">
@@ -81,7 +100,6 @@
 			public_data (
 				data_id,
 				data_nm,
-				reload_cycle,
 				addr,
 				writer
 			)
@@ -89,7 +107,6 @@
 			(
 				#{data_id},
 				#{data_nm},
-				#{reload_cycle},
 				#{addr},
 				#{writer}
 			)
@@ -99,7 +116,6 @@
 		SELECT
 			pdc.pcid as pcid,
 			pd.data_nm as data_nm,
-			pd.reload_cycle as reload_cycle,
 			pd.writer as writer,
 			pdc.data_id as data_id,
 			pdc.record_id as record_id,
@@ -112,6 +128,30 @@
 			LEFT OUTER JOIN public_data pd ON (pdc.data_id = pd.data_id)
 		WHERE 
 			pdc.data_id = #{data_id}
+		AND
+			pdc.record_id BETWEEN (#{page}*#{rows})-(#{rows}-1) AND (#{page}*#{rows})
+		ORDER BY
+			pdc.record_id ASC
+	</select>
+	
+	<select id="pdDetailGridTitle" parameterType="DataMap" resultType="DataMap">
+		SELECT
+			pdc.pcid as pcid,
+			pd.data_nm as data_nm,
+			pd.writer as writer,
+			pdc.data_id as data_id,
+			pdc.record_id as record_id,
+			pdc.[key],
+			pdc.[value],
+			pdc.reg_dttm as reg_dttm,
+			pdc.updt_dttm as updt_dttm
+		FROM
+			public_data_collection pdc
+			LEFT OUTER JOIN public_data pd ON (pdc.data_id = pd.data_id)
+		WHERE 
+			pdc.data_id = #{data_id}
+		ORDER BY
+			pdc.record_id ASC
 	</select>
 	
 	<delete id="removePublicData" parameterType="DataMap">
@@ -127,4 +167,58 @@
 		WHERE
 			data_id = #{data_id}		
 	</delete>
+	
+	<select id="publicDataCnt" parameterType="DataMap" resultType="DataMap">
+		SELECT 
+			COUNT(*) AS records
+		FROM (
+			SELECT
+					ROWNUM as rnum,
+					pd.pid as pid,
+					pd.data_id as data_id,
+					pd.data_nm as data_nm,
+					pd.writer as writer,
+					pd.reg_dttm as reg_dttm,
+					pd.updt_dttm as updt_dttm,
+					u.name as name
+				FROM
+					[public_data] pd 
+					LEFT OUTER JOIN [user] u ON (pd.writer = u.username)
+				WHERE 
+					pd.writer = #{username}
+				<if test="data_nm != ''">AND pd.data_nm LIKE '%' || #{data_nm} || '%'</if>
+				<if test="reg_dttm != ''">AND reg_dttm = #{reg_dttm}</if>
+		)
+	</select>
+	
+	<select id="pdDetailGridCnt" parameterType="DataMap" resultType="DataMap">
+		SELECT
+			COUNT(DISTINCT record_id) as records
+		FROM
+			public_data_collection
+		WHERE 
+<!-- 			writer = #{username} -->
+<!-- 		AND -->
+			data_id = #{data_id}
+		ORDER BY
+			record_id ASC
+	</select>
+	
+	<select id="pdDetailExecel" parameterType="DataMap" resultType="DataMap">
+		SELECT
+			pdc.pcid as pcid,
+			pd.data_nm as data_nm,
+			pd.writer as writer,
+			pdc.data_id as data_id,
+			pdc.record_id as record_id,
+			pdc.[key],
+			pdc.[value],
+			pdc.reg_dttm as reg_dttm,
+			pdc.updt_dttm as updt_dttm
+		FROM
+			public_data_collection pdc
+			LEFT OUTER JOIN public_data pd ON (pdc.data_id = pd.data_id)
+		WHERE 
+			pdc.data_id = #{data_id}
+	</select>
 </mapper>

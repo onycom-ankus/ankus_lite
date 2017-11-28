@@ -197,6 +197,14 @@
 		return true;
 	} 
 	
+	function vaildationCheck(strValue) 
+	{
+		var regExp = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+		if(strValue.length == 0) {return false;}
+		if (!regExp.test(strValue)) {return false;}
+		return true;
+	} 
+	
 	// 회원가입 다이얼로그
 	function regist()
 	{
@@ -214,16 +222,32 @@
 		data.email		= $('#_reg_email').val();
 		data.password	= $('#_reg_password').val();
 		data.language 	= "ko";
+
+		//if($('#_reg_account').val().length==0)
+		//{
+		//	ANKUS_API.util.alert(i18nP('JS_LOGIN_SIGN_UP_CHECK', i18nP('LOGIN_MODAL_TITLE_ID')));
+		//	return;
+		//}
+		
+		//if($('#_reg_password').val().length==0)
+		//{
+		//	ANKUS_API.util.alert(i18nP('JS_LOGIN_SIGN_UP_CHECK', i18nP('LOGIN_MODAL_TITLE_PW')));
+		//	return;
+		//}
+		
+		if(!vaildationCheck($('#_reg_account').val())){
+			ANKUS_API.util.alert('아이디는 영문자+숫자+특수문자로  8~15 자리  입력하시기 바랍니다.');
+			return;
+		}
+		
+		if(!vaildationCheck($('#_reg_password').val())){
+			ANKUS_API.util.alert('비밀번호는 영문자+숫자+특수문자로  8~15 자리  입력하시기 바랍니다.');
+			return;
+		}
 		
 		if($('#_reg_password').val()!=$('#_reg_password2').val())
 		{
 			ANKUS_API.util.alert(i18nP('JS_LOGIN_SIGN_UP_NOT_MATCH_PW'));
-			return;
-		}
-
-		if($('#_reg_account').val().length==0)
-		{
-			ANKUS_API.util.alert(i18nP('JS_LOGIN_SIGN_UP_CHECK', i18nP('LOGIN_MODAL_TITLE_ID')));
 			return;
 		}
 		
@@ -233,11 +257,6 @@
 			return;
 		}
 		
-		if($('#_reg_password').val().length==0)
-		{
-			ANKUS_API.util.alert(i18nP('JS_LOGIN_SIGN_UP_CHECK', i18nP('LOGIN_MODAL_TITLE_PW')));
-			return;
-		}
 		
 		ANKUS_API.ajax({
 			url			: '/signup',

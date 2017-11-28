@@ -53,7 +53,7 @@
 	        colModel		: [
 	        	{ name : 'wid', hidden : true},
 	        	{ name : 'word', label : '대표어',  width : 590, align : 'center'},	        	
-	        	{ name : 'wtype', label : '종류',  width : 590, align : 'center'}	        	
+	        	{ name : 'wtype', label : '단어구분',  width : 590, align : 'center'}	        	
 	        ]
 	    });
 	};
